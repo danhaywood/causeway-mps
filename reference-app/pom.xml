@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example.causewaymps</groupId>
+    <artifactId>reference-app</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <!--
+      De-risking module for the Causeway MPS DSL (change: entity-property-action-slice).
+
+      It proves the LOCKED generated idiom is valid Java against the real Causeway
+      applib + Jakarta Persistence APIs, and demonstrates coexistence: hand-written
+      code (app/) and generated-style entities (customers/) reference each other on a
+      single shared classpath.
+
+      It is NOT the MPS generator. The classes under customers/ are a hand-written
+      "golden" reference for what the generator must emit. See SETUP.md.
+    -->
+
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <causeway.version>3.6.0</causeway.version>
+        <jakarta.persistence.version>3.1.0</jakarta.persistence.version>
+        <jakarta.inject.version>2.0.1</jakarta.inject.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-applib</artifactId>
+            <version>${causeway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>${jakarta.persistence.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <version>${jakarta.inject.version}</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -2,10 +2,38 @@
 
 Change: `spike-headless-authoring`. Date: 2026-06-16. **Deliverable = this verdict.**
 
-## Verdict: QUALIFIED GO
+## Verdict: GO (caveat closed)
 
-Claude **can** drive MPS headlessly far enough to be the primary Phase B workflow — with
-one well-understood caveat about concept IDs. Pure GUI authoring is **not** required.
+Claude **can** author MPS structure concepts headlessly as the primary Phase B workflow.
+Pure GUI authoring is **not** required.
+
+### Update — caveat fully resolved (2026-06-16)
+
+The `conceptId` gap was closed via option (a): one throwaway `SampleEntity` concept was created
+in the MPS GUI and saved, which revealed the full ID pattern (`conceptId` property `EcuMT`
+= `6714410169261853888`, plus `PropertyDeclaration`/`LinkDeclaration`/`InterfaceConceptReference`
+ids and the `tpck:` targets for `BaseConcept`/`INamedConcept`/`string`). Using that pattern,
+**five real concepts — `Module`, `Entity`, `Property`, `Action`, `Parameter` — were authored
+entirely by editing `causeway.structure.mps` by hand** (names via `INamedConcept`, `implements`,
+aggregation child collections, reference links, fresh unique `conceptId`/`linkId`s).
+
+`./gradlew checkModels --rerun-tasks` → **BUILD SUCCESSFUL, 0 errors** (the only 3 warnings are
+the unrelated empty-generator-model warning). The headless author → validate loop works
+end-to-end.
+
+**Remaining refinements (not blockers, deferred):**
+- **Cardinality:** the sample didn't capture `sourceCardinality`, so child collections currently
+  use MPS's default (single), not `0..n`. Need that one encoding (set `0..n` on one link in the
+  GUI + save, or look it up) to make `entities`/`properties`/`actions`/`parameters` true collections.
+- **Type union** (interface concept + baseLanguage-type arm), **Action.returnType**, **Action.semantics**
+  (enum), and **Action.body** (embedded baseLanguage `StatementList`) need IDs from those other
+  languages — capture them the same way (reference them once in the GUI) or import the languages.
+- **Editor**: relying on MPS default editors (no editor aspect authored).
+- **Generator**: the separately-hard aspect; out of this spike's scope.
+
+The original blocker analysis below is retained for the record.
+
+---
 
 ## What was proven to work
 

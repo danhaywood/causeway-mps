@@ -17,7 +17,7 @@ Time-boxed spike. The deliverable is the **go/no-go verdict** (task 4.2), not th
 
 - [x] 3.1 Inspect persistence-v9 format — DONE via the repo's `…@generator.mps` (registry index→id mapping); distribution ships no source structure models to crib feature IDs from.
 - [x] 3.2 Hand-author the `Module` concept — DONE (minimal: named `ConceptDeclaration`, rootable). **It loaded and MPS recognised it as concept `Module`.**
-- [~] 3.3 Iterate against the oracle — PARTIAL: one specific modelcheck error remains — a manually-created concept needs its `conceptId`/feature IDs generated ("Generate IDs" intention). Couldn't extract the `conceptId` property id from the distribution; not closed this session. See verdict.
+- [x] 3.3 Iterate against the oracle — DONE. Caveat closed via option (a): one GUI `SampleEntity` revealed the `conceptId`/feature-id pattern; then **five concepts (`Module`/`Entity`/`Property`/`Action`/`Parameter`) authored headlessly** → `checkModels` BUILD SUCCESSFUL, 0 errors. Deferred refinements: cardinality (0..n), Type union, Action returnType/semantics/body, editor, generator. See verdict.
 
 ## 4. Verdict
 

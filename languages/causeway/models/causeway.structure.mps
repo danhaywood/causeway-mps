@@ -12,7 +12,6 @@
       <concept id="1169125787135" name="jetbrains.mps.lang.structure.structure.AbstractConceptDeclaration" flags="ig" index="PkWjJ">
         <property id="6714410169261853888" name="conceptId" index="EcuMT" />
         <child id="1071489727083" name="linkDeclaration" index="1TKVEi" />
-        <child id="1071489727084" name="propertyDeclaration" index="1TKVEl" />
       </concept>
       <concept id="1169127622168" name="jetbrains.mps.lang.structure.structure.InterfaceConceptReference" flags="ig" index="PrWs8">
         <reference id="1169127628841" name="intfc" index="PrY4T" />
@@ -22,12 +21,9 @@
         <reference id="1071489389519" name="extends" index="1TJDcQ" />
         <child id="1169129564478" name="implements" index="PzmwI" />
       </concept>
-      <concept id="1071489288299" name="jetbrains.mps.lang.structure.structure.PropertyDeclaration" flags="ig" index="1TJgyi">
-        <property id="241647608299431129" name="propertyId" index="IQ2nx" />
-        <reference id="1082985295845" name="dataType" index="AX2Wp" />
-      </concept>
       <concept id="1071489288298" name="jetbrains.mps.lang.structure.structure.LinkDeclaration" flags="ig" index="1TJgyj">
         <property id="1071599776563" name="role" index="20kJfa" />
+        <property id="1071599893252" name="sourceCardinality" index="20lbJX" />
         <property id="1071599937831" name="metaClass" index="20lmBu" />
         <property id="241647608299431140" name="linkId" index="IQ2ns" />
         <reference id="1071599976176" name="target" index="20lvS9" />
@@ -39,79 +35,84 @@
       </concept>
     </language>
   </registry>
-  <node concept="1TIwiD" id="2000000000000000001">
+  <node concept="1TIwiD" id="1">
     <property role="EcuMT" value="8900000000000000001" />
     <property role="TrG5h" value="Module" />
     <property role="19KtqR" value="true" />
     <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
-    <node concept="PrWs8" id="2000000000000000011" role="PzmwI">
+    <node concept="PrWs8" id="11" role="PzmwI">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
     </node>
-    <node concept="1TJgyj" id="2000000000000000021" role="1TKVEi">
+    <node concept="1TJgyj" id="21" role="1TKVEi">
       <property role="IQ2ns" value="8900000000000000021" />
       <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20kJfa" value="entities" />
-      <ref role="20lvS9" node="2000000000000000002" resolve="Entity" />
+      <property role="20lbJX" value="fLJekj5/_0__n" />
+      <ref role="20lvS9" node="2" resolve="Entity" />
     </node>
   </node>
-  <node concept="1TIwiD" id="2000000000000000002">
+  <node concept="1TIwiD" id="2">
     <property role="EcuMT" value="8900000000000000002" />
     <property role="TrG5h" value="Entity" />
     <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
-    <node concept="PrWs8" id="2000000000000000012" role="PzmwI">
+    <node concept="PrWs8" id="12" role="PzmwI">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
     </node>
-    <node concept="1TJgyj" id="2000000000000000022" role="1TKVEi">
+    <node concept="1TJgyj" id="22" role="1TKVEi">
       <property role="IQ2ns" value="8900000000000000022" />
       <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20kJfa" value="properties" />
-      <ref role="20lvS9" node="2000000000000000003" resolve="Property" />
+      <property role="20lbJX" value="fLJekj5/_0__n" />
+      <ref role="20lvS9" node="3" resolve="Property" />
     </node>
-    <node concept="1TJgyj" id="2000000000000000023" role="1TKVEi">
+    <node concept="1TJgyj" id="23" role="1TKVEi">
       <property role="IQ2ns" value="8900000000000000023" />
       <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20kJfa" value="actions" />
-      <ref role="20lvS9" node="2000000000000000004" resolve="Action" />
+      <property role="20lbJX" value="fLJekj5/_0__n" />
+      <ref role="20lvS9" node="4" resolve="Action" />
     </node>
   </node>
-  <node concept="1TIwiD" id="2000000000000000003">
+  <node concept="1TIwiD" id="3">
     <property role="EcuMT" value="8900000000000000003" />
     <property role="TrG5h" value="Property" />
     <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
-    <node concept="PrWs8" id="2000000000000000013" role="PzmwI">
+    <node concept="PrWs8" id="13" role="PzmwI">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
     </node>
-    <node concept="1TJgyj" id="2000000000000000024" role="1TKVEi">
+    <node concept="1TJgyj" id="24" role="1TKVEi">
       <property role="IQ2ns" value="8900000000000000024" />
       <property role="20kJfa" value="type" />
-      <ref role="20lvS9" node="2000000000000000002" resolve="Entity" />
+      <ref role="20lvS9" node="2" resolve="Entity" />
     </node>
   </node>
-  <node concept="1TIwiD" id="2000000000000000004">
+  <node concept="1TIwiD" id="4">
     <property role="EcuMT" value="8900000000000000004" />
     <property role="TrG5h" value="Action" />
     <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
-    <node concept="PrWs8" id="2000000000000000014" role="PzmwI">
+    <node concept="PrWs8" id="14" role="PzmwI">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
     </node>
-    <node concept="1TJgyj" id="2000000000000000025" role="1TKVEi">
+    <node concept="1TJgyj" id="25" role="1TKVEi">
       <property role="IQ2ns" value="8900000000000000025" />
       <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20kJfa" value="parameters" />
-      <ref role="20lvS9" node="2000000000000000005" resolve="Parameter" />
+      <property role="20lbJX" value="fLJekj5/_0__n" />
+      <ref role="20lvS9" node="5" resolve="Parameter" />
     </node>
   </node>
-  <node concept="1TIwiD" id="2000000000000000005">
+  <node concept="1TIwiD" id="5">
     <property role="EcuMT" value="8900000000000000005" />
     <property role="TrG5h" value="Parameter" />
     <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
-    <node concept="PrWs8" id="2000000000000000015" role="PzmwI">
+    <node concept="PrWs8" id="15" role="PzmwI">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
     </node>
-    <node concept="1TJgyj" id="2000000000000000026" role="1TKVEi">
+    <node concept="1TJgyj" id="26" role="1TKVEi">
       <property role="IQ2ns" value="8900000000000000026" />
       <property role="20kJfa" value="type" />
-      <ref role="20lvS9" node="2000000000000000002" resolve="Entity" />
+      <ref role="20lvS9" node="2" resolve="Entity" />
     </node>
   </node>
 </model>
+

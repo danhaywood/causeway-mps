@@ -1,8 +1,14 @@
 # Tasks
 
+> **Sequencing note (found during apply 2026-06-16):** tasks 2.2, 2.4, 3.x, 4.4, and 5.1
+> are effectively **blocked on `entity-property-action-slice` Phase B** — the MPS modules
+> are currently empty, so there is nothing meaningful to generate/modelcheck/compile yet.
+> Toolchain decision (1.1) is done; build scaffolding (1.2–1.4) can be authored now but
+> gains little until Phase B produces real models. See `docs/headless-build-research.md`.
+
 ## 1. Toolchain selection & pinning
 
-- [ ] 1.1 Verify mps-gradle-plugin (`de.itemis.mps`) compatibility with MPS 2025.3 (baseline 253); if unsupported, record the gap and fall back to the ant build
+- [x] 1.1 Verify mps-gradle-plugin compatibility with MPS 2025.3 (baseline 253) — DONE: feasible via `com.specificlanguages.mps` 2.0.1; MPS 2025.3 zip downloadable; ant fallback not needed. See `docs/headless-build-research.md`
 - [ ] 1.2 Pin MPS version (2025.3) and download the MPS distribution for the build (don't depend on local `MPS.app`)
 - [ ] 1.3 Configure a Gradle Java toolchain pinning JDK 21 (independent of the default `java` 11)
 - [ ] 1.4 Add Gradle wrapper + settings so the build runs from a clean checkout

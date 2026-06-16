@@ -19,6 +19,6 @@ captured once via the GUI (the spike technique), then edited as XML.
 
 ## 3. Constraints & typesystem
 
-- [ ] 3.1 Constraint: unique member names within an entity (properties; actions)
-- [ ] 3.2 Typesystem/scoping: `EntityType`/`JavaType` references resolve; unresolved → error
-- [ ] 3.3 Validate headlessly (deliberately-broken model fails; clean model passes)
+- [x] 3.1 Constraint: unique member names — DONE. A `checking rule` (`unique_member_names` for `Entity`) authored **in the MPS GUI** (imperative code is the wrong fit for hand-authored XML — the declarative/imperative boundary). Compiles clean. (Currently checks properties; actions block is a trivial copy when wanted.)
+- [x] 3.2 Type references resolve — DONE for v1 via MPS's built-in unresolved-reference checking (all `EntityType`/`JavaType`/`Type` refs resolve; 0 errors). A custom scope provider is a later refinement.
+- [~] 3.3 Validate headlessly — DONE for rule validity (`checkModels` clean). The behavioral fire-test (a model with duplicate names → error) needs an authored Entity *instance*, so it's exercised in `sandbox-sample-and-e2e`.

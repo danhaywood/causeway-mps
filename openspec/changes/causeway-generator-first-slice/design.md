@@ -38,3 +38,20 @@ becomes the generated method body; external references resolve via the shared cl
   delta as a failure to investigate.
 - **baseLanguage body round-trip** → verify a body that calls an external service generates valid Java
   (ties to `sandbox-sample-and-e2e`).
+
+## Design note (2026-06-16): mixins-everywhere changes this change's target
+
+Decision from `dsl-mixins` (explore): **persisted is the default; `derived` marks mixin props/colls;
+actions are always mixins.** This directly changes what this generator emits:
+
+- `Action` → **a separate `Mixee_member` mixin class** (e.g. `Customer_placeOrder` with `@Action act(..)`),
+  NOT an inline method on the entity class.
+- `Property`/`Collection` **default (persisted)** → inline field + getter (as already golden-verified);
+  **`derived`** → a mixin (`prop()`/`coll()`).
+- The entity class therefore contains **only persisted state**.
+
+Consequence: the golden target shifts. `reference-app/.../Customer.java` must be **re-goldened** so
+`placeOrder` lives in a `Customer_placeOrder` mixin class (state stays in `Customer`). Do this re-golden
++ compile as the FIRST step of this change (the generator's verified target), or settle `dsl-mixins`
+first. The first slice's `name` property is persisted → inline, so it is unaffected. Verify the
+`Mixee_member` / `act`/`prop`/`coll` conventions against Causeway 3.6 when implementing.

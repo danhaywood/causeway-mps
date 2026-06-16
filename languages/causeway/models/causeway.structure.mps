@@ -11,9 +11,19 @@
   </imports>
   <registry>
     <language id="c72da2b9-7cce-4447-8389-f407dc1158b7" name="jetbrains.mps.lang.structure">
+      <concept id="3348158742936976480" name="jetbrains.mps.lang.structure.structure.EnumerationMemberDeclaration" flags="ng" index="25R33">
+        <property id="1421157252384165432" name="memberId" index="3tVfz5" />
+      </concept>
+      <concept id="3348158742936976479" name="jetbrains.mps.lang.structure.structure.EnumerationDeclaration" flags="ng" index="25R3W">
+        <child id="3348158742936976577" name="members" index="25R1y" />
+      </concept>
+      <concept id="1082978164218" name="jetbrains.mps.lang.structure.structure.DataTypeDeclaration" flags="ng" index="AxPO6">
+        <property id="7791109065626895363" name="datatypeId" index="3F6X1D" />
+      </concept>
       <concept id="1169125787135" name="jetbrains.mps.lang.structure.structure.AbstractConceptDeclaration" flags="ig" index="PkWjJ">
         <property id="6714410169261853888" name="conceptId" index="EcuMT" />
         <child id="1071489727083" name="linkDeclaration" index="1TKVEi" />
+        <child id="1071489727084" name="propertyDeclaration" index="1TKVEl" />
       </concept>
       <concept id="1169125989551" name="jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration" flags="ig" index="PlHQZ" />
       <concept id="1169127622168" name="jetbrains.mps.lang.structure.structure.InterfaceConceptReference" flags="ig" index="PrWs8">
@@ -23,6 +33,10 @@
         <property id="1096454100552" name="rootable" index="19KtqR" />
         <reference id="1071489389519" name="extends" index="1TJDcQ" />
         <child id="1169129564478" name="implements" index="PzmwI" />
+      </concept>
+      <concept id="1071489288299" name="jetbrains.mps.lang.structure.structure.PropertyDeclaration" flags="ig" index="1TJgyi">
+        <property id="241647608299431129" name="propertyId" index="IQ2nx" />
+        <reference id="1082985295845" name="dataType" index="AX2Wp" />
       </concept>
       <concept id="1071489288298" name="jetbrains.mps.lang.structure.structure.LinkDeclaration" flags="ig" index="1TJgyj">
         <property id="1071599776563" name="role" index="20kJfa" />
@@ -104,6 +118,23 @@
       <property role="20lbJX" value="fLJekj5/_0__n" />
       <ref role="20lvS9" node="5" resolve="Parameter" />
     </node>
+    <node concept="1TJgyj" id="42" role="1TKVEi">
+      <property role="IQ2ns" value="8900000000000000042" />
+      <property role="20lmBu" value="fLJjDmT/aggregation" />
+      <property role="20kJfa" value="returnType" />
+      <ref role="20lvS9" node="6" resolve="Type" />
+    </node>
+    <node concept="1TJgyj" id="41" role="1TKVEi">
+      <property role="IQ2ns" value="8900000000000000041" />
+      <property role="20lmBu" value="fLJjDmT/aggregation" />
+      <property role="20kJfa" value="body" />
+      <ref role="20lvS9" to="tpee:fzclF80" resolve="StatementList" />
+    </node>
+    <node concept="1TJgyi" id="43" role="1TKVEl">
+      <property role="IQ2nx" value="8900000000000000043" />
+      <property role="TrG5h" value="semantics" />
+      <ref role="AX2Wp" node="9" resolve="SemanticsOf" />
+    </node>
   </node>
   <node concept="1TIwiD" id="5">
     <property role="EcuMT" value="8900000000000000005" />
@@ -150,4 +181,33 @@
       <ref role="20lvS9" to="tpee:fz3vP1H" resolve="Type" />
     </node>
   </node>
+  <node concept="25R3W" id="9">
+    <property role="3F6X1D" value="8900000000000000009" />
+    <property role="TrG5h" value="SemanticsOf" />
+    <node concept="25R33" id="91" role="25R1y">
+      <property role="3tVfz5" value="8900000000000000091" />
+      <property role="TrG5h" value="SAFE_AND_REQUEST_CACHEABLE" />
+    </node>
+    <node concept="25R33" id="92" role="25R1y">
+      <property role="3tVfz5" value="8900000000000000092" />
+      <property role="TrG5h" value="SAFE" />
+    </node>
+    <node concept="25R33" id="93" role="25R1y">
+      <property role="3tVfz5" value="8900000000000000093" />
+      <property role="TrG5h" value="IDEMPOTENT" />
+    </node>
+    <node concept="25R33" id="94" role="25R1y">
+      <property role="3tVfz5" value="8900000000000000094" />
+      <property role="TrG5h" value="IDEMPOTENT_ARE_YOU_SURE" />
+    </node>
+    <node concept="25R33" id="95" role="25R1y">
+      <property role="3tVfz5" value="8900000000000000095" />
+      <property role="TrG5h" value="NON_IDEMPOTENT" />
+    </node>
+    <node concept="25R33" id="96" role="25R1y">
+      <property role="3tVfz5" value="8900000000000000096" />
+      <property role="TrG5h" value="NON_IDEMPOTENT_ARE_YOU_SURE" />
+    </node>
+  </node>
 </model>
+

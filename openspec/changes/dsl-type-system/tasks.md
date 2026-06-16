@@ -12,10 +12,10 @@ captured once via the GUI (the spike technique), then edited as XML.
 
 ## 2. Action behavior (incl. embedded baseLanguage)
 
-- [ ] 2.1 Capture the baseLanguage `StatementList` concept id + the used-language/devkit imports from a GUI reference node
-- [ ] 2.2 Add `Action.returnType` (`Type`) and `Action.body` (embedded baseLanguage `StatementList`)
-- [ ] 2.3 Add `Action.semantics` referencing Causeway `SemanticsOf` (enum stub; fall back to a local enum mirror if needed)
-- [ ] 2.4 Validate headlessly; confirm a body can reference an external (stubbed) type
+- [x] 2.1 Capture baseLanguage `StatementList` (`tpee:fzclF80`) + enum (`EnumerationDeclaration 25R3W`) ids via GUI — DONE
+- [x] 2.2 Add `Action.returnType` (a `Type`; optional ⇒ void) and `Action.body` (embedded baseLanguage `StatementList`) — DONE
+- [x] 2.3 Add `Action.semantics` — DONE via a **local `SemanticsOf` enum** mirroring Causeway's 6 values (self-contained; generator will map to `org.apache.causeway…SemanticsOf`)
+- [x] 2.4 Validate headlessly — DONE: `checkModels` BUILD SUCCESSFUL, 0 errors. (Confirming a *body* references an external stubbed type is exercised end-to-end in `sandbox-sample-and-e2e`, since it needs an authored action instance.)
 
 ## 3. Constraints & typesystem
 

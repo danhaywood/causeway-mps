@@ -4,14 +4,14 @@ Time-boxed spike. The deliverable is the **go/no-go verdict** (task 4.2), not th
 
 ## 1. Bootstrap the headless build
 
-- [ ] 1.1 Download a Gradle distribution and generate a Gradle wrapper (gradlew + wrapper jar/properties)
-- [ ] 1.2 Write minimal `settings.gradle.kts` / `build.gradle.kts` / `gradle.properties` using `com.specificlanguages.mps` 2.0.1, `com.jetbrains:mps:2025.3` (artifacts.itemis.cloud), JDK 21 toolchain
-- [ ] 1.3 Resolve the MPS 2025.3 distribution and the plugin (one-time ~1 GB download)
+- [x] 1.1 Download a Gradle distribution and generate a Gradle wrapper — DONE. Discovered the plugin requires **Gradle 9.x** (8.x fails with a Kotlin `SpillingKt` mismatch). Wrapper pinned to 9.0.0.
+- [x] 1.2 Write minimal `settings.gradle.kts` / `build.gradle.kts` — DONE, but pivoted plugin: `com.specificlanguages.mps` is packaging-oriented (no-ops without a build solution); using `de.itemis.mps.gradle.common` 1.30.x `MpsCheck`/`MpsGenerate` task types instead. Plugin + MPS resolved from artifacts.itemis.cloud.
+- [x] 1.3 Resolve the MPS 2025.3 distribution and the plugin — DONE (~1 GB download via `resolveMps` Sync task)
 
 ## 2. Green baseline on the empty scaffold
 
 - [ ] 2.1 Run headless `generate` against the unmodified `causeway` scaffold; fix any toolchain/config issues
-- [ ] 2.2 Run headless `modelcheck` against the unmodified scaffold; confirm clean — establishes the oracle/baseline
+- [x] 2.2 Run headless `modelcheck` against the unmodified scaffold — DONE: `./gradlew checkModels` BUILD SUCCESSFUL, only harmless warnings (empty generator model), no errors. **Oracle established.**
 
 ## 3. Hand-author the Module concept
 

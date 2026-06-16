@@ -5,10 +5,10 @@ captured once via the GUI (the spike technique), then edited as XML.
 
 ## 1. Type union
 
-- [ ] 1.1 Capture `InterfaceConceptDeclaration` id pattern once via GUI (reference it + save)
-- [ ] 1.2 Author `Type` interface concept + `EntityType` (reference → Entity) + `JavaType` (wraps a baseLanguage type)
-- [ ] 1.3 Repoint `Property.type` and `Parameter.type` from direct Entity ref to a `Type` child
-- [ ] 1.4 Validate headlessly (modelcheck clean)
+- [x] 1.1 Capture `InterfaceConceptDeclaration` (`PlHQZ`) + baseLanguage wiring via GUI — DONE. Also added `jetbrains.mps.baseLanguage` as a `causeway` language dependency (the embedding milestone); baseLanguage `Type` = `tpee:fz3vP1H`.
+- [x] 1.2 Author `Type` (interface) + `EntityType` (reference → Entity) + `JavaType` (child → baseLanguage `Type`) — DONE
+- [x] 1.3 Repoint `Property.type` and `Parameter.type` to a `Type` child — DONE
+- [x] 1.4 Validate headlessly — DONE: `./gradlew checkModels` BUILD SUCCESSFUL, 0 errors
 
 ## 2. Action behavior (incl. embedded baseLanguage)
 

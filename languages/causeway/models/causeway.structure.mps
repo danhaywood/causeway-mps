@@ -2,10 +2,12 @@
 <model ref="r:4e8cfae1-fc0f-442b-b22c-99efd9c6acf9(causeway.structure)">
   <persistence version="9" />
   <languages>
+    <use id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage" version="12" />
     <devkit ref="78434eb8-b0e5-444b-850d-e7c4ad2da9ab(jetbrains.mps.devkit.aspect.structure)" />
   </languages>
   <imports>
     <import index="tpck" ref="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" implicit="true" />
+    <import index="tpee" ref="r:00000000-0000-4000-0000-011c895902ca(jetbrains.mps.baseLanguage.structure)" implicit="true" />
   </imports>
   <registry>
     <language id="c72da2b9-7cce-4447-8389-f407dc1158b7" name="jetbrains.mps.lang.structure">
@@ -13,6 +15,7 @@
         <property id="6714410169261853888" name="conceptId" index="EcuMT" />
         <child id="1071489727083" name="linkDeclaration" index="1TKVEi" />
       </concept>
+      <concept id="1169125989551" name="jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration" flags="ig" index="PlHQZ" />
       <concept id="1169127622168" name="jetbrains.mps.lang.structure.structure.InterfaceConceptReference" flags="ig" index="PrWs8">
         <reference id="1169127628841" name="intfc" index="PrY4T" />
       </concept>
@@ -82,8 +85,9 @@
     </node>
     <node concept="1TJgyj" id="24" role="1TKVEi">
       <property role="IQ2ns" value="8900000000000000024" />
+      <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20kJfa" value="type" />
-      <ref role="20lvS9" node="2" resolve="Entity" />
+      <ref role="20lvS9" node="6" resolve="Type" />
     </node>
   </node>
   <node concept="1TIwiD" id="4">
@@ -110,9 +114,40 @@
     </node>
     <node concept="1TJgyj" id="26" role="1TKVEi">
       <property role="IQ2ns" value="8900000000000000026" />
+      <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20kJfa" value="type" />
+      <ref role="20lvS9" node="6" resolve="Type" />
+    </node>
+  </node>
+  <node concept="PlHQZ" id="6">
+    <property role="EcuMT" value="8900000000000000006" />
+    <property role="TrG5h" value="Type" />
+  </node>
+  <node concept="1TIwiD" id="7">
+    <property role="EcuMT" value="8900000000000000007" />
+    <property role="TrG5h" value="EntityType" />
+    <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
+    <node concept="PrWs8" id="17" role="PzmwI">
+      <ref role="PrY4T" node="6" resolve="Type" />
+    </node>
+    <node concept="1TJgyj" id="31" role="1TKVEi">
+      <property role="IQ2ns" value="8900000000000000031" />
+      <property role="20kJfa" value="entity" />
       <ref role="20lvS9" node="2" resolve="Entity" />
     </node>
   </node>
+  <node concept="1TIwiD" id="8">
+    <property role="EcuMT" value="8900000000000000008" />
+    <property role="TrG5h" value="JavaType" />
+    <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
+    <node concept="PrWs8" id="18" role="PzmwI">
+      <ref role="PrY4T" node="6" resolve="Type" />
+    </node>
+    <node concept="1TJgyj" id="32" role="1TKVEi">
+      <property role="IQ2ns" value="8900000000000000032" />
+      <property role="20lmBu" value="fLJjDmT/aggregation" />
+      <property role="20kJfa" value="javaType" />
+      <ref role="20lvS9" to="tpee:fz3vP1H" resolve="Type" />
+    </node>
+  </node>
 </model>
-

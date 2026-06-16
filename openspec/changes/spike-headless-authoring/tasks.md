@@ -15,11 +15,11 @@ Time-boxed spike. The deliverable is the **go/no-go verdict** (task 4.2), not th
 
 ## 3. Hand-author the Module concept
 
-- [ ] 3.1 Inspect the existing `causeway.structure.mps` header/persistence (v9) and a known structure model for the exact `jetbrains.mps.lang.structure` concept IDs / format
-- [ ] 3.2 Hand-author the `Module` root concept (`INamedConcept`, `entities` child collection) by editing `causeway.structure.mps` XML
-- [ ] 3.3 Run modelcheck + generate; iterate on the XML using the diagnostics until green (or hit the iteration cap)
+- [x] 3.1 Inspect persistence-v9 format — DONE via the repo's `…@generator.mps` (registry index→id mapping); distribution ships no source structure models to crib feature IDs from.
+- [x] 3.2 Hand-author the `Module` concept — DONE (minimal: named `ConceptDeclaration`, rootable). **It loaded and MPS recognised it as concept `Module`.**
+- [~] 3.3 Iterate against the oracle — PARTIAL: one specific modelcheck error remains — a manually-created concept needs its `conceptId`/feature IDs generated ("Generate IDs" intention). Couldn't extract the `conceptId` property id from the distribution; not closed this session. See verdict.
 
 ## 4. Verdict
 
-- [ ] 4.1 Capture the build evidence (commands + output) for baseline and for the authored concept
-- [ ] 4.2 Write the explicit go/no-go: is headless hand-authoring viable for Phase B, or fall back to GUI authoring? Record the recommended approach
+- [x] 4.1 Capture build evidence — DONE (commands + the modelcheck error + attempted model in the verdict doc)
+- [x] 4.2 Write the go/no-go — DONE: **QUALIFIED GO** — `docs/spike-headless-authoring-verdict.md`. Headless authoring viable; needs a one-time conceptId bootstrap (seed IDs from one GUI/sample concept, or run headless "Generate IDs").

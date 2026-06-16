@@ -1,24 +1,26 @@
 # Tasks
 
-> **Sequencing note (found during apply 2026-06-16):** tasks 2.2, 2.4, 3.x, 4.4, and 5.1
-> are effectively **blocked on `entity-property-action-slice` Phase B** — the MPS modules
-> are currently empty, so there is nothing meaningful to generate/modelcheck/compile yet.
-> Toolchain decision (1.1) is done; build scaffolding (1.2–1.4) can be authored now but
-> gains little until Phase B produces real models. See `docs/headless-build-research.md`.
+> **UPDATE (2026-06-16):** `spike-headless-authoring` delivered the build foundation early.
+> A working Gradle build now exists at the repo root (`build.gradle.kts`, wrapper, `settings.gradle.kts`)
+> and `./gradlew checkModels` runs modelcheck headlessly over the real `causeway` modules (0 errors).
+> Corrected toolchain (the original `com.specificlanguages.mps` guess was wrong): **Gradle 9.x** +
+> **`de.itemis.mps.gradle.common` 1.30.x** (`MpsCheck`/`MpsGenerate`) + `com.jetbrains:mps:2025.3`
+> from artifacts.itemis.cloud. Remaining scope is now: run/verify *generate*, compile the generated
+> Java, and *productionize* (CI). See `docs/headless-build-research.md` + the spike verdict.
 
 ## 1. Toolchain selection & pinning
 
-- [x] 1.1 Verify mps-gradle-plugin compatibility with MPS 2025.3 (baseline 253) — DONE: feasible via `com.specificlanguages.mps` 2.0.1; MPS 2025.3 zip downloadable; ant fallback not needed. See `docs/headless-build-research.md`
-- [ ] 1.2 Pin MPS version (2025.3) and download the MPS distribution for the build (don't depend on local `MPS.app`)
-- [ ] 1.3 Configure a Gradle Java toolchain pinning JDK 21 (independent of the default `java` 11)
-- [ ] 1.4 Add Gradle wrapper + settings so the build runs from a clean checkout
+- [x] 1.1 Verify plugin compatibility with MPS 2025.3 — DONE (corrected): `de.itemis.mps.gradle.common` 1.30.x on **Gradle 9.x** (8.x fails: Kotlin `SpillingKt`). `com.specificlanguages.mps` rejected (packaging-oriented). Ant fallback not needed.
+- [x] 1.2 Pin MPS 2025.3 + download for the build — DONE: `mps` configuration resolves `com.jetbrains:mps:2025.3`, `Sync`'d to `build/mps`; not dependent on local MPS.app.
+- [~] 1.3 JDK 21 — PARTIAL: build currently run with `JAVA_HOME`=SDKMAN JDK 21; a declarative Gradle Java toolchain block is still a refinement.
+- [x] 1.4 Gradle wrapper + settings — DONE (pinned to Gradle 9.0.0; committed).
 
 ## 2. Headless generation & modelcheck
 
-- [ ] 2.1 Configure the build to resolve the `causeway`, `causeway.runtime`, and `causeway.sandbox` modules
-- [ ] 2.2 Wire the generate task for all three modules; achieve a first green headless generate (expect minor `.mpl`/`.msd`/library adjustments)
-- [ ] 2.3 Wire the modelcheck task as a gate (fail the build on model errors)
-- [ ] 2.4 Ensure sandbox stub dependencies (Causeway applib + Jakarta + hand-written app) resolve headlessly, matching the IDE setup
+- [x] 2.1 Resolve the `causeway`/`runtime`/`sandbox` modules — DONE (`MpsCheck.projectLocation` = project dir picks them up).
+- [ ] 2.2 Wire + verify the `generate` task — `generateModels` (`MpsGenerate`) is DEFINED but not yet run/verified (waits on the generator, slice task 4).
+- [x] 2.3 Modelcheck gate — DONE: `checkModels` fails the build on model errors; passes clean on the current structure.
+- [ ] 2.4 Sandbox stub dependencies (Causeway + Jakarta + reference-app) resolve headlessly — pending (waits on slice task 5.1/5.2).
 
 ## 3. Compile generated Java
 

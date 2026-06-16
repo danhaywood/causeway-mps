@@ -1,9 +1,14 @@
 # Tasks
 
 Split into two phases (decided 2026-06-16): **Phase A** is plain-Java de-risking that
-needs no MPS IDE; **Phase B** is the MPS language authoring, which must be done
-through the MPS projectional editor (`.mps` model files cannot be reliably hand-written
-as text). See `reference-app/SETUP.md`.
+needs no MPS IDE; **Phase B** is the MPS language authoring. See `reference-app/SETUP.md`.
+
+**UPDATE (2026-06-16):** the original assumption that Phase B "must be done through the MPS
+projectional editor" was **disproven** by `spike-headless-authoring` (verdict: GO). Claude can
+author `.mps` models **headlessly** by hand-editing XML and validating via `./gradlew checkModels`
+(see `docs/spike-headless-authoring-verdict.md`). The only GUI step needed is a one-time capture
+of a new language's concept/feature IDs (reference it once in MPS, save, read the ids). The
+structure concepts (task 2) were authored this way and pass modelcheck clean.
 
 ## 1. Phase A — Plain-Java de-risking (no MPS IDE)
 
@@ -14,20 +19,20 @@ as text). See `reference-app/SETUP.md`.
 - [x] 1.5 Document the stub/classpath setup and golden idiom (`reference-app/SETUP.md`)
 - [ ] 1.6 (deferred) Boot a Causeway app context to verify runtime introspection under `ENCAPSULATION_ENABLED` (compile-time only so far)
 
-## 2. Phase B — Structure concepts (MPS IDE: causeway.structure)
+## 2. Phase B — Structure concepts (causeway.structure — authored HEADLESSLY)
 
-- [ ] 2.1 Add `Module` root concept (`INamedConcept`) with an `entities` child collection
-- [ ] 2.2 Add `Entity` root concept (`INamedConcept`) with `properties` and `actions` child collections
-- [ ] 2.3 Add `Type` union concept: alternative of an `Entity` reference vs a wrapped baseLanguage type
-- [ ] 2.4 Add `Property` concept with `name` and a `Type`
-- [ ] 2.5 Add `Parameter` concept with `name` and a `Type`
-- [ ] 2.6 Add `Action` concept with `parameters`, return `Type`, `SemanticsOf` value, and an embedded baseLanguage `StatementList` body
+- [x] 2.1 `Module` root concept (`INamedConcept`) with `entities` 0..n → Entity
+- [x] 2.2 `Entity` concept (`INamedConcept`) with `properties` 0..n → Property and `actions` 0..n → Action (note: Entity is a child of Module, so not rootable; only Module is rootable)
+- [ ] 2.3 `Type` union concept — NOT done. Placeholder: `Property.type`/`Parameter.type` are currently direct references to `Entity`. Needs an interface concept + `EntityType` arm + baseLanguage-type arm (capture `InterfaceConceptDeclaration` + baseLanguage ids once via GUI).
+- [x] 2.4 `Property` concept (`INamedConcept`) with a `type` (currently ref → Entity; see 2.3)
+- [x] 2.5 `Parameter` concept (`INamedConcept`) with a `type` (currently ref → Entity; see 2.3)
+- [~] 2.6 `Action` concept — PARTIAL: `INamedConcept` + `parameters` 0..n → Parameter done; **deferred:** return `Type`, `SemanticsOf` (enum), and the embedded baseLanguage `StatementList` body (need the enum + baseLanguage ids).
 
-## 3. Phase B — Constraints, typesystem & editor (MPS IDE)
+## 3. Phase B — Constraints, typesystem & editor (causeway.* — headless)
 
 - [ ] 3.1 Constraint: member names unique within an entity (properties and actions)
-- [ ] 3.2 Typesystem/scoping: `Type` entity-reference resolves to an `Entity` node; baseLanguage-type alternative resolves via stubs
-- [ ] 3.3 Editor: projectional editors for `Module`, `Entity`, `Property`, `Action` (including inline baseLanguage body)
+- [ ] 3.2 Typesystem/scoping: `Type` entity-reference resolves to an `Entity` node; baseLanguage-type alternative resolves via stubs (depends on 2.3)
+- [ ] 3.3 Editor: rely on MPS **default editors** for v1 (no editor aspect authored); revisit only if the inline baseLanguage body needs a custom cell
 
 ## 4. Phase B — Generator (MPS IDE: causeway.generator)
 

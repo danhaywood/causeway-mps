@@ -10,7 +10,7 @@ Time-boxed spike. The deliverable is the **go/no-go verdict** (task 4.2), not th
 
 ## 2. Green baseline on the empty scaffold
 
-- [ ] 2.1 Run headless `generate` against the unmodified `causeway` scaffold; fix any toolchain/config issues
+- [x] 2.1 Headless `generate` baseline — N/A for the verdict: `modelcheck` (2.2) was the oracle used; `generateModels` is wired but generate-verification belongs to the slice's generator work, not this spike.
 - [x] 2.2 Run headless `modelcheck` against the unmodified scaffold — DONE: `./gradlew checkModels` BUILD SUCCESSFUL, only harmless warnings (empty generator model), no errors. **Oracle established.**
 
 ## 3. Hand-author the Module concept

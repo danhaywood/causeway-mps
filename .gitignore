@@ -1,0 +1,16 @@
+# MPS generated output
+**/source_gen/
+**/source_gen.caches/
+**/test_gen/
+**/test_gen.caches/
+**/classes_gen/
+**/.caches/
+
+# MPS / IntelliJ user-specific
+.mps/workspace.xml
+
+# Claude local settings
+.claude/settings.local.json
+
+# OS
+.DS_Store

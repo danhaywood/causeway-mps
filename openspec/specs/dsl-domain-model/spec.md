@@ -1,7 +1,11 @@
 # dsl-domain-model Specification
 
 ## Purpose
-TBD - created by archiving change entity-property-action-slice. Update Purpose after archive.
+The core MPS structure concepts of the `causeway` DSL — `Module`, `Entity`, `Property`, `Action`,
+`Parameter`, and the `Type` union (`EntityType` ∪ `JavaType`) — and how they compose. Actions carry
+parameters, an optional return type, a `SemanticsOf` value, and an embedded baseLanguage body. (Mixin
+generation, the persisted/`derived` discriminator, and the richer action programming model are layered
+on by the `dsl-mixins` and `dsl-action-model` changes.)
 ## Requirements
 ### Requirement: Module concept
 The `causeway` language SHALL provide a `Module` root concept that is an `INamedConcept`. A `Module` SHALL contain zero or more `Entity` children (`entities`, cardinality `0..n`).

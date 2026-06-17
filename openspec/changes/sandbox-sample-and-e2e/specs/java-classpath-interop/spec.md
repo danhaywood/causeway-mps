@@ -31,5 +31,6 @@ The generated body of an `Action` SHALL be able to reference and invoke hand-wri
 that SHALL compile on the shared classpath.
 
 #### Scenario: Generated body calls a hand-written service
-- **WHEN** `Customer.placeOrder`'s body calls `OrderService` and is generated
-- **THEN** the generated method compiles against `OrderService` on the shared classpath
+- **WHEN** the `placeOrder` action's body calls `OrderService` and is generated (into the
+  `Customer_placeOrder` mixin's `act` method)
+- **THEN** the generated mixin compiles against `OrderService` on the shared classpath

@@ -46,22 +46,31 @@ cd reference-app && mvn compile
 @DomainObject(nature = Nature.ENTITY,
               introspection = Introspection.ENCAPSULATION_ENABLED)        // per-object, self-contained
 @Entity @Table(schema = "customers", name = "Customer")
-public class Customer {
+public class Customer {                                                   // PURE PERSISTED STATE
 
     @Column(name = "name", nullable = false, length = 255)
     private String name;                                                  // JPA on the FIELD, field-access, no Lombok
 
     @Property @Domain.Include
     private String getName() { return name; }                            // explicit private getter, read-only
+}
+```
 
-    @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public Customer placeOrder(final Product product, final int quantity) {
-        orderService.placeOrder(this, product, quantity);                // body references external hand-written code
-        return this;
+Under **mixins-everywhere**, the entity class holds only persisted state; every
+action generates as a `Mixee_member` **mixin class** (state stays in the entity):
+
+```java
+@Action(semantics = SemanticsOf.IDEMPOTENT)                              // @Action on the CLASS
+public class Customer_placeOrder {
+    private final Customer customer;                                      // mixee = single-arg ctor param
+    public Customer_placeOrder(final Customer customer) { this.customer = customer; }
+
+    @MemberSupport                                                        // mixin main method `act`, encapsulation-ok
+    public Customer act(final Product product, final int quantity) {
+        orderService.placeOrder(customer, product, quantity);            // body references external hand-written code
+        return customer;
     }
-
-    @Inject @Transient
-    private transient OrderService orderService;
+    @Inject private OrderService orderService;                           // injected service (allowed; not domain state)
 }
 ```
 

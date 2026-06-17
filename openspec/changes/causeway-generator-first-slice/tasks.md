@@ -3,6 +3,11 @@
 Oracle = `./gradlew generateModels` then compile the output against `reference-app`'s classpath;
 diff every generated file against the golden `reference-app/src/main/java/customers/`.
 
+## 0. Re-golden reference-app to mixin form (the generator's verified target)
+
+- [x] 0.1 Move `Customer.placeOrder` from an inline method to a `Customer_placeOrder` mixin class (class `@Action`, single-arg ctor = mixee, `act` method `@MemberSupport`, injected `OrderService`); `Customer` keeps only persisted state. Verified idiom against Causeway docs.
+- [x] 0.2 Compile the re-goldened `reference-app` against real Causeway 3.6.0 — DONE (Customer + Customer_placeOrder + Product compile). Updated `SETUP.md`.
+
 ## 1. Generator scaffolding
 
 - [ ] 1.1 Confirm `generateModels` (`MpsGenerate`) wiring in the build targets the sandbox/language output

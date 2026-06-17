@@ -1,32 +1,25 @@
 package customers;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import app.OrderService;
 
 /**
- * GOLDEN reference for generator output (change: entity-property-action-slice).
+ * GOLDEN reference for generator output.
  *
- * Demonstrates the LOCKED idiom that the MPS generator must emit:
+ * Under the mixins-everywhere decision, an entity class is PURE PERSISTED STATE:
  *  - per-object @DomainObject(... introspection = ENCAPSULATION_ENABLED)
  *  - JPA annotations on the FIELD (field-access), no Lombok
  *  - explicit private getter carrying @Property + @Domain.Include (read-only)
- *  - @Action method whose body is (here, hand-written; later, embedded baseLanguage)
- *    and which references hand-written external code ({@link OrderService}).
+ * All behaviour lives in mixin classes (see {@link Customer_placeOrder}).
  */
 @Named("customers.Customer")
 @DomainObject(nature = Nature.ENTITY, introspection = Introspection.ENCAPSULATION_ENABLED)
@@ -46,16 +39,4 @@ public class Customer {
     private String getName() {
         return name;
     }
-
-    @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public Customer placeOrder(final Product product, final int quantity) {
-        // stands in for the embedded baseLanguage body; the milestone is that an
-        // action body can reference external hand-written code on the classpath.
-        orderService.placeOrder(this, product, quantity);
-        return this;
-    }
-
-    @Inject
-    @Transient
-    private transient OrderService orderService;
 }

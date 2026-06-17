@@ -16,12 +16,17 @@ generator-authoring boundary).
 > `OrderService`) both need before they can move past a skeleton. Headless-authorable; settled in
 > `design.md`.
 
-- [ ] 0.1 Add an `injectedServices` child to `Action` in `causeway.structure` — a list of named, typed
-  fields (`name` + `Type`, reusing the `EntityType`/`JavaType` union). `./gradlew checkModels` green.
+- [x] 0.1 Add an `injectedServices` child to `Action` in `causeway.structure` — DONE: new
+  `InjectedService` concept (`INamedConcept` + a single `type` child reusing the `Type` union;
+  conceptId `8900000000000000010`) and `Action.injectedServices` link (`0..n`, linkId
+  `8900000000000000044`), hand-authored with clean IDs per the spike convention. `./gradlew checkModels`
+  green (no "Generate IDs" hint, no unresolved refs).
 - [ ] 0.2 Make each declared service in scope (as a variable) for the `act` body (simplest scope case —
-  see §3.1). Confirm a body reference to the service resolves.
-- [ ] 0.3 Update the promoted `dsl-domain-model` spec note + the generator-template doc OPEN ITEM once
-  the concept exists (it is currently "RESOLVED (design)").
+  see §3.1). Confirm a body reference to the service resolves. *(Needs the scope provider — §3; the
+  structure exists but bodies can't yet reference services until scope is wired.)*
+- [x] 0.3 Reflect that the concept now exists — DONE for the generator-template doc OPEN ITEM (no longer
+  a design-only prerequisite). The promoted `dsl-domain-model` spec is updated at archive time (the delta
+  in `specs/dsl-domain-model/spec.md` merges then), not hand-edited mid-change.
 
 ## 1. Structure concepts
 

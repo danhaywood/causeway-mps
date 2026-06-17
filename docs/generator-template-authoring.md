@@ -174,14 +174,16 @@ Notes:
 - `act` body is a `COPY_SRC` of `Action.body`; external refs (e.g. `OrderService`) resolve on the shared
   classpath — the coexistence milestone, proven in `sandbox-sample-and-e2e`.
 
-> **RESOLVED (design, 2026-06-17) — was an OPEN ITEM.** The golden mixin has
+> **RESOLVED — concept now exists (2026-06-17).** The golden mixin has
 > `@Inject private OrderService orderService;` and the body references `orderService`. **Settled in
-> `dsl-action-model/design.md`:** `Action` gains an `injectedServices` child (named, typed fields,
-> reusing the `Type` union); each is in scope for the body and generates as `@Inject private <Type>
-> <name>;` on the mixin. Auto-detecting services from the body is deferred v2 sugar. **Implementation
-> prerequisite:** the `injectedServices` structure concept must exist before this Action template (and the
-> e2e `placeOrder` sample) can move past a skeleton — it is small and headless-authorable, a candidate to
-> pull forward (like the stubs). The Entity/Property/Type templates have no such dependency.
+> `dsl-action-model/design.md` and implemented:** `Action` has an `injectedServices` child
+> (`InjectedService` = named field + a `type` reusing the `Type` union; conceptId
+> `8900000000000000010`, link `8900000000000000044`), now in `causeway.structure` and `checkModels`-green
+> (dsl-action-model task 0.1). Each declared service generates as `@Inject private <Type> <name>;` on the
+> mixin; auto-detecting services from the body is deferred v2 sugar. **Still pending** (dsl-action-model
+> task 0.2): the *scope provider* so a body can actually reference the service — until that lands, the
+> sample action body can't yet resolve `orderService`. The Entity/Property/Type templates have no such
+> dependency.
 
 ## GUI playbook (fast, low-risk sequence)
 

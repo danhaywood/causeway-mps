@@ -30,13 +30,18 @@ generator-authoring boundary).
 
 ## 1. Structure concepts
 
-- [ ] 1.1 Action-level supporting blocks on `Action`: `hide`, `disable`, `validate`, each an embedded
-  baseLanguage block alongside the `act` body.
-- [ ] 1.2 Per-parameter supporting blocks on `Parameter`: `choices`, `default`, `validate`,
-  `autoComplete`, `hide`, `disable`, each an embedded baseLanguage block.
-- [ ] 1.3 Top-level / explicit-target action form (`action … on <Entity> as <mixee>`) in addition to the
-  nested form (target implicit = enclosing entity).
-- [ ] 1.4 `./gradlew checkModels` green on a model exercising both forms + all block kinds.
+- [x] 1.1 Action-level supporting blocks on `Action` — DONE: `hide` (45), `disable` (46), `validate`
+  (47), each an optional (`0..1`) `StatementList` child (same shape as the `act` body / link 41).
+- [x] 1.2 Per-parameter supporting blocks on `Parameter` — DONE: `choices` (50), `default` (51),
+  `validate` (52), `autoComplete` (53), `hide` (54), `disable` (55), each an optional (`0..1`)
+  `StatementList` child.
+- [x] 1.3 Top-level / explicit-target action form — DONE: `Module.actions` (49, `0..n`) holds top-level
+  actions, and `Action.target` (48) is an optional (`0..1`) **reference** to `Entity` (empty ⇒ nested,
+  target implicit = enclosing entity; set ⇒ top-level / cross-module). **Deferred**: the explicit
+  mixee-handle *name* (`as customer`) — defaults to the decapitalized target name for now; a string-typed
+  property is a small refinement (the constraint "top-level ⇒ target set" is a §5 constraints concern).
+- [x] 1.4 `./gradlew checkModels` green with all new links (also surfaced + fixed the reference-cardinality
+  encoding gotcha — see `docs/spike-headless-authoring-verdict.md`).
 
 ## 3. Scope provider (the hard part — GUI-authored)
 

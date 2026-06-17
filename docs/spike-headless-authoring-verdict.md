@@ -105,6 +105,20 @@ The model is preserved here as evidence.)
 3. After the gap is closed, Claude can do the bulk of Phase B structure authoring headlessly;
    the **generator** aspect remains the separately-hard piece (out of this spike's scope).
 
+## Headless authoring gotchas (accrued)
+
+Hand-authoring `causeway.structure` (clean round IDs, validated by `./gradlew checkModels`) is
+reliable. Conventions/pitfalls learned beyond the initial conceptId bootstrap:
+
+- **Cardinality (`sourceCardinality`, role `20lbJX`)** on a child/aggregation link: `0..n` =
+  `fLJekj5/_0__n`, `0..1` = `fLJekj5/_0__1`; omit the property entirely for single (`1`).
+- **Reference links carrying a cardinality must set the metaClass explicitly.** A single reference (e.g.
+  `EntityType.entity`) omits both `20lmBu` (metaClass) and `20lbJX` (cardinality) and works. But an
+  **optional** reference (`0..1`) with the metaClass omitted fails modelcheck with `Property constraint
+  violation for the property "sourceCardinality"`. Fix: set `20lmBu = fLJjDmT/reference` alongside
+  `20lbJX = fLJekj5/_0__1`. (Aggregation links use `20lmBu = fLJjDmT/aggregation`.) Confirmed on MPS
+  2025.3 while authoring `Action.target` (dsl-action-model task 1.3).
+
 ## Bottom line
 
 The big unknowns are resolved: the build/validate loop is real and green, and hand-authored

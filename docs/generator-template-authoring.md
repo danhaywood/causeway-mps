@@ -174,15 +174,14 @@ Notes:
 - `act` body is a `COPY_SRC` of `Action.body`; external refs (e.g. `OrderService`) resolve on the shared
   classpath — the coexistence milestone, proven in `sandbox-sample-and-e2e`.
 
-> **OPEN ITEM (design gap, surface before authoring the Action template).** The golden mixin has
-> `@Inject private OrderService orderService;` and the body references `orderService`. The current
-> `Action` concept models a `body` but **no injected-service field**, so a copied-through body has nothing
-> to resolve `orderService` against. Options: (a) the embedded body references an injected field the DSL
-> models (needs a new structure child on `Action`); (b) auto-detect referenced service types and emit
-> `@Inject` fields (the "auto-injected-services" freebie explicitly deferred in `dsl-action-model`);
-> (c) for the single sample, model it in the sandbox program. **This must be settled with
-> `dsl-action-model` / `sandbox-sample-and-e2e` before the Action template can faithfully reproduce the
-> golden.** The Entity/Property/Type templates have no such gap.
+> **RESOLVED (design, 2026-06-17) — was an OPEN ITEM.** The golden mixin has
+> `@Inject private OrderService orderService;` and the body references `orderService`. **Settled in
+> `dsl-action-model/design.md`:** `Action` gains an `injectedServices` child (named, typed fields,
+> reusing the `Type` union); each is in scope for the body and generates as `@Inject private <Type>
+> <name>;` on the mixin. Auto-detecting services from the body is deferred v2 sugar. **Implementation
+> prerequisite:** the `injectedServices` structure concept must exist before this Action template (and the
+> e2e `placeOrder` sample) can move past a skeleton — it is small and headless-authorable, a candidate to
+> pull forward (like the stubs). The Entity/Property/Type templates have no such dependency.
 
 ## GUI playbook (fast, low-risk sequence)
 

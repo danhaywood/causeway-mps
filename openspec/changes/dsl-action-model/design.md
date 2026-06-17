@@ -67,15 +67,36 @@ the validated-param arg — the generator picks.
 - **Scope creep** → this is the richest concept; keep properties'/collections' blocks and the sugar out
   of the first cut.
 
-## Note (2026-06-17): the `@Inject` service-field gap (surfaced by `causeway-generator-first-slice`)
+## Decision (2026-06-17): injected services are explicitly modelled on the Action
 
-Building the Action generator template exposed a concrete gap this change must resolve. The golden
-`Customer_placeOrder` mixin has `@Inject private OrderService orderService;` and its `act` body calls
-`orderService`. But today `Action` models a `body` and **no injected-service field**, so a copied-through
-body has nothing to resolve `orderService` against — the generated mixin can't compile. Options:
-(a) model an injected-service field on `Action` that the body references; (b) **auto-detect** referenced
-service types in the body and emit `@Inject` fields (this is the "auto-injected services" candidate v2
-already noted as a Non-Goal above — this finding is the concrete motivation for it); (c) for a single
-sample, declare it in the sandbox program. **Until settled, the Action template in
-`causeway-generator-first-slice` can only emit a skeleton mixin, not the golden.** See
-`docs/generator-template-authoring.md` (OPEN ITEM). The Entity/Property/Type templates have no such gap.
+*Surfaced by `causeway-generator-first-slice`.* The golden `Customer_placeOrder` mixin has
+`@Inject private OrderService orderService;` and its `act` body calls `orderService`. Today `Action`
+models a `body` but **no injected-service declaration**, so a copied-through body has nothing to resolve
+`orderService` against — and, just as blocking, the embedded body *can't even be authored* (the
+baseLanguage reference `orderService` has no in-scope target). This decision settles that.
+
+**Settled: option (a) — model injected services explicitly.** `Action` gains an `injectedServices`
+child: a list of named, typed fields (`name` + a `Type`, reusing the `JavaType`/`EntityType` union).
+Rationale:
+- It is the **minimal** concept that lets the body resolve a service and the generator reproduce the
+  golden. (b) auto-detect and (c) sample-only were rejected: (c) isn't a generator solution; (b) is real
+  but is sugar *on top of* (a) — keep it as the deferred v2 below.
+- It is **consistent with this change's existing scope rule** — the scope table already says "ALWAYS in
+  scope: the mixee + injected services". (a) simply gives those services a declaration site. Each declared
+  service is an in-scope variable for every action/param supporting block and the body (universal scope),
+  exactly as the table states.
+
+**Generation.** Each `injectedServices` entry → `@Inject private <Type> <name>;` on the mixin class; a
+body reference to `<name>` resolves to that field. (Matches the golden's `@Inject private OrderService
+orderService;`.)
+
+**Deferred (v2 sugar, unchanged Non-Goal):** auto-detecting `@DomainService`-typed references in a body
+and synthesising the `@Inject` fields, so the author needn't declare them. This is a convenience layer
+over the explicit declaration settled here, not a replacement.
+
+**Sequencing consequence.** This `injectedServices` field is the *one* piece of `dsl-action-model` that
+`causeway-generator-first-slice` (Action template) and `sandbox-sample-and-e2e` (the `placeOrder` sample,
+whose body calls `OrderService`) both need before they can proceed past a skeleton. It is small and
+structure-only (headless-authorable, validated by `checkModels`) — a candidate to pull forward ahead of
+this change's larger scope-provider work, the same way the classpath stubs were. The Entity/Property/Type
+templates have no such dependency. See `docs/generator-template-authoring.md` (Action OPEN ITEM).

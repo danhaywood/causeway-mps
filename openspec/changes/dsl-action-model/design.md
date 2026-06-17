@@ -66,3 +66,16 @@ the validated-param arg — the generator picks.
 - **Reorder breaks references** → warn at edit time; otherwise a silent semantic change.
 - **Scope creep** → this is the richest concept; keep properties'/collections' blocks and the sugar out
   of the first cut.
+
+## Note (2026-06-17): the `@Inject` service-field gap (surfaced by `causeway-generator-first-slice`)
+
+Building the Action generator template exposed a concrete gap this change must resolve. The golden
+`Customer_placeOrder` mixin has `@Inject private OrderService orderService;` and its `act` body calls
+`orderService`. But today `Action` models a `body` and **no injected-service field**, so a copied-through
+body has nothing to resolve `orderService` against — the generated mixin can't compile. Options:
+(a) model an injected-service field on `Action` that the body references; (b) **auto-detect** referenced
+service types in the body and emit `@Inject` fields (this is the "auto-injected services" candidate v2
+already noted as a Non-Goal above — this finding is the concrete motivation for it); (c) for a single
+sample, declare it in the sandbox program. **Until settled, the Action template in
+`causeway-generator-first-slice` can only emit a skeleton mixin, not the golden.** See
+`docs/generator-template-authoring.md` (OPEN ITEM). The Entity/Property/Type templates have no such gap.

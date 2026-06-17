@@ -19,3 +19,6 @@ reference-app/target/
 # Gradle
 .gradle/
 build/
+
+# Staged MPS classpath stubs (resolved at build time by resolveSandboxStubs)
+languages/causeway.sandbox/libs/

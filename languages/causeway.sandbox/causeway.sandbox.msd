@@ -4,6 +4,15 @@
     <modelRoot contentPath="${module}" type="default">
       <sourceRoot path="${module}/models" />
     </modelRoot>
+    <!-- Causeway/Jakarta classpath stubs so DSL programs + generator templates can reference
+         external annotation types (@DomainObject, @Entity, @Property, @Action, SemanticsOf, …).
+         Populated at build time by the `resolveSandboxStubs` Gradle task (libs/ is git-ignored);
+         pulled forward from sandbox-sample-and-e2e task 1.1. -->
+    <modelRoot contentPath="${module}/libs" type="java_classes">
+      <sourceRoot location="causeway-applib-3.6.0.jar" />
+      <sourceRoot location="jakarta.persistence-api-3.1.0.jar" />
+      <sourceRoot location="jakarta.inject-api-2.0.1.jar" />
+    </modelRoot>
   </models>
   <facets>
     <facet type="java" compile="off" classes="off" ext="no">

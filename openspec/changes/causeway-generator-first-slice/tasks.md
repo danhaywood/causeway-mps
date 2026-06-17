@@ -10,7 +10,7 @@ diff every generated file against the golden `reference-app/src/main/java/custom
 
 ## 1. Generator scaffolding
 
-- [ ] 1.1 Confirm `generateModels` (`MpsGenerate`) wiring in the build targets the sandbox/language output
+- [x] 1.1 Confirm `generateModels` (`MpsGenerate`) wiring — DONE: `./gradlew generateModels` BUILD SUCCESSFUL; generated the `causeway` language's own impl Java into `source_gen` (incl. `EnumerationDescriptor_SemanticsOf`, `unique_member_names_NonTypesystemRule`), proving the task + our models are valid. NB this is the *language's* code, not yet Causeway *domain* code (needs the templates + a sandbox program).
 - [ ] 1.2 Set up the generator model in `causeway.generator` (capture template-language ids via GUI where hand-XML is impractical; record what needs the GUI)
 
 ## 2. Templates

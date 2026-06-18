@@ -78,6 +78,7 @@
   <node concept="1TIwiD" id="2">
     <property role="EcuMT" value="8900000000000000002" />
     <property role="TrG5h" value="Entity" />
+    <property role="19KtqR" value="true" />
     <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
     <node concept="PrWs8" id="12" role="PzmwI">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />

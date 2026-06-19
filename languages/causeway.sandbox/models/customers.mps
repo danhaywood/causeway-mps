@@ -24,6 +24,7 @@
       <concept id="8900000000000000003" name="causeway.structure.Property" flags="ng" index="3Zuirr">
         <child id="8900000000000000024" name="type" index="3Zuir0" />
       </concept>
+      <concept id="8900000000000000001" name="causeway.structure.Module" flags="ng" index="3Zuir1" />
     </language>
     <language id="ceab5195-25ea-4f22-9b92-103b95ca8c0c" name="jetbrains.mps.lang.core">
       <concept id="1169194658468" name="jetbrains.mps.lang.core.structure.INamedConcept" flags="ngI" index="TrEIO">
@@ -52,6 +53,9 @@
         </node>
       </node>
     </node>
+  </node>
+  <node concept="3Zuir1" id="_$TiGuwUR0">
+    <property role="TrG5h" value="customers" />
   </node>
 </model>
 

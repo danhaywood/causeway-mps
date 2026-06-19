@@ -28,10 +28,13 @@ GUI-authored there).
 
 ## 2. Sandbox sanity (`causeway.sandbox` / `customers`)
 
-- [ ] 2.1 Confirm `customers.mps` still loads and `checkModels` is green after the metamodel change (it
-  already stores Entity roots with no Module node — expect no edit, just verification).
-- [ ] 2.2 Add a `Module` singleton root to the `customers` model carrying the `customers` namespace (so the
-  generator has the metadata to read). `checkModels` green.
+- [x] 2.1 Confirm `customers.mps` still loads and `checkModels` is green after the metamodel change — DONE:
+  green with no edit; it already stores two `Entity` roots and no `Module` node.
+- [x] 2.2 Add a `Module` singleton root to the `customers` model carrying the `customers` namespace — DONE:
+  hand-authored a `Module` root named `customers` (concept `8900000000000000001`, registry index `3Zuir1`,
+  node id `_$TiGuwUR0`), matching the file's id/index style. `./gradlew checkModels --rerun-tasks` green
+  (MPS executed the check; modelcheck plugin fails on errors, so success = the node is valid). User to
+  reload-from-disk in MPS.
 
 ## 3. Generator alignment (`causeway.generator`)
 

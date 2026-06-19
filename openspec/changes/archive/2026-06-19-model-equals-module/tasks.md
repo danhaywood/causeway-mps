@@ -67,10 +67,12 @@ GUI-authored there).
 
 ## 5. Reconcile the spec + dependent changes
 
-- [ ] 5.1 At archive time, merge this change's `dsl-domain-model` delta into the promoted spec (Module =
-  singleton; Entity = root owning properties + nested actions; Action = dual nested/top-level with the
-  inner-class split).
-- [ ] 5.2 Confirm `dsl-action-model`'s in-flight `dsl-domain-model` delta still reconciles — its nested
-  form via containment stays valid; ensure its merge does not re-introduce `Module`-owns-entities.
-- [ ] 5.3 Note the deferred Module metadata follow-up (ModuleWithFixtures flag, deps, permissions) so it
-  is not lost.
+- [x] 5.1 Merge this change's `dsl-domain-model` delta into the promoted spec — DONE: promoted
+  `openspec/specs/dsl-domain-model/spec.md` now has Module = singleton (no containment), Entity = root
+  owning properties + nested actions, Action = dual nested/top-level with the inner-class split.
+- [x] 5.2 Reconcile `dsl-action-model`'s in-flight delta — DONE: it never referenced `Module` containment
+  (no re-introduction risk); its `Action concept` MODIFIED requirement was updated to a superset that
+  carries the rootable + non-static-inner-class generation detail, so archiving it later extends (not
+  reverts) this change. Its supporting-blocks / injected-services / params-as-fields additions are intact.
+- [x] 5.3 Deferred Module metadata follow-up (ModuleWithFixtures flag, deps, permissions) — DONE: recorded
+  in the (archived) proposal's out-of-scope list and the `model-equals-module` memory.

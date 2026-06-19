@@ -1,12 +1,16 @@
 ## MODIFIED Requirements
 
 ### Requirement: Action concept
-The `causeway` language SHALL provide an `Action` concept (`INamedConcept`). An `Action` SHALL be
-authored in one of two forms:
+The `causeway` language SHALL provide an `Action` concept (`INamedConcept`) that is **both** a valid
+nested child of an `Entity` (the `actions` containment) **and** rootable as a top-level concept. An
+`Action` SHALL be authored in one of two forms, discriminated by its optional `target` reference:
 
-- **nested** within an `Entity` — its target (mixee) is implicitly the enclosing entity; or
-- **top-level** with an explicit target `Entity` and a mixee name (e.g. `action … on Customer as
-  customer`), enabling contribution to an entity in another module.
+- **nested** within an `Entity` — `target` empty, mixee implicitly the enclosing entity; generates as a
+  **non-static inner mixin class** of the entity's class (the javac-synthesised `Mixin(Outer)`
+  constructor is the 1-arg-mixee ctor; mixee = `Outer.this`); or
+- **top-level** — a root with an explicit `target` `Entity` and a mixee name (e.g. `action … on Customer
+  as customer`); generates as a **separate top-level mixin class** via a root mapping rule, enabling
+  contribution to an entity in another module (a cross-model reference).
 
 An `Action` SHALL have a name; an ordered list of `Parameter` children (`0..n`) whose order is
 significant (dependency order — see the `dsl-action-scoping` capability); a return `Type`; a

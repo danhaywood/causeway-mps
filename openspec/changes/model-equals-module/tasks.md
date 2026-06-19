@@ -41,12 +41,18 @@ GUI-authored there).
 > Template *bodies* are GUI-authored under `causeway-generator-first-slice` §2; this change only fixes the
 > shape they target and records the split. Keep these as confirmation, not authoring, where possible.
 
-- [ ] 3.1 Confirm the `Entity` root mapping rule is the single entry point and that nested `actions` are
-  intended to generate via a `$LOOP$` (inner class per nested action) — not a separate root rule.
-- [ ] 3.2 Confirm a top-level `Action` root mapping rule is the path for the separate-file form (deferred
-  until a top-level action exists in the sandbox/golden; record as the design of record).
-- [ ] 3.3 `./gradlew generateModels` green over `customers` (skeleton still generates after the metamodel
-  change).
+- [x] 3.1 Confirm the `Entity` root mapping rule is the single entry point — DONE: the `main` mapping
+  config has exactly one rule, `Entity --> map_Entity` (root mapping rule); no `Action` root rule exists,
+  consistent with nested actions generating via a `$LOOP$` inside `map_Entity` (inner class per nested
+  action). The `$LOOP$` body itself is GUI template work (`causeway-generator-first-slice` §2).
+- [x] 3.2 Top-level `Action` root mapping rule = design of record for the separate-file form — DONE
+  (recorded): `Action` is now rootable, so a `Action --> map_Action` root mapping rule is the path when a
+  top-level action exists. Deferred until the sandbox/golden has one.
+- [x] 3.3 `./gradlew generateModels` green over `customers` — DONE: `Customer.java` + `Product.java` still
+  generate as skeletons (`package customers`); the new `Module` root does **not** leak into `source_gen`
+  (unmatched root, not copied to the Java output) — benign today. An explicit abandon-root rule is still
+  wanted in `causeway-generator-first-slice` 2.1 (for the namespace macro), but is not required for
+  generation to succeed.
 
 ## 4. Re-golden the reference-app
 

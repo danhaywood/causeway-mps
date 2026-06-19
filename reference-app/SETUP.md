@@ -57,22 +57,33 @@ public class Customer {                                                   // PUR
 ```
 
 Under **mixins-everywhere**, the entity class holds only persisted state; every
-action generates as a `Mixee_member` **mixin class** (state stays in the entity):
+action generates as a **mixin class** (state stays in the entity). Per the
+**model=module** decision, a *nested* action (one contained in its `Entity`)
+generates as a **non-static inner mixin class** of the entity — no separate file:
 
 ```java
-@Action(semantics = SemanticsOf.IDEMPOTENT)                              // @Action on the CLASS
-public class Customer_placeOrder {
-    private final Customer customer;                                      // mixee = single-arg ctor param
-    public Customer_placeOrder(final Customer customer) { this.customer = customer; }
+public class Customer {
+    // ... persisted state ...
 
-    @MemberSupport                                                        // mixin main method `act`, encapsulation-ok
-    public Customer act(final Product product, final int quantity) {
-        orderService.placeOrder(customer, product, quantity);            // body references external hand-written code
-        return customer;
+    @Action(semantics = SemanticsOf.IDEMPOTENT)                          // @Action on the (inner) CLASS
+    public class placeOrder {                                            // non-static inner class == mixin
+
+        @MemberSupport                                                    // mixin main method `act`, encapsulation-ok
+        public Customer act(final Product product, final int quantity) {
+            orderService.placeOrder(Customer.this, product, quantity);   // mixee = Customer.this (no field/ctor)
+            return Customer.this;
+        }
+        @Inject private OrderService orderService;                       // injected service (allowed; not domain state)
     }
-    @Inject private OrderService orderService;                           // injected service (allowed; not domain state)
 }
 ```
+
+The Java compiler synthesises the inner class's constructor as
+`placeOrder(Customer)` — verified in the bytecode — which is exactly the
+single-arg-mixee constructor Causeway requires, with the mixee supplied as
+`Customer.this`. A *top-level / cross-module* action (contributing to an entity
+it does not live beside) instead generates as a separate top-level
+`Mixee_member` class with an explicit mixee ctor.
 
 ## Mapping to the MPS sandbox stubs (Phase B)
 

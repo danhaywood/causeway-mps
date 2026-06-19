@@ -56,12 +56,14 @@ GUI-authored there).
 
 ## 4. Re-golden the reference-app
 
-- [ ] 4.1 Re-golden `Customer.placeOrder` from a separate `Customer_placeOrder.java` (the
-  `causeway-generator-first-slice` 0.1 form) to a **non-static inner mixin class** of `Customer`
-  (`@Action` class, `@MemberSupport act`, injected `OrderService`, mixee = `Customer.this`).
-- [ ] 4.2 Compile the re-goldened `reference-app` against real Causeway 3.6.0; confirm Causeway introspects
-  the non-static inner class as a mixin (1-arg synthesised ctor = mixee). Update `SETUP.md` if the golden
-  layout notes change.
+- [x] 4.1 Re-golden `Customer.placeOrder` to a **non-static inner mixin class** of `Customer` — DONE:
+  deleted `Customer_placeOrder.java`; added inner class `placeOrder` (`@Action(semantics=IDEMPOTENT)`,
+  `@MemberSupport act(Product,int)`, `@Inject OrderService`, mixee = `Customer.this`, no explicit
+  field/ctor). Named after the member per design decision.
+- [x] 4.2 Compile against real Causeway 3.6.0 — DONE: `mvn compile` green (JDK 21). `javap` confirms the
+  synthesised ctor is `Customer$placeOrder(customers.Customer)` — i.e. the 1-arg-mixee ctor Causeway
+  requires, at the bytecode level. `SETUP.md` updated to the inner-class idiom. (Runtime metamodel
+  introspection of the inner-class mixin remains the same deferred boot-time validation as before.)
 
 ## 5. Reconcile the spec + dependent changes
 

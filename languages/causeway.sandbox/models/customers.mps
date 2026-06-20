@@ -18,13 +18,13 @@
       <concept id="8900000000000000008" name="causeway.structure.JavaType" flags="ng" index="3Zuirg">
         <child id="8900000000000000032" name="javaType" index="3ZuirS" />
       </concept>
+      <concept id="8900000000000000001" name="causeway.structure.Module" flags="ng" index="3Zuirp" />
       <concept id="8900000000000000002" name="causeway.structure.Entity" flags="ng" index="3Zuirq">
         <child id="8900000000000000022" name="properties" index="3Zuire" />
       </concept>
       <concept id="8900000000000000003" name="causeway.structure.Property" flags="ng" index="3Zuirr">
         <child id="8900000000000000024" name="type" index="3Zuir0" />
       </concept>
-      <concept id="8900000000000000001" name="causeway.structure.Module" flags="ng" index="3Zuir1" />
     </language>
     <language id="ceab5195-25ea-4f22-9b92-103b95ca8c0c" name="jetbrains.mps.lang.core">
       <concept id="1169194658468" name="jetbrains.mps.lang.core.structure.INamedConcept" flags="ngI" index="TrEIO">
@@ -54,7 +54,7 @@
       </node>
     </node>
   </node>
-  <node concept="3Zuir1" id="_$TiGuwUR0">
+  <node concept="3Zuirp" id="_$TiGuwUR0">
     <property role="TrG5h" value="customers" />
   </node>
 </model>

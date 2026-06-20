@@ -4,12 +4,10 @@
     <modelRoot contentPath="${module}" type="default">
       <sourceRoot path="${module}/models" />
     </modelRoot>
-    <modelRoot contentPath="${module}/libs" type="java_classes">
-      <sourceRoot location="causeway-applib-3.6.0.jar" />
-      <sourceRoot location="jakarta.persistence-api-3.1.0.jar" />
-      <sourceRoot location="jakarta.inject-api-2.0.1.jar" />
-    </modelRoot>
   </models>
+  <dependencies>
+    <dependency reexport="false">c31c5f46-778f-4244-90d0-c92808fc2b16(causeway.stubs)</dependency>
+  </dependencies>
   <facets>
     <facet type="java" compile="off" classes="off" ext="no">
       <classes generated="true" />
@@ -24,6 +22,7 @@
     <language slang="l:9ded098b-ad6a-4657-bfd9-48636cfe8bc3:jetbrains.mps.lang.traceable" version="0" />
   </languageVersions>
   <dependencyVersions>
+    <module reference="c31c5f46-778f-4244-90d0-c92808fc2b16(causeway.stubs)" version="0" />
     <module reference="c44a8d28-571f-4fff-b536-5883d8cb98df(causeway.sandbox)" version="0" />
   </dependencyVersions>
 </solution>

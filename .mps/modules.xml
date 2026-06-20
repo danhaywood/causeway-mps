@@ -4,6 +4,7 @@
     <projectModules>
       <modulePath path="$PROJECT_DIR$/languages/causeway.runtime/causeway.runtime.msd" folder="" />
       <modulePath path="$PROJECT_DIR$/languages/causeway.sandbox/causeway.sandbox.msd" folder="" />
+      <modulePath path="$PROJECT_DIR$/languages/causeway.stubs/causeway.stubs.msd" folder="" />
       <modulePath path="$PROJECT_DIR$/languages/causeway/causeway.mpl" folder="" />
     </projectModules>
   </component>

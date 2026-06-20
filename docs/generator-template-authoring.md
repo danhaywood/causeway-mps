@@ -35,7 +35,7 @@ are the "separately-hard piece" for two concrete reasons established during this
 
 | Source concept (`causeway.structure`) | Target artifact | Generator construct |
 |---|---|---|
-| `Module` | package + `@Named` prefix | *No* root template. Package = containing output-model name (convention: name the program model after the module). The `@Named` value is computed in the Entity template by navigating `Entity → ancestor Module`. |
+| `Module` | package + `@Named` prefix | *No* root template (generator abandons it). Package = containing output-model name (convention: name the program model after the module). The `@Named` prefix is computed in the Entity template by reading the model's `Module` **singleton root** (model=module pivot): `node.model.roots(Module)` — *not* an ancestor (entities are roots, not children of `Module`). |
 | `Entity` | one Java class (pure state) | **Root mapping rule** → root template class. `@Named`/`@DomainObject`/`@Entity`/`@Table`, fixed `id` field, properties via `$LOOP$`. Carries a **mapping label** so `EntityType` references can resolve to it. |
 | `Property` | private JPA field + explicit `@Property @Domain.Include` getter | `$LOOP$` over `Entity.properties` inside the Entity template (idiomatic for members-of-a-class; the tasks file's "reduction rule" wording maps to this). |
 | `Action` | a separate `Mixee_member` mixin class | **Root mapping rule** → root template class (`@Action`, mixee ctor, `@MemberSupport act(..)`, body via `COPY_SRC`). |
@@ -102,8 +102,10 @@ root mapping rules below to it.
 - **No root template.** Package comes from the output model; convention: the sandbox program models live
   in a model named after the module (`customers`), so generated roots land in package `customers`.
 - The `@Named` prefix is *not* produced here; it is computed inside the Entity template (below) so each
-  entity is self-contained. Navigation: `node.ancestor<concept = Entity>` is the entity; its module is
-  `entity.ancestor<concept = Module>`; prefix = `module.name`.
+  entity is self-contained. Navigation (**model=module pivot**): the entity is `node`; the module singleton
+  is `node.model.roots(Module)` (entities are roots, *not* children of `Module`, so there is no ancestor
+  `Module` to walk to); prefix = `<that Module>.name`. Guard for the singleton (first/only root). The
+  `customers` sandbox now carries a `Module` named `customers`.
 
 ### Entity → annotated state class (tasks 2.2, 2.3) — ROOT MAPPING RULE + mapping label
 Create a root mapping rule: `sourceConcept = Entity`, `keepInputRoot = false`, **assign a mapping label**
@@ -147,7 +149,15 @@ Applies to property/parameter/return types.
   `genContext.get output ClassConcept for (node.entity)` against label `entityToClass`. Produces e.g.
   `customers.Product`.
 
-### Action → `Mixee_member` mixin class (task 2.4) — ROOT MAPPING RULE
+### Action → mixin class (task 2.4) — NEEDS PIVOT UPDATE
+> **Stale (pre model=module).** This section still describes a *nested* action as a separate top-level
+> `Mixee_member` class via its own root mapping rule. Post-pivot a **nested** action generates as a
+> **non-static inner mixin class** inside the Entity template (a `$LOOP$` over `Entity.actions`, mixee =
+> `Customer.this`, ctor synthesised by javac); only a **top-level** action (explicit `target`) is a root
+> mapping rule producing a separate file. See `archive/2026-06-19-model-equals-module`. The mixin-body /
+> annotation mechanics below still apply; the *where it lives* changes. Out of B2 scope (the `customers`
+> sandbox has no action yet).
+
 Create a second root mapping rule: `sourceConcept = Action`. Template = a root class:
 
 ```java

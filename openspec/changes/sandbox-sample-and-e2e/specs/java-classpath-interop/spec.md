@@ -1,13 +1,16 @@
 ## ADDED Requirements
 
-### Requirement: Sandbox imports external Java as classpath stubs
-The `causeway.sandbox` solution SHALL import the Causeway applib + Jakarta Persistence/Inject + the
-hand-written `reference-app` as Java classpath stubs, so DSL programs and their embedded baseLanguage
-bodies can reference those external types.
+### Requirement: Sandbox resolves external Java via the shared stubs solution
+The `causeway.sandbox` solution SHALL obtain the Causeway applib + Jakarta Persistence/Inject as Java
+classpath stubs by depending on the shared `causeway.stubs` solution (see the `Shared classpath-stubs
+solution` requirement) rather than importing the jars itself, and SHALL additionally import the
+hand-written `reference-app` so embedded baseLanguage bodies can reference that external code. DSL programs
+and their bodies SHALL then resolve those external types.
 
 #### Scenario: External types resolve in the sandbox
-- **WHEN** the sandbox is configured with the Causeway + app classpath
-- **THEN** types like `OrderService` and Causeway services resolve as baseLanguage types in sandbox models
+- **WHEN** the sandbox depends on `causeway.stubs` (and on the `reference-app` app-stub)
+- **THEN** types like `OrderService` and Causeway services/annotations resolve as baseLanguage types in
+  sandbox models
 
 ### Requirement: Sample DSL program
 The `causeway.sandbox` SHALL contain a sample program: module `customers`, entity `Customer` with a

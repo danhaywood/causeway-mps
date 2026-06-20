@@ -15,11 +15,13 @@ are the "separately-hard piece" for two concrete reasons established during this
    references to `@Named`, `@DomainObject`, `@Entity`, `@Table`, `@Id`, `@Column`, `@Property`,
    `@Domain.Include`, `@Action`, `@MemberSupport`, `@Inject` and the `Nature`/`Introspection`/`SemanticsOf`
    enums. In MPS these are `AnnotationInstance` / `ClassifierType` references to real classifiers, which
-   require the **Causeway applib 3.6.0 + Jakarta Persistence/Inject imported as classpath stubs**. This was
-   `sandbox-sample-and-e2e` **task 1.1**, declared a dependency of this change — and has been **pulled
-   forward**: `causeway.sandbox.msd` now declares a `java_classes` modelRoot over `${module}/libs`
-   (`causeway-applib-3.6.0`, `jakarta.persistence-api-3.1.0`, `jakarta.inject-api-2.0.1`), staged there by
-   the `resolveSandboxStubs` Gradle task and validated headlessly. The annotation classifiers now resolve.
+   require the **Causeway applib 3.6.0 + Jakarta Persistence/Inject imported as classpath stubs**, visible
+   **to the generator**. This is the shared **`causeway.stubs`** solution (`shared-stubs-solution` change):
+   a `java_classes` modelRoot over `${module}/libs` (`causeway-applib-3.6.0`, `jakarta.persistence-api-3.1.0`,
+   `jakarta.inject-api-2.0.1`), staged by the `resolveStubs` Gradle task and depended on by both the
+   `causeway` language's generator and `causeway.sandbox`. (An earlier step put the jars only in
+   `causeway.sandbox`, which made them visible to sandbox programs but **not** to the generator templates —
+   the gap `shared-stubs-solution` closes.) The annotation classifiers now resolve in the generator.
    (Still deferred: the `reference-app` app-stub for action *bodies* — see the Action OPEN ITEM.)
 2. **Template-body IDs need the GUI.** A Java-class root template (annotations, field-access fields, an
    explicit getter, plus template macros and their baseLanguage query functions) is far richer than the
@@ -190,9 +192,12 @@ Notes:
 Run in the MPS GUI on the `causeway` language; validate after each step with `./gradlew checkModels`,
 and `generateModels` once the sandbox program exists.
 
-1. **(Prereq — DONE) Causeway/Jakarta stubs** are wired into `causeway.sandbox` (`${module}/libs` via
-   `resolveSandboxStubs`); the annotation classifiers resolve. Run `./gradlew checkModels` once to stage
-   `libs/`. (The `reference-app` app-stub for action bodies is still deferred.)
+1. **(Prereq — DONE) Causeway/Jakarta stubs** live in the shared **`causeway.stubs`** solution
+   (`${module}/libs` via the `resolveStubs` Gradle task). Both the `causeway` language's **generator** and
+   `causeway.sandbox` depend on it, so the annotation classifiers resolve **in the generator** (this is the
+   `shared-stubs-solution` change — earlier the stubs were only visible to the sandbox, which is why the
+   generator couldn't see them). Run `./gradlew checkModels` once to stage `libs/`. (The `reference-app`
+   app-stub for action *bodies* is still deferred.)
 2. Open `causeway.generator.templates@generator` → the `main` MappingConfiguration.
 3. **Entity rule:** add a root mapping rule, sourceConcept `Entity`; create its root template class; build
    the class body per the Entity spec; attach property macros (class name, `@Named`, `@Table` args,

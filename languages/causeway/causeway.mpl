@@ -24,6 +24,9 @@
         </facet>
       </facets>
       <external-templates />
+      <dependencies>
+        <dependency reexport="false">c31c5f46-778f-4244-90d0-c92808fc2b16(causeway.stubs)</dependency>
+      </dependencies>
       <languageVersions>
         <language slang="l:f3061a53-9226-4cc5-a443-f952ceaf5816:jetbrains.mps.baseLanguage" version="12" />
         <language slang="l:fd392034-7849-419d-9071-12563d152375:jetbrains.mps.baseLanguage.closures" version="0" />
@@ -50,6 +53,7 @@
         <module reference="99bd0b43-8ce5-4eaa-aac8-ff12e0700f84(causeway)" version="0" />
         <module reference="a95688c2-ec8f-4d71-bc52-3274f445df31(causeway.generator)" version="0" />
         <module reference="bcd38118-0485-45d2-b327-9440f8727737(causeway.runtime)" version="0" />
+        <module reference="c31c5f46-778f-4244-90d0-c92808fc2b16(causeway.stubs)" version="0" />
         <module reference="ceab5195-25ea-4f22-9b92-103b95ca8c0c(jetbrains.mps.lang.core)" version="0" />
       </dependencyVersions>
       <mapping-priorities />

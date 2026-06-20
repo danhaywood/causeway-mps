@@ -6,14 +6,31 @@
     <devkit ref="a2eb3a43-fcc2-4200-80dc-c60110c4862d(jetbrains.mps.devkit.templates)" />
   </languages>
   <imports>
+    <import index="xj8n" ref="c31c5f46-778f-4244-90d0-c92808fc2b16/java:org.apache.causeway.applib.annotation(causeway.stubs/)" />
     <import index="k3bw" ref="r:4e8cfae1-fc0f-442b-b22c-99efd9c6acf9(causeway.structure)" implicit="true" />
     <import index="tpck" ref="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" implicit="true" />
   </imports>
   <registry>
     <language id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage">
+      <concept id="1465982738277781862" name="jetbrains.mps.baseLanguage.structure.PlaceholderMember" flags="nn" index="2tJIrI" />
+      <concept id="1188207840427" name="jetbrains.mps.baseLanguage.structure.AnnotationInstance" flags="nn" index="2AHcQZ">
+        <reference id="1188208074048" name="annotation" index="2AI5Lk" />
+        <child id="1188214630783" name="value" index="2B76xF" />
+      </concept>
+      <concept id="1188208481402" name="jetbrains.mps.baseLanguage.structure.HasAnnotation" flags="ngI" index="2AJDlI">
+        <child id="1188208488637" name="annotation" index="2AJF6D" />
+      </concept>
+      <concept id="1188214545140" name="jetbrains.mps.baseLanguage.structure.AnnotationInstanceValue" flags="ng" index="2B6LJw">
+        <reference id="1188214555875" name="key" index="2B6OnR" />
+        <child id="1188214607812" name="value" index="2B70Vg" />
+      </concept>
       <concept id="1197027756228" name="jetbrains.mps.baseLanguage.structure.DotExpression" flags="nn" index="2OqwBi">
         <child id="1197027771414" name="operand" index="2Oq$k0" />
         <child id="1197027833540" name="operation" index="2OqNvi" />
+      </concept>
+      <concept id="1083260308424" name="jetbrains.mps.baseLanguage.structure.EnumConstantReference" flags="nn" index="Rm8GO">
+        <reference id="1083260308426" name="enumConstantDeclaration" index="Rm8GQ" />
+        <reference id="1144432896254" name="enumClass" index="1Px2BO" />
       </concept>
       <concept id="1137021947720" name="jetbrains.mps.baseLanguage.structure.ConceptFunction" flags="in" index="2VMwT0">
         <child id="1137022507850" name="body" index="2VODD2" />
@@ -24,6 +41,9 @@
       </concept>
       <concept id="1068580123136" name="jetbrains.mps.baseLanguage.structure.StatementList" flags="sn" stub="5293379017992965193" index="3clFbS">
         <child id="1068581517665" name="statement" index="3cqZAp" />
+      </concept>
+      <concept id="1107461130800" name="jetbrains.mps.baseLanguage.structure.Classifier" flags="ng" index="3pOWGL">
+        <child id="5375687026011219971" name="member" index="jymVt" unordered="true" />
       </concept>
       <concept id="1178549954367" name="jetbrains.mps.baseLanguage.structure.IVisible" flags="ngI" index="1B3ioH">
         <child id="1178549979242" name="visibility" index="1B3o_S" />
@@ -65,6 +85,10 @@
       <concept id="1169194658468" name="jetbrains.mps.lang.core.structure.INamedConcept" flags="ngI" index="TrEIO">
         <property id="1169194664001" name="name" index="TrG5h" />
       </concept>
+      <concept id="779128492853369165" name="jetbrains.mps.lang.core.structure.SideTransformInfo" flags="ng" index="1KehLL">
+        <property id="779128492853934523" name="cellId" index="1K8rM7" />
+        <property id="779128492853699361" name="side" index="1Kfyot" />
+      </concept>
     </language>
   </registry>
   <node concept="bUwia" id="4eUqHDdy7EW">
@@ -93,6 +117,28 @@
               </node>
             </node>
           </node>
+        </node>
+      </node>
+    </node>
+    <node concept="2tJIrI" id="1shQjzjzwtu" role="jymVt" />
+    <node concept="1KehLL" id="1shQjzjzwuu" role="lGtFl">
+      <property role="1K8rM7" value="classKeyword" />
+      <property role="1Kfyot" value="Fg1jLUVyTf/left" />
+    </node>
+    <node concept="2AHcQZ" id="1shQjzjzwUD" role="2AJF6D">
+      <ref role="2AI5Lk" to="xj8n:~DomainObject" resolve="DomainObject" />
+      <node concept="2B6LJw" id="1shQjzjzx4d" role="2B76xF">
+        <ref role="2B6OnR" to="xj8n:~DomainObject.nature()" resolve="nature" />
+        <node concept="Rm8GO" id="1shQjzjzx8V" role="2B70Vg">
+          <ref role="Rm8GQ" to="xj8n:~Nature.ENTITY" resolve="ENTITY" />
+          <ref role="1Px2BO" to="xj8n:~Nature" resolve="Nature" />
+        </node>
+      </node>
+      <node concept="2B6LJw" id="1shQjzjzx8W" role="2B76xF">
+        <ref role="2B6OnR" to="xj8n:~DomainObject.introspection()" resolve="introspection" />
+        <node concept="Rm8GO" id="1shQjzjzxcC" role="2B70Vg">
+          <ref role="Rm8GQ" to="xj8n:~Introspection.ENCAPSULATION_ENABLED" resolve="ENCAPSULATION_ENABLED" />
+          <ref role="1Px2BO" to="xj8n:~Introspection" resolve="Introspection" />
         </node>
       </node>
     </node>

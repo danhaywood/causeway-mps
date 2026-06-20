@@ -202,12 +202,30 @@ Notes:
 Run in the MPS GUI on the `causeway` language; validate after each step with `./gradlew checkModels`,
 and `generateModels` once the sandbox program exists.
 
-1. **(Prereq — DONE) Causeway/Jakarta stubs** live in the shared **`causeway.stubs`** solution
+1. **(Prereq — DONE, 2026-06-20) Causeway/Jakarta stubs** live in the shared **`causeway.stubs`** solution
    (`${module}/libs` via the `resolveStubs` Gradle task). Both the `causeway` language's **generator** and
-   `causeway.sandbox` depend on it, so the annotation classifiers resolve **in the generator** (this is the
-   `shared-stubs-solution` change — earlier the stubs were only visible to the sandbox, which is why the
-   generator couldn't see them). Run `./gradlew checkModels` once to stage `libs/`. (The `reference-app`
-   app-stub for action *bodies* is still deferred.)
+   `causeway.sandbox` depend on it (`shared-stubs-solution` change). **Three things were needed before the
+   generator could actually resolve `@DomainObject` — all learned the hard way:**
+   - **(a) JDK dependency on `causeway.stubs`.** Without it the stub classes' `java.lang` / `java.lang.annotation`
+     refs (`String`, `Class`, `@Target`, `@Retention`, `ElementType`) dangle.
+   - **(b) Full transitive closure, not just the 3 API jars.** A Causeway annotation like `@DomainObject` is
+     itself meta-annotated with Spring (`@Component`, `@Scope`) → the stub `@interface` is *invalid* (and
+     dropped from scope) unless Spring + the rest resolve. So `stubs` is `isTransitive = true` (17 jars:
+     causeway-applib/schema, jakarta.*, joda-time, micrometer, spring-* 6.2.17), each listed in
+     `causeway.stubs.msd`'s `java_classes` modelRoot.
+   - **(c) The generator template *model* must IMPORT the stub models.** A module dependency makes classes
+     *available*; the model still has to import e.g. `org.apache.causeway.applib.annotation@java_stub` (and
+     `jakarta.persistence`, `jakarta.inject`) for completion to offer them. `java.lang` works for free only
+     because every baseLanguage model auto-imports it.
+
+   Run `./gradlew checkModels` once to stage `libs/`. (The `reference-app` app-stub for action *bodies* is
+   still deferred.) **NB `checkModels` stays green even when stubs have unresolved refs — it does not deeply
+   check `java_classes` stub models, so green is NOT proof the generator can resolve a classifier; the GUI
+   completion is the real oracle for that.**
+
+   **Adding an annotation to the template class (MPS gesture):** typing `@` *before* `public` lands in the
+   *modifiers* cell (offers `abstract`/`final`), NOT annotations. Select the whole `ClassConcept` node
+   (Escape out to node selection) and type `@` there — see step 3.
 2. Open `causeway.generator.templates@generator` → the `main` MappingConfiguration.
 3. **Entity rule:** add a root mapping rule, sourceConcept `Entity`; create its root template class; build
    the class body per the Entity spec; attach property macros (class name, `@Named`, `@Table` args,

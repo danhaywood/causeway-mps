@@ -21,8 +21,10 @@ val mps: Configuration by configurations.creating
 // Causeway/Jakarta jars imported into the shared `causeway.stubs` solution as MPS `java_classes` stubs
 // (so generator templates AND DSL programs can resolve @DomainObject, @Entity, SemanticsOf, …).
 // Versions mirror reference-app/pom.xml.
-// isTransitive = false: only the direct API jars are needed to resolve the annotations we use.
-val stubs: Configuration by configurations.creating { isTransitive = false }
+// Transitive: a Causeway annotation like @DomainObject is itself meta-annotated with Spring
+// (@Component/@Scope) etc., so the stub class is only valid if those resolve too — we need the
+// full compile closure (Spring/Jackson/…), mirroring reference-app's classpath.
+val stubs: Configuration by configurations.creating { isTransitive = true }
 dependencies {
     mps("com.jetbrains:mps:2025.3")
 

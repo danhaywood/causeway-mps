@@ -25,19 +25,40 @@ diff every generated file against the golden `reference-app/src/main/java/custom
 
 ## 2. Templates
 
-> Spec for all of §2 is in `docs/generator-template-authoring.md` (node-by-node + macro logic). These
-> stay open: authoring the template bodies needs the MPS GUI, and faithful (annotated) output needs the
-> Causeway/Jakarta stubs imported first. **Action template has an OPEN design gap** (the `@Inject`
-> service field — see the doc; settle with `dsl-action-model`/`sandbox-sample-and-e2e`).
+> Spec for all of §2 is in `docs/generator-template-authoring.md` (node-by-node + macro logic). **B2 done
+> (2026-06-22):** the Entity template (annotations + property field/getter) was GUI-authored and the stub
+> dependency resolved via the `shared-stubs-solution` (`causeway.stubs` + JDK + full transitive Spring
+> closure, and the template model must *import* the stub models). Generated entities compile against
+> Causeway 3.6.0. **Still open:** §2.4 (Action template — nested→inner class, needs a sandbox action +
+> `dsl-action-model`) and §2.5 (faithful `Type` resolution — needs a non-`String` property).
 
-- [ ] 2.1 `Module` → package + `@Named` prefix — *revised (model=module): package = model name (done, skeleton); `@Named` namespace read from the `Module` singleton root, which the generator abandons. Pending: add the `Module` singleton + abandon-root + namespace macro (B2).*
-- [~] 2.2 `Entity` → annotated class (root mapping rule) — class shell + name macro DONE (B1: skeleton generates). Pending (B2): `@Named` + `@DomainObject(nature=ENTITY, introspection=ENCAPSULATION_ENABLED)` + `@Entity`/`@Table` — needs the Causeway/Jakarta stubs reachable from the generator model.
-- [ ] 2.3 `Property` → private JPA field (field-access) + explicit `@Property @Domain.Include` private getter, no Lombok, no setter — *design: `$LOOP$` over `Entity.properties` inside the Entity template*
-- [ ] 2.4 `Action` → `Mixee_member` mixin class (`@Action(semantics=…)`, mixee ctor, `@MemberSupport act(..)`, `COPY_SRC` body) — *root mapping rule; blocked on the `@Inject` design gap*
-- [ ] 2.5 `Type` resolution: `EntityType` → generated class name (reference macro via `entityToClass` label); `JavaType` → `COPY_SRC` the wrapped baseLanguage type
+- [x] 2.1 `Module` → `@Named` prefix — DONE (B2): package = model name; `@Named` namespace read from the
+  `Module` singleton root via a property macro `node.model.roots(Module).first.name`. The unmatched
+  `Module` root is abandoned implicitly (no rule; doesn't leak). (Explicit abandon-root rule not needed.)
+- [x] 2.2 `Entity` → annotated class (root mapping rule) — DONE (B2): emits `@DomainObject(nature=ENTITY,
+  introspection=ENCAPSULATION_ENABLED)`, `@Entity`, `@Table(schema=<module>, name=<entity>)`, `@Named`
+  (macros for `@Named`/`@Table`), plus the fixed `@Id @Column(name="id", nullable=false) Long id`. Stubs
+  reachable via the `shared-stubs-solution` (`causeway.stubs`) + template-model imports.
+- [x] 2.3 `Property` → private JPA field + explicit `@Property` private getter — DONE (B2): `$LOOP$` over
+  `node.properties` emits `@Column(name=<prop>, nullable=false, length=255) private <type> <prop>;` and
+  `@Property private <type> get<Prop>() { return <field>; }`. Getter body field-ref resolves per-property
+  by shared input node (no mapping label). `@Domain.Include` dropped — `@Property` meta-includes it.
+- [ ] 2.4 `Action` → mixin class — OUT OF B2 SCOPE (the `customers` sandbox has no action). Per
+  `model-equals-module`: a **nested** action generates as a non-static inner class via a `$LOOP$` over
+  `Entity.actions`; a top-level action via its own root rule. Needs a sandbox action + the injected-service
+  scope work (`dsl-action-model`).
+- [~] 2.5 `Type` resolution — PARTIAL: field/getter type is hardcoded `String` (the String-only slice
+  simplification, matching the `customers` golden). Faithful resolution — `JavaType` → `COPY_SRC
+  node.type.javaType`; `EntityType` → reference macro via an `entityToClass` label — is deferred until a
+  non-`String`/entity-typed property exists to exercise it (a richer sandbox).
 
 ## 3. Verify against golden
 
-- [ ] 3.1 `./gradlew generateModels` green
-- [ ] 3.2 Diff generated output vs `reference-app/src/main/java/customers/` — investigate any delta
-- [ ] 3.3 Compile generated Java against Causeway 3.6.0 + Jakarta (reuse `reference-app` deps)
+- [x] 3.1 `./gradlew generateModels` green — DONE: generates `customers/Customer.java` + `Product.java`
+  with the full entity-state.
+- [x] 3.2 Diff generated output vs golden — DONE: entity-state matches; remaining deltas are **cosmetic
+  and Java-irrelevant** (annotation order, `@Column` arg order, 2- vs 4-space indent) plus the
+  out-of-scope `placeOrder` action + the golden's javadoc.
+- [x] 3.3 Compile generated Java against Causeway 3.6.0 + Jakarta — DONE: `javac -cp causeway.stubs/libs/*`
+  compiles `Customer.java` + `Product.java` cleanly (exit 0). DSL → generated Java → compiles against real
+  Causeway, end to end.

@@ -47,10 +47,11 @@ diff every generated file against the golden `reference-app/src/main/java/custom
   `model-equals-module`: a **nested** action generates as a non-static inner class via a `$LOOP$` over
   `Entity.actions`; a top-level action via its own root rule. Needs a sandbox action + the injected-service
   scope work (`dsl-action-model`).
-- [~] 2.5 `Type` resolution — PARTIAL: field/getter type is hardcoded `String` (the String-only slice
-  simplification, matching the `customers` golden). Faithful resolution — `JavaType` → `COPY_SRC
-  node.type.javaType`; `EntityType` → reference macro via an `entityToClass` label — is deferred until a
-  non-`String`/entity-typed property exists to exercise it (a richer sandbox).
+- [~] 2.5 `Type` resolution — JavaType DONE (2.5a), EntityType OPEN (2.5b). **2.5a:** field/getter type is
+  `COPY_SRC (node.type : JavaType).javaType`; sandbox `Product.price : int` proves a non-`String` type
+  flows through. **2.5b (open):** `EntityType` → the generated class via an `entityToClass` mapping label
+  — needs an entity-typed property in the sandbox + the union-aware approach (reduction rules: `COPY_SRC
+  node.type` + reduce `JavaType`→`javaType` + reduce `EntityType`→class-ref).
 
 ## 3. Verify against golden
 

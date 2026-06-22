@@ -47,11 +47,16 @@ diff every generated file against the golden `reference-app/src/main/java/custom
   `model-equals-module`: a **nested** action generates as a non-static inner class via a `$LOOP$` over
   `Entity.actions`; a top-level action via its own root rule. Needs a sandbox action + the injected-service
   scope work (`dsl-action-model`).
-- [~] 2.5 `Type` resolution — JavaType DONE (2.5a), EntityType OPEN (2.5b). **2.5a:** field/getter type is
-  `COPY_SRC (node.type : JavaType).javaType`; sandbox `Product.price : int` proves a non-`String` type
-  flows through. **2.5b (open):** `EntityType` → the generated class via an `entityToClass` mapping label
-  — needs an entity-typed property in the sandbox + the union-aware approach (reduction rules: `COPY_SRC
-  node.type` + reduce `JavaType`→`javaType` + reduce `EntityType`→class-ref).
+- [~] 2.5 `Type` resolution — JavaType DONE (2.5a), EntityType PARKED (2.5b). **2.5a:** field/getter type
+  cells `COPY_SRC node.type`; a reduction rule reduces `JavaType` → its wrapped `javaType` (`COPY_SRC
+  node.javaType`); sandbox `Product.price : int` proves a non-`String` type flows through. **2.5b
+  (parked):** groundwork laid — baseLanguage added as a generator-module dependency + `entityToClass`
+  mapping label (`Entity -> Classifier`) declared and attached to the Entity root rule. The `EntityType`
+  reduction rule itself is **blocked**: authoring its inline-template `ClassifierType` fails because the
+  reduction-rule fragment cell can't resolve stub/JDK classifiers (an MPS scoping quirk) — so the
+  reference macro (`genContext.get output by label and input(entityToClass, node.entity)`) has no
+  `ClassifierType` to attach to. Not exercised by the golden (no cross-entity reference). **Revisit:** try
+  importing the JDK/stub model so the fragment sees a class, or `InlineTemplateWithContextRuleConsequence`.
 
 ## 3. Verify against golden
 

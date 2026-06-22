@@ -26,10 +26,11 @@ skeleton still generates). Unblocks `causeway-generator-first-slice` §2 (B2 tem
   DONE: added a `<dependencies>` block to the `<generator>` element + a `causeway.stubs` entry in its
   `dependencyVersions`. Hand-XML worked (no GUI fallback needed). `./gradlew checkModels` green — the
   module graph is well-formed with the new dependency.
-- [~] 3.2 Classifier-resolution probe — FOLDED INTO B2: hand-authoring a `ClassifierType` reference needs
-  the GUI-assigned stub node id, and B2's first action (adding an annotation to the Entity template) IS the
-  probe. The dependency is wired + checkModels-green; final resolution confirmation happens on the first
-  B2 annotation.
+- [x] 3.2 Classifier-resolution probe — DONE (proven via B2, 2026-06-22): the Entity template resolves and
+  emits `@DomainObject`/`@Entity`/`@Table`/`@Named`/`@Property` from `causeway.stubs`, and the generated
+  `Customer.java`/`Product.java` **compile against Causeway 3.6.0** (`javac` exit 0). Beyond the dependency
+  wiring this needed: a JDK dependency on `causeway.stubs`, the full transitive closure (`isTransitive=true`,
+  Spring incl.), and the template *model* importing the stub models.
 
 ## 4. Re-point the sandbox
 

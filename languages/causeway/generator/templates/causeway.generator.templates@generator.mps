@@ -3,6 +3,8 @@
   <persistence version="9" />
   <languages>
     <use id="b401a680-8325-4110-8fd3-84331ff25bef" name="jetbrains.mps.lang.generator" version="4" />
+    <use id="d7706f63-9be2-479c-a3da-ae92af1e64d5" name="jetbrains.mps.lang.generator.generationContext" version="2" />
+    <use id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage" version="12" />
     <devkit ref="a2eb3a43-fcc2-4200-80dc-c60110c4862d(jetbrains.mps.devkit.templates)" />
   </languages>
   <imports>
@@ -10,6 +12,7 @@
     <import index="p99f" ref="c31c5f46-778f-4244-90d0-c92808fc2b16/java:jakarta.persistence(causeway.stubs/)" />
     <import index="w0p9" ref="c31c5f46-778f-4244-90d0-c92808fc2b16/java:jakarta.inject(causeway.stubs/)" />
     <import index="k3bw" ref="r:4e8cfae1-fc0f-442b-b22c-99efd9c6acf9(causeway.structure)" implicit="true" />
+    <import index="tpee" ref="r:00000000-0000-4000-0000-011c895902ca(jetbrains.mps.baseLanguage.structure)" implicit="true" />
     <import index="tpck" ref="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" implicit="true" />
     <import index="wyt6" ref="6354ebe7-c22a-4a0f-ac54-50b52ab9b065/java:java.lang(JDK/)" implicit="true" />
   </imports>
@@ -96,6 +99,7 @@
         <child id="1168024447342" name="sourceNodeQuery" index="3NFExx" />
       </concept>
       <concept id="1095416546421" name="jetbrains.mps.lang.generator.structure.MappingConfiguration" flags="ig" index="bUwia">
+        <child id="1200911492601" name="mappingLabel" index="2rTMjI" />
         <child id="1167328349397" name="reductionMappingRule" index="3acgRq" />
         <child id="1167514678247" name="rootMappingRule" index="3lj3bC" />
       </concept>
@@ -104,6 +108,10 @@
       </concept>
       <concept id="1168619357332" name="jetbrains.mps.lang.generator.structure.RootTemplateAnnotation" flags="lg" index="n94m4">
         <reference id="1168619429071" name="applicableConcept" index="n9lRv" />
+      </concept>
+      <concept id="1200911316486" name="jetbrains.mps.lang.generator.structure.MappingLabelDeclaration" flags="lg" index="2rT7sh">
+        <reference id="1200911342686" name="sourceConcept" index="2rTdP9" />
+        <reference id="1200913004646" name="targetConcept" index="2rZz_L" />
       </concept>
       <concept id="1167169188348" name="jetbrains.mps.lang.generator.structure.TemplateFunctionParameter_sourceNode" flags="nn" index="30H73N" />
       <concept id="1167169308231" name="jetbrains.mps.lang.generator.structure.BaseMappingRule" flags="ng" index="30H$t8">
@@ -165,6 +173,11 @@
   </registry>
   <node concept="bUwia" id="4eUqHDdy7EW">
     <property role="TrG5h" value="main" />
+    <node concept="2rT7sh" id="30A11KA9cjs" role="2rTMjI">
+      <property role="TrG5h" value="entityToClass" />
+      <ref role="2rTdP9" to="k3bw:2" resolve="Entity" />
+      <ref role="2rZz_L" to="tpee:g7pOWCK" resolve="Classifier" />
+    </node>
     <node concept="3aamgX" id="4Dp_93nLuMq" role="3acgRq">
       <ref role="30HIoZ" to="k3bw:8" resolve="JavaType" />
       <node concept="gft3U" id="4Dp_93nLuMI" role="1lVwrX">

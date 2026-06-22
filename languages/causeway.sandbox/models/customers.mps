@@ -10,6 +10,7 @@
   </imports>
   <registry>
     <language id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage">
+      <concept id="1070534370425" name="jetbrains.mps.baseLanguage.structure.IntegerType" flags="in" index="10Oyi0" />
       <concept id="1107535904670" name="jetbrains.mps.baseLanguage.structure.ClassifierType" flags="in" index="3uibUv">
         <reference id="1107535924139" name="classifier" index="3uigEE" />
       </concept>
@@ -51,6 +52,12 @@
         <node concept="3uibUv" id="_$TiGuwUQ4" role="3ZuirS">
           <ref role="3uigEE" to="wyt6:~String" resolve="String" />
         </node>
+      </node>
+    </node>
+    <node concept="3Zuirr" id="4Dp_93nKBTy" role="3Zuire">
+      <property role="TrG5h" value="price" />
+      <node concept="3Zuirg" id="4Dp_93nKC7O" role="3Zuir0">
+        <node concept="10Oyi0" id="4Dp_93nKCaG" role="3ZuirS" />
       </node>
     </node>
   </node>

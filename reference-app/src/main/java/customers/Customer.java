@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -24,7 +23,7 @@ import app.OrderService;
  * Under the mixins-everywhere decision, an entity class holds the PERSISTED STATE:
  *  - per-object @DomainObject(... introspection = ENCAPSULATION_ENABLED)
  *  - JPA annotations on the FIELD (field-access), no Lombok
- *  - explicit private getter carrying @Property + @Domain.Include (read-only)
+ *  - explicit private getter carrying @Property (read-only; @Property meta-includes it under ENCAPSULATION)
  *
  * A <b>nested</b> action (model=module: an Action contained in its Entity)
  * generates as a <b>non-static inner mixin class</b> of the entity — see
@@ -46,7 +45,6 @@ public class Customer {
     private String name;
 
     @Property
-    @Domain.Include
     private String getName() {
         return name;
     }

@@ -51,8 +51,8 @@ public class Customer {                                                   // PUR
     @Column(name = "name", nullable = false, length = 255)
     private String name;                                                  // JPA on the FIELD, field-access, no Lombok
 
-    @Property @Domain.Include
-    private String getName() { return name; }                            // explicit private getter, read-only
+    @Property
+    private String getName() { return name; }                            // explicit private getter; @Property meta-includes it
 }
 ```
 
@@ -90,7 +90,7 @@ it does not live beside) instead generates as a separate top-level
 When the MPS work begins, `causeway.sandbox` must import the **same** jars as Java
 classpath stubs so embedded action bodies can resolve external types:
 
-- `causeway-applib` (annotations: `@DomainObject`, `@Property`, `@Action`, `@Domain`, `SemanticsOf`, …)
+- `causeway-applib` (annotations: `@DomainObject`, `@Property`, `@Action`, `@MemberSupport`, `SemanticsOf`, …)
 - `jakarta.persistence-api`, `jakarta.inject-api`
 - this `reference-app` jar (or the hand-written app) — so bodies can call `OrderService` etc.
 
@@ -101,7 +101,8 @@ alongside the hand-written `app/` code.
 
 **Proven (compile-time):** the idiom is valid Java against real Causeway + Jakarta
 APIs; `jakarta.inject.Named`, `@DomainObject(... introspection = ENCAPSULATION_ENABLED)`,
-`@Domain.Include` on an explicit private getter, `@Action(semantics=…)`, and
+`@Property` on an explicit private getter (which meta-includes it under encapsulation),
+`@Action(semantics=…)`, and
 bidirectional generated↔hand-written references all compile. The "no-Lombok →
 annotations on the explicit getter" decision needs no `onMethod_` workaround.
 

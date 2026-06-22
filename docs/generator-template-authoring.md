@@ -142,12 +142,23 @@ rule — properties are *members of* the entity class. Each iteration:
 - No Lombok, no setter (read-only this slice).
 
 ### Type resolution (task 2.5)
-Applies to property/parameter/return types.
-- **`JavaType`** → `COPY_SRC node.javaType`: its `javaType` child *is already* a baseLanguage `Type`
-  (`tpee:fz3vP1H`), so copy it straight into the type position. (`String name` → `java.lang.String`.)
-- **`EntityType`** → **reference macro** resolving to the generated class via the mapping label:
-  `genContext.get output ClassConcept for (node.entity)` against label `entityToClass`. Produces e.g.
-  `customers.Product`.
+Applies to property/parameter/return types. **As-built (2026-06-22):** the field/getter type cells are
+`COPY_SRC node.type` (copy the whole `Type` union node), and **reduction rules** unwrap it — the
+union-friendly shape.
+- **`JavaType`** → DONE: reduction rule `JavaType --> COPY_SRC node.javaType` (its `javaType` child is
+  already a baseLanguage `Type`, `tpee:fz3vP1H`). Proven by `Product.price : int` → `private int price;`.
+- **`EntityType`** → **PARKED (blocked).** Intended: reduction rule `EntityType -->` a `ClassifierType`
+  whose classifier is a **reference macro** `genContext.get output by label and input(entityToClass,
+  node.entity)`. Groundwork exists (baseLanguage as a *generator-module* dependency; the `entityToClass`
+  label, `Entity -> Classifier`, declared + attached to the Entity root rule). **Blocker:** the reduction
+  rule's inline-template fragment cell won't resolve any stub/JDK classifier, so the placeholder
+  `ClassifierType` can't be authored (no class to attach the reference macro to). Not exercised by the
+  golden. **Revisit:** import the JDK/stub model into the fragment scope, or try
+  `InlineTemplateWithContextRuleConsequence`.
+
+> NB the field/getter line above still shows `@Domain.Include` — **as-built this is dropped**: `@Property`
+> meta-includes it under `ENCAPSULATION_ENABLED`. Getter = `@Property private <type> get<Prop>() { return
+> <field>; }`.
 
 ### Action → mixin class (task 2.4) — NEEDS PIVOT UPDATE
 > **Stale (pre model=module).** This section still describes a *nested* action as a separate top-level

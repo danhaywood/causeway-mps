@@ -1,5 +1,15 @@
 # GUI session — generator first slice (Entity / Property / Type)
 
+> **STATUS (2026-06-22): entity slice COMPLETE & verified.** Checkpoints A, B1, B2, B3 are all done — the
+> Entity template generates the full entity-state and the generated `Customer`/`Product` compile against
+> Causeway 3.6.0. This doc is now mostly historical; live status is in the memory `generator-templates-state`
+> and `openspec/changes/causeway-generator-first-slice/tasks.md`. **Two corrections to the steps below**
+> (the as-built differs): the `@Named`/`@Table` namespace reads the **Module singleton**
+> (`node.model.roots(Module).first.name`), **not** `node.ancestor<Module>` (model=module pivot); and
+> `@Domain.Include` was **dropped** (`@Property` meta-includes it). **Type resolution:** JavaType is done
+> via `COPY_SRC node.type` + a `JavaType` reduction rule; **EntityType is PARKED** (blocked — see the
+> task/memory). **Open next:** §2.4 Action template; revisit 2.5b EntityType.
+
 Operational checklist for authoring, in the MPS GUI, the first generator slice + the minimal program to
 feed it. Companion to the design/ID spec in `docs/generator-template-authoring.md` (refer to its §2.x for
 the per-template macro logic). Scope: state-only `Customer`/`Product` (the `placeOrder` mixin/action is

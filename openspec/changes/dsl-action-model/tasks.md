@@ -21,9 +21,9 @@ generator-authoring boundary).
   conceptId `8900000000000000010`) and `Action.injectedServices` link (`0..n`, linkId
   `8900000000000000044`), hand-authored with clean IDs per the spike convention. `./gradlew checkModels`
   green (no "Generate IDs" hint, no unresolved refs).
-- [ ] 0.2 Make each declared service in scope (as a variable) for the `act` body (simplest scope case —
-  see §3.1). Confirm a body reference to the service resolves. *(Needs the scope provider — §3; the
-  structure exists but bodies can't yet reference services until scope is wired.)*
+- [x] 0.2 Make each declared service in scope (as a variable) for the `act` body (simplest scope case — see §3.1).
+  DONE: the `scopeProbe` sandbox action resolves `orderService` through `ActionVariableReference` using the action scope provider.
+  MPS 2026.1 Make, MCP node validation, and the aligned MPS 2026.1 `./gradlew checkModels --rerun-tasks` oracle are green.
 - [x] 0.3 Reflect that the concept now exists — DONE for the generator-template doc OPEN ITEM (no longer
   a design-only prerequisite). The promoted `dsl-domain-model` spec is updated at archive time (the delta
   in `specs/dsl-domain-model/spec.md` merges then), not hand-edited mid-change.
@@ -45,8 +45,10 @@ generator-authoring boundary).
 
 ## 3. Scope provider (the hard part — GUI-authored)
 
-- [ ] 3.1 Prototype the simplest case first: parameters + mixee + injected services visible in the `act`
-  body (baseLanguage scope extension).
+- [x] 3.1 Prototype the simplest case first: parameters + mixee + injected services visible in the `act` body (baseLanguage scope extension).
+  DONE: `ActionVariableReference` is a smart-reference BaseLanguage expression, and `Action.getScope` exposes all action parameters, declared injected services, and the enclosing entity.
+  The `scopeProbe` sandbox action resolves `product`, `orderService`, and `Customer` references from its body.
+  MPS 2026.1 Make, MCP validation, `./gradlew checkModels --rerun-tasks`, and `./gradlew generateModels --rerun-tasks` are green.
 - [ ] 3.2 Implement the full lifecycle lattice (`dsl-action-scoping`): action `hide`/`disable` → no
   params; param *i* `default`/`choices`/`hide`/`disable`/`autoComplete` → `[0..i-1]`; param *i*
   `validate` → `[0..i]`; action `validate`/`act` → all. Mixee + services universal.

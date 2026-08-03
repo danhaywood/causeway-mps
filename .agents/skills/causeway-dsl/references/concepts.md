@@ -19,7 +19,8 @@ Its `actions` role contains zero or more nested `Action` nodes.
 
 A rootable or entity-nested action with inherited `name` and `semantics : SemanticsOf`.
 It contains `parameters`, optional `returnType`, optional BaseLanguage `body`, `injectedServices`, lifecycle/supporting blocks, and optional `target` entity nodes.
-The current OpenSpec work still needs BaseLanguage scope wiring and action mixin generation.
+Its prototype `ScopeProvider.getScope` implementation exposes all parameters, injected services, and the enclosing entity to `ActionVariableReference` expressions inside the body.
+The current OpenSpec work still needs the full lifecycle scope lattice and action mixin generation.
 
 ## Member concepts
 
@@ -35,7 +36,12 @@ It also owns `choices`, `default`, `validate`, `autoComplete`, `hide`, and `disa
 ### `causeway.structure.InjectedService`
 
 A named injected service with an optional `type : Type` child.
-Declared services are not yet in scope inside action bodies until the action scope-provider work is completed.
+It implements BaseLanguage `IVariableDeclaration` and is exposed by the prototype action scope provider.
+
+### `causeway.structure.ActionVariableReference`
+
+A smart-reference BaseLanguage expression whose `variable` reference targets `IVariableDeclaration`.
+Its scope currently contains the enclosing action's parameters, injected services, and nested entity mixee.
 
 ## Type concepts
 

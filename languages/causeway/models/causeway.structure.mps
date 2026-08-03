@@ -3,11 +3,12 @@
   <persistence version="9" />
   <languages>
     <use id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage" version="12" />
+    <use id="c72da2b9-7cce-4447-8389-f407dc1158b7" name="jetbrains.mps.lang.structure" version="9" />
     <devkit ref="78434eb8-b0e5-444b-850d-e7c4ad2da9ab(jetbrains.mps.devkit.aspect.structure)" />
   </languages>
   <imports>
-    <import index="tpck" ref="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" implicit="true" />
-    <import index="tpee" ref="r:00000000-0000-4000-0000-011c895902ca(jetbrains.mps.baseLanguage.structure)" implicit="true" />
+    <import index="tpee" ref="r:00000000-0000-4000-0000-011c895902ca(jetbrains.mps.baseLanguage.structure)" />
+    <import index="tpck" ref="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" />
   </imports>
   <registry>
     <language id="c72da2b9-7cce-4447-8389-f407dc1158b7" name="jetbrains.mps.lang.structure">
@@ -22,6 +23,7 @@
       </concept>
       <concept id="1169125787135" name="jetbrains.mps.lang.structure.structure.AbstractConceptDeclaration" flags="ig" index="PkWjJ">
         <property id="6714410169261853888" name="conceptId" index="EcuMT" />
+        <property id="4628067390765907488" name="conceptShortDescription" index="R4oN_" />
         <child id="1071489727083" name="linkDeclaration" index="1TKVEi" />
         <child id="1071489727084" name="propertyDeclaration" index="1TKVEl" />
       </concept>
@@ -47,6 +49,9 @@
       </concept>
     </language>
     <language id="ceab5195-25ea-4f22-9b92-103b95ca8c0c" name="jetbrains.mps.lang.core">
+      <concept id="1133920641626" name="jetbrains.mps.lang.core.structure.BaseConcept" flags="ng" index="2VYdi">
+        <property id="1193676396447" name="virtualPackage" index="3GE5qa" />
+      </concept>
       <concept id="1169194658468" name="jetbrains.mps.lang.core.structure.INamedConcept" flags="ngI" index="TrEIO">
         <property id="1169194664001" name="name" index="TrG5h" />
       </concept>
@@ -82,6 +87,9 @@
       <property role="20kJfa" value="actions" />
       <property role="20lbJX" value="fLJekj5/_0__n" />
       <ref role="20lvS9" node="4" resolve="Action" />
+    </node>
+    <node concept="PrWs8" id="4IOweXOJ78F" role="PzmwI">
+      <ref role="PrY4T" to="tpee:4H$HgYMZ7sw" resolve="IVariableDeclaration" />
     </node>
   </node>
   <node concept="1TIwiD" id="3">
@@ -165,6 +173,9 @@
       <property role="TrG5h" value="semantics" />
       <ref role="AX2Wp" node="9" resolve="SemanticsOf" />
     </node>
+    <node concept="PrWs8" id="4IOweXOJpnz" role="PzmwI">
+      <ref role="PrY4T" to="tpck:3fifI_xCcJN" resolve="ScopeProvider" />
+    </node>
   </node>
   <node concept="1TIwiD" id="5">
     <property role="EcuMT" value="8900000000000000005" />
@@ -221,6 +232,9 @@
       <property role="20lbJX" value="fLJekj5/_0__1" />
       <ref role="20lvS9" to="tpee:fzclF80" resolve="StatementList" />
     </node>
+    <node concept="PrWs8" id="4IOweXOJ78L" role="PzmwI">
+      <ref role="PrY4T" to="tpee:4H$HgYMZ7sw" resolve="IVariableDeclaration" />
+    </node>
   </node>
   <node concept="1TIwiD" id="10">
     <property role="EcuMT" value="8900000000000000010" />
@@ -234,6 +248,9 @@
       <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20kJfa" value="type" />
       <ref role="20lvS9" node="6" resolve="Type" />
+    </node>
+    <node concept="PrWs8" id="4IOweXOJ78I" role="PzmwI">
+      <ref role="PrY4T" to="tpee:4H$HgYMZ7sw" resolve="IVariableDeclaration" />
     </node>
   </node>
   <node concept="PlHQZ" id="6">
@@ -293,6 +310,22 @@
     <node concept="25R33" id="96" role="25R1y">
       <property role="3tVfz5" value="8900000000000000096" />
       <property role="TrG5h" value="NON_IDEMPOTENT_ARE_YOU_SURE" />
+    </node>
+  </node>
+  <node concept="1TIwiD" id="4IOweXOJ78z">
+    <property role="EcuMT" value="5455126814596559395" />
+    <property role="TrG5h" value="ActionVariableReference" />
+    <property role="R4oN_" value="Reference to an action parameter, mixee, or injected service visible in the current action block." />
+    <property role="3GE5qa" value="actions" />
+    <ref role="1TJDcQ" to="tpee:fz3vP1J" resolve="Expression" />
+    <node concept="1TJgyj" id="4IOweXOJ78$" role="1TKVEi">
+      <property role="IQ2ns" value="5455126814596559396" />
+      <property role="20kJfa" value="variable" />
+      <property role="20lbJX" value="fLJekj4/_1" />
+      <ref role="20lvS9" to="tpee:4H$HgYMZ7sw" resolve="IVariableDeclaration" />
+    </node>
+    <node concept="PrWs8" id="4IOweXOJ78_" role="PzmwI">
+      <ref role="PrY4T" to="tpee:SORzhOp6jM" resolve="IVariableReference" />
     </node>
   </node>
 </model>

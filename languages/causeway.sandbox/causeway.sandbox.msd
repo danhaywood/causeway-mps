@@ -12,6 +12,7 @@
   </facets>
   <dependencies>
     <dependency reexport="false">c31c5f46-778f-4244-90d0-c92808fc2b16(causeway.stubs)</dependency>
+    <dependency reexport="false">6354ebe7-c22a-4a0f-ac54-50b52ab9b065(JDK)</dependency>
   </dependencies>
   <languageVersions>
     <language slang="l:99bd0b43-8ce5-4eaa-aac8-ff12e0700f84:causeway" version="0" />
@@ -20,6 +21,7 @@
     <language slang="l:9ded098b-ad6a-4657-bfd9-48636cfe8bc3:jetbrains.mps.lang.traceable" version="0" />
   </languageVersions>
   <dependencyVersions>
+    <module reference="6354ebe7-c22a-4a0f-ac54-50b52ab9b065(JDK)" version="0" />
     <module reference="c44a8d28-571f-4fff-b536-5883d8cb98df(causeway.sandbox)" version="0" />
     <module reference="c31c5f46-778f-4244-90d0-c92808fc2b16(causeway.stubs)" version="0" />
   </dependencyVersions>

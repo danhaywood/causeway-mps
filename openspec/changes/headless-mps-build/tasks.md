@@ -4,16 +4,20 @@
 > A working Gradle build now exists at the repo root (`build.gradle.kts`, wrapper, `settings.gradle.kts`)
 > and `./gradlew checkModels` runs modelcheck headlessly over the real `causeway` modules (0 errors).
 > Corrected toolchain (the original `com.specificlanguages.mps` guess was wrong): **Gradle 9.x** +
-> **`de.itemis.mps.gradle.common` 1.30.x** (`MpsCheck`/`MpsGenerate`) + `com.jetbrains:mps:2025.3`
+> **`de.itemis.mps.gradle.common` 1.30.x** (`MpsCheck`/`MpsGenerate`) + `com.jetbrains:mps:2026.1`
 > from artifacts.itemis.cloud. `causeway-generator-first-slice` has since verified `generateModels` and
 > manually compiled the generated entity-state Java. Remaining scope is now: automate that compile in
 > Gradle, complete action/app coexistence, and *productionize* (CI). See
 > `docs/headless-build-research.md` + the spike verdict.
+>
+> **UPDATE (2026-08-03):** The project and authoring IDE moved to MPS 2026.1 (baseline 261).
+> The headless distribution is now aligned to `com.jetbrains:mps:2026.1`; fresh `checkModels` and `generateModels` runs pass on JDK 21.
 
 ## 1. Toolchain selection & pinning
 
-- [x] 1.1 Verify plugin compatibility with MPS 2025.3 — DONE (corrected): `de.itemis.mps.gradle.common` 1.30.x on **Gradle 9.x** (8.x fails: Kotlin `SpillingKt`). `com.specificlanguages.mps` rejected (packaging-oriented). Ant fallback not needed.
-- [x] 1.2 Pin MPS 2025.3 + download for the build — DONE: `mps` configuration resolves `com.jetbrains:mps:2025.3`, `Sync`'d to `build/mps`; not dependent on local MPS.app.
+- [x] 1.1 Verify plugin compatibility with MPS 2026.1 — DONE: `de.itemis.mps.gradle.common` 1.30.x on **Gradle 9.x** runs both `MpsCheck` and `MpsGenerate` successfully against MPS 2026.1 on JDK 21.
+  The original `com.specificlanguages.mps` option remains rejected as packaging-oriented, and the Ant fallback is not needed.
+- [x] 1.2 Pin MPS 2026.1 + download for the build — DONE: the `mps` configuration resolves `com.jetbrains:mps:2026.1` and syncs it to `build/mps`, independently of the local MPS.app.
 - [~] 1.3 JDK 21 — PARTIAL: build currently run with `JAVA_HOME`=SDKMAN JDK 21; a declarative Gradle Java toolchain block is still a refinement.
 - [x] 1.4 Gradle wrapper + settings — DONE (pinned to Gradle 9.0.0; committed).
 
@@ -33,7 +37,7 @@
 ## 4. CI pipeline
 
 - [ ] 4.1 Add a CI workflow that runs the single build command on push and PR
-- [ ] 4.2 Provision the pinned JDK 21 and MPS 2025.3 distribution on the runner (no preinstalled IDE)
+- [ ] 4.2 Provision the pinned JDK 21 and MPS 2026.1 distribution on the runner (no preinstalled IDE)
 - [ ] 4.3 Cache the MPS distribution and Gradle dependencies for stable runs
 - [ ] 4.4 Confirm CI fails on a deliberately broken model and passes on a clean one
 

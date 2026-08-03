@@ -17,6 +17,7 @@ repositories {
 }
 
 // The MPS distribution the build runs against.
+// Keep this aligned with the authoring IDE baseline; MPS 2026.1 requires JDK 21.
 val mps: Configuration by configurations.creating
 // Causeway/Jakarta jars imported into the shared `causeway.stubs` solution as MPS `java_classes` stubs
 // (so generator templates AND DSL programs can resolve @DomainObject, @Entity, SemanticsOf, …).
@@ -26,7 +27,7 @@ val mps: Configuration by configurations.creating
 // full compile closure (Spring/Jackson/…), mirroring reference-app's classpath.
 val stubs: Configuration by configurations.creating { isTransitive = true }
 dependencies {
-    mps("com.jetbrains:mps:2025.3")
+    mps("com.jetbrains:mps:2026.1")
 
     stubs("org.apache.causeway.core:causeway-applib:3.6.0")
     stubs("jakarta.persistence:jakarta.persistence-api:3.1.0")

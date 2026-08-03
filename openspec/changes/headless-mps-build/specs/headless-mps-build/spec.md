@@ -8,11 +8,11 @@ The build SHALL generate the `causeway` language, `causeway.runtime`, and `cause
 - **THEN** MPS generates the output for all three modules and the task completes successfully without any GUI interaction
 
 ### Requirement: Pinned MPS and JDK versions
-The build SHALL pin the MPS version to 2025.3 (baseline 253) and SHALL select a JDK 17+ independently of the machine's default `java` (which is 11), e.g. via a Gradle Java toolchain. The pinned versions SHALL be declared in a single location.
+The build SHALL pin the MPS version to 2026.1 (baseline 261) and SHALL select a JDK 17+ independently of the machine's default `java` (which is 11), e.g. via a Gradle Java toolchain. The pinned versions SHALL be declared in a single location.
 
 #### Scenario: Build uses pinned toolchain, not default java
 - **WHEN** the build runs on a machine whose default `java` is 11
-- **THEN** the build resolves and uses the pinned JDK 17+ (21) and the pinned MPS 2025.3 distribution, not the default JDK
+- **THEN** the build resolves and uses the pinned JDK 17+ (21) and the pinned MPS 2026.1 distribution, not the default JDK
 
 ### Requirement: Modelcheck gate
 The build SHALL run MPS modelcheck over the modules and SHALL fail when model errors are present.

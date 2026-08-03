@@ -1,75 +1,56 @@
-# Headless MPS build — toolchain research (task 1.1)
+# Headless MPS build — toolchain research
 
-Decision record for the `headless-mps-build` change. Captures what was verified on
-2026-06-16 and the recommended toolchain.
+Decision record for the `headless-mps-build` change.
+The original investigation was performed on 2026-06-16 and the MPS 2026.1 alignment was verified on 2026-08-03.
 
-## Verdict: a headless build is feasible for MPS 2025.3
+## Verdict
 
-No fallback to the ant build is required for compatibility reasons; the Gradle path works.
+A reproducible headless build is working with MPS 2026.1 (baseline 261), Gradle 9.0.0, `de.itemis.mps.gradle.common` 1.30.x, and JDK 21.
+No Ant fallback is required.
 
 ## Verified facts
 
 | Check | Result |
 |-------|--------|
-| MPS 2025.3 distribution downloadable | ✅ `GET …/maven-mps/com/jetbrains/mps/2025.3/mps-2025.3.zip` → **HTTP 200** (artifacts.itemis.cloud) |
-| `com.specificlanguages.mps` plugin published | ✅ **2.0.1** on the Gradle Plugin Portal (released 2026-01-15, *after* MPS 2025.3) → portal POM **HTTP 200** |
-| mbeddr `de.itemis.mps.gradle` per-baseline builds | ✅ artifacts versioned `…1.4.253.…` exist (baseline **253** = MPS 2025.3) |
-| JDK 17+ available | ✅ 17 / 21 / 25 via SDKMAN (default `java` is 11) |
-| Gradle installed locally | ❌ not on PATH or SDKMAN — a wrapper must be bootstrapped |
+| MPS 2026.1 distribution downloadable | ✅ `com.jetbrains:mps:2026.1` resolves from `artifacts.itemis.cloud` |
+| IDE and headless runtime aligned | ✅ both use build `MPS-261.25134.779` |
+| Model checking | ✅ `./gradlew checkModels --rerun-tasks` completes successfully |
+| Model generation | ✅ `./gradlew generateModels --rerun-tasks` completes successfully |
+| Gradle integration | ✅ `de.itemis.mps.gradle.common` 1.30.x works with MPS 2026.1 on Gradle 9.0.0 |
+| JDK | ✅ JDK 21 via SDKMAN; the machine default remains JDK 11 |
 
-Sources: [Gradle Plugin Portal — com.specificlanguages.mps](https://plugins.gradle.org/plugin/com.specificlanguages.mps),
-[mbeddr/mps-gradle-plugin](https://github.com/mbeddr/mps-gradle-plugin),
-[mvnrepository — modelcheck.gradle.plugin](https://mvnrepository.com/artifact/modelcheck/modelcheck.gradle.plugin).
+## Current toolchain
 
-## Recommended toolchain
+- **Gradle wrapper:** 9.0.0.
+- **MPS Gradle plugin:** `de.itemis.mps.gradle.common` 1.30.x, using `MpsCheck` and `MpsGenerate`.
+- **MPS distribution:** `com.jetbrains:mps:2026.1` from `https://artifacts.itemis.cloud/repository/maven-mps/`.
+- **JDK:** 21, matching `reference-app` and MPS 2026.1.
+- **Fallback:** the MPS-generated Ant build remains a documented fallback but is not currently needed.
 
-- **Primary:** `com.specificlanguages.mps` **2.0.1** — declarative; auto-discovers MPS modules,
-  resolves the MPS distribution as a dependency, and exposes generate / check-models / assemble tasks.
-  It builds on the mbeddr `de.itemis.mps.gradle` task types (`MpsGenerate`, `MpsCheck`).
-- **MPS distribution:** `com.jetbrains:mps:2025.3` from `https://artifacts.itemis.cloud/repository/maven-mps/`.
-- **JDK:** Gradle Java toolchain pinned to **21** (matches `reference-app`; independent of the default `java` 11).
-- **Fallback (documented, not needed for compat):** the MPS-generated ant `build.xml` (`<generate>` / `<modelcheck>`),
-  if the plugin ever lags an MPS release.
+`com.specificlanguages.mps` was rejected during the original spike because it is packaging-oriented and no-ops without an MPS build solution.
+The Itemis `MpsCheck` and `MpsGenerate` task types directly match this project's headless validation needs.
 
-## Proposed build config (DRAFT — not yet verified by running)
+## Commands
 
-> Recorded as guidance, **not** committed as working build files. The exact module-discovery
-> and stub-dependency wiring depends on what Phase B of `entity-property-action-slice` produces
-> (see blocker below), and nothing here has been executed (no local Gradle; empty modules).
+Run with JDK 21 selected:
 
-```kotlin
-// settings.gradle.kts
-pluginManagement { repositories { gradlePluginPortal(); mavenCentral() } }
-rootProject.name = "causeway-mps"
-
-// build.gradle.kts
-plugins { id("com.specificlanguages.mps") version "2.0.1" }
-repositories {
-    maven("https://artifacts.itemis.cloud/repository/maven-mps/")
-    mavenCentral()
-}
-java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
-dependencies {
-    "mps"("com.jetbrains:mps:2025.3")
-    // + Causeway applib 3.6.0 / Jakarta Persistence 3.1.0 / Jakarta Inject 2.0.1
-    //   on the generated-Java compile classpath, aligned with reference-app — wired after Phase B
-}
-// tasks: generate -> checkModels (modelcheck gate) -> compile generated Java
+```bash
+JAVA_HOME="$HOME/.sdkman/candidates/java/21.0.10-tem" ./gradlew checkModels --rerun-tasks
+JAVA_HOME="$HOME/.sdkman/candidates/java/21.0.10-tem" ./gradlew generateModels --rerun-tasks
 ```
 
-## Blocker found during apply: most of this depends on Phase B
+The Gradle build resolves the pinned MPS distribution into `build/mps` and stages Causeway/Jakarta stub dependencies under `languages/causeway.stubs/libs`.
+A declarative Gradle Java toolchain remains desirable so callers do not need to set `JAVA_HOME` explicitly.
 
-The `causeway` language, `causeway.runtime`, and `causeway.sandbox` modules are currently
-**empty** (no concepts, no generator templates, no sandbox DSL program — that is
-`entity-property-action-slice` Phase B, which is MPS-IDE work and not yet done). Consequently:
+## MPS 2025.3 to 2026.1 alignment
 
-- A headless **generate** would run against an empty-but-valid scaffold — a near no-op, not a
-  meaningful milestone (task 2.2).
-- **modelcheck** has little to check (task 2.3).
-- There is **no generated Java to compile** and **no sandbox stub setup** to mirror (tasks 2.4, 3.x, 5.x).
-- The end-to-end CI gate (4.4, 5.1) cannot be exercised.
+The project and authoring IDE were upgraded from MPS 2025.3 (baseline 253) to MPS 2026.1 (baseline 261).
+Keeping the old headless runtime caused 2026.1-generated behavior descriptors to fail under 2025.3 with an `SMethodBuilder` ABI mismatch.
+The fix is to align the downloaded headless distribution with the authoring baseline rather than downgrade or redesign the language behavior.
 
-**Recommendation:** do `entity-property-action-slice` Phase B first (or far enough to have a
-sample DSL program generating real Java), then return to wire and *verify* this build green.
-Tasks 1.2–1.4 (write the build files + bootstrap a wrapper) can be done now as unverified
-scaffolding, but gain little until there is something to build.
+Whenever MPS is upgraded, verify both `checkModels` and `generateModels` against the new downloaded distribution before accepting the baseline change.
+
+## Remaining pipeline work
+
+The MPS generate and modelcheck stages are operational.
+The remaining `headless-mps-build` work is to automate compilation of generated Java together with `reference-app`, expose a single fail-fast command, and add the CI workflow and caches.

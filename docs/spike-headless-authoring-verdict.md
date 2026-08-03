@@ -2,6 +2,9 @@
 
 Change: `spike-headless-authoring`. Date: 2026-06-16. **Deliverable = this verdict.**
 
+> **Baseline update (2026-08-03):** This document records the original MPS 2025.3 spike.
+> The active project and headless Gradle build now target MPS 2026.1; see `docs/headless-build-research.md`.
+
 ## Verdict: GO (caveat closed)
 
 Claude **can** author MPS structure concepts headlessly as the primary Phase B workflow.

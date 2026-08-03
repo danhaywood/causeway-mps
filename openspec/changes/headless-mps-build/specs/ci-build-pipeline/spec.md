@@ -12,7 +12,7 @@ A CI pipeline SHALL run the headless build (generate → modelcheck → compile)
 - **THEN** the CI pipeline reports success
 
 ### Requirement: Reproducible CI environment
-The CI pipeline SHALL provision the pinned JDK 17+ and the pinned MPS 2025.3 distribution, independent of any preinstalled IDE, and SHALL cache the MPS distribution and build dependencies for stable, repeatable runs.
+The CI pipeline SHALL provision the pinned JDK 17+ and the pinned MPS 2026.1 distribution, independent of any preinstalled IDE, and SHALL cache the MPS distribution and build dependencies for stable, repeatable runs.
 
 #### Scenario: Fresh CI runner produces the same result
 - **WHEN** the pipeline runs on a fresh runner with no MPS IDE installed

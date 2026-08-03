@@ -5,8 +5,10 @@
 > and `./gradlew checkModels` runs modelcheck headlessly over the real `causeway` modules (0 errors).
 > Corrected toolchain (the original `com.specificlanguages.mps` guess was wrong): **Gradle 9.x** +
 > **`de.itemis.mps.gradle.common` 1.30.x** (`MpsCheck`/`MpsGenerate`) + `com.jetbrains:mps:2025.3`
-> from artifacts.itemis.cloud. Remaining scope is now: run/verify *generate*, compile the generated
-> Java, and *productionize* (CI). See `docs/headless-build-research.md` + the spike verdict.
+> from artifacts.itemis.cloud. `causeway-generator-first-slice` has since verified `generateModels` and
+> manually compiled the generated entity-state Java. Remaining scope is now: automate that compile in
+> Gradle, complete action/app coexistence, and *productionize* (CI). See
+> `docs/headless-build-research.md` + the spike verdict.
 
 ## 1. Toolchain selection & pinning
 
@@ -18,14 +20,14 @@
 ## 2. Headless generation & modelcheck
 
 - [x] 2.1 Resolve the `causeway`/`runtime`/`sandbox` modules — DONE (`MpsCheck.projectLocation` = project dir picks them up).
-- [ ] 2.2 Wire + verify the `generate` task — `generateModels` (`MpsGenerate`) is DEFINED but not yet run/verified (waits on the generator, slice task 4).
-- [x] 2.3 Modelcheck gate — DONE: `checkModels` fails the build on model errors; passes clean on the current structure.
-- [ ] 2.4 Sandbox stub dependencies (Causeway + Jakarta + reference-app) resolve headlessly — pending (waits on slice task 5.1/5.2).
+- [x] 2.2 Wire + verify the `generate` task — DONE via `causeway-generator-first-slice`: `./gradlew generateModels` succeeds and generates the `customers` entity-state Java.
+- [x] 2.3 Modelcheck gate — DONE: `checkModels` fails the build on model errors; passes clean on the current structure and the current `customers` entity-state sandbox.
+- [~] 2.4 Sandbox stub dependencies resolve headlessly — Causeway 3.6.0 and Jakarta stubs DONE via the shared `causeway.stubs` solution and used successfully by generation; the `reference-app`/`OrderService` positive resolution check remains pending until an action body exists.
 
 ## 3. Compile generated Java
 
-- [ ] 3.1 Configure a compile step for the Java generated from `causeway.sandbox`
-- [ ] 3.2 Put the Causeway 3.6.0 + Jakarta Persistence/Inject deps (aligned with `reference-app`) + hand-written app on the compile classpath
+- [~] 3.1 Generated `Customer.java` and `Product.java` were compiled successfully with `javac`; configuring that compile as a Gradle pipeline step remains open.
+- [~] 3.2 Causeway 3.6.0 + Jakarta Persistence/Inject are proven on the generated-code classpath via `causeway.stubs/libs/*`; adding the hand-written app/`OrderService` to the same classpath remains open.
 - [ ] 3.3 Expose a single command that runs generate → modelcheck → compile, fail-fast
 
 ## 4. CI pipeline

@@ -14,13 +14,13 @@ and `dsl-type-system`.
 
 ## 2. Sample DSL program
 
-- [ ] 2.1 Author module `customers` with entity `Product`
-- [ ] 2.2 Author entity `Customer`: `String name` property; `placeOrder(Product, int)` action whose body calls `OrderService`
-- [ ] 2.3 `./gradlew checkModels` clean
+- [x] 2.1 Author module/model `customers` with entity `Product` — DONE during `causeway-generator-first-slice`; `Product.price : int` also exercises non-`String` Java type flow.
+- [~] 2.2 Author entity `Customer`: entity and `String name` property DONE during `causeway-generator-first-slice`; `placeOrder(Product, int)` and its `OrderService` body remain deferred until `dsl-action-model` supplies action-body scoping.
+- [x] 2.3 `./gradlew checkModels` clean — DONE for the current `customers` entity-state sandbox; repeat after adding the action body.
 
 ## 3. End-to-end
 
-- [ ] 3.1 `./gradlew generateModels`; diff output against golden `reference-app/src/main/java/customers/`
-- [ ] 3.2 Compile generated sources + hand-written `app` on one classpath (reuse `reference-app` deps)
+- [~] 3.1 `./gradlew generateModels`; entity-state generation and golden diff DONE during `causeway-generator-first-slice`; repeat and complete the diff after action generation exists.
+- [~] 3.2 Generated `Customer.java` and `Product.java` compile against `causeway.stubs/libs/*`; compiling those sources together with the hand-written `app` remains open until the generated action references `OrderService`.
 - [ ] 3.3 Confirm the generated `placeOrder` body referencing `OrderService` compiles (coexistence milestone)
 - [ ] 3.4 (deferred) Boot a Causeway app context to verify runtime introspection under `ENCAPSULATION_ENABLED`

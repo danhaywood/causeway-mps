@@ -26,4 +26,5 @@
 `Product.price` demonstrates a `JavaType` wrapping BaseLanguage `IntegerType`.
 `Customer.scopeProbe` exercises the lifecycle scope lattice across action hide, action validate/body, parameter choices, and parameter validate blocks.
 Its `product`, `quantity`, `orderService`, and `Customer` smart references provide positive examples of ordered parameter scope plus universal service/mixee scope.
+Name-based resolution rejects out-of-scope parameter names, and a deliberately forced out-of-scope persistent reference is reported as `The reference … is out of search scope` by the model checker.
 The action is a scope-validation fixture rather than the final `placeOrder` sample.

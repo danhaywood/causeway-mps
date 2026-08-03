@@ -55,8 +55,10 @@ generator-authoring boundary).
   DONE: `Action` scopes action-level blocks, while `Parameter` now implements `ScopeProvider` and scopes parameter-level blocks using declaration order.
   `Customer.scopeProbe` exercises action availability, action validation/body, first- and second-parameter choices, and parameter validation with resolved mixee/service references.
   MPS 2026.1 Make, MCP root validation, `./gradlew checkModels --rerun-tasks`, and `./gradlew generateModels --rerun-tasks` are green.
-- [ ] 3.3 Confirm completion offers only in-scope params and an out-of-scope reference is an edit-time
+- [x] 3.3 Confirm completion offers only in-scope params and an out-of-scope reference is an edit-time
   error.
+  DONE: name-based reference resolution, which uses the same search scope as completion, rejects `product` in action hide, `product` in its own choices block, and `quantity` in its own choices block with `NOT_FOUND`, while legal service and earlier-parameter names resolve.
+  Forcing action hide to reference `product` by persistent node reference produces the edit-time model-checker error `The reference product (variable) is out of search scope`; restoring `orderService` returns the `Customer` root to its clean state.
 
 ## 4. Typesystem (typed blocks)
 

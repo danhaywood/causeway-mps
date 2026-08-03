@@ -32,6 +32,9 @@
       <concept id="5455126814596559395" name="causeway.structure.ActionVariableReference" flags="ng" index="Z2fbc">
         <reference id="5455126814596559396" name="variable" index="Z2fbb" />
       </concept>
+      <concept id="5455126814597722999" name="causeway.structure.LifecycleBlock" flags="ng" index="ZuFeo">
+        <child id="5455126814597799728" name="body" index="ZuXZv" />
+      </concept>
       <concept id="8900000000000000008" name="causeway.structure.JavaType" flags="ng" index="3Zuirg">
         <child id="8900000000000000032" name="javaType" index="3ZuirS" />
       </concept>
@@ -78,123 +81,131 @@
       <property role="3ZuirN" value="7I39Hy4Yw1s/SAFE" />
       <node concept="3Zuirt" id="4IOweXOJEa5" role="3Zuir1">
         <property role="TrG5h" value="product" />
-        <node concept="3clFbS" id="4IOweXOKfC2" role="3ZuirE">
-          <node concept="3clFbJ" id="4IOweXOKfC3" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfC6" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfC9" role="3uHU7B">
-                <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+        <node concept="ZuFeo" id="4IOweXONVsb" role="3ZuirE">
+          <node concept="3clFbS" id="4IOweXONVsd" role="ZuXZv">
+            <node concept="3clFbJ" id="4IOweXONVse" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVsh" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVsk" role="3uHU7B">
+                  <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVsl" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfCa" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVsm" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfCb" role="3clFbx" />
-          </node>
-          <node concept="3clFbJ" id="4IOweXOKfCc" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfCf" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfCi" role="3uHU7B">
-                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            <node concept="3clFbJ" id="4IOweXONVsn" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVsq" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVst" role="3uHU7B">
+                  <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVsu" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfCj" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVsv" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfCk" role="3clFbx" />
           </node>
         </node>
-        <node concept="3clFbS" id="4IOweXOKfCl" role="3ZuirG">
-          <node concept="3clFbJ" id="4IOweXOKfCm" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfCp" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfCs" role="3uHU7B">
-                <ref role="Z2fbb" node="4IOweXOJEa5" resolve="product" />
+        <node concept="ZuFeo" id="4IOweXONVsw" role="3ZuirG">
+          <node concept="3clFbS" id="4IOweXONVsy" role="ZuXZv">
+            <node concept="3clFbJ" id="4IOweXONVsz" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVsA" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVsD" role="3uHU7B">
+                  <ref role="Z2fbb" node="4IOweXOJEa5" resolve="product" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVsE" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfCt" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVsF" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfCu" role="3clFbx" />
-          </node>
-          <node concept="3clFbJ" id="4IOweXOKfCv" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfCy" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfC_" role="3uHU7B">
-                <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+            <node concept="3clFbJ" id="4IOweXONVsG" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVsJ" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVsM" role="3uHU7B">
+                  <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVsN" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfCA" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVsO" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfCB" role="3clFbx" />
-          </node>
-          <node concept="3clFbJ" id="4IOweXOKfCC" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfCF" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfCI" role="3uHU7B">
-                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            <node concept="3clFbJ" id="4IOweXONVsP" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVsS" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVsV" role="3uHU7B">
+                  <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVsW" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfCJ" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVsX" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfCK" role="3clFbx" />
           </node>
         </node>
       </node>
       <node concept="3Zuirt" id="4IOweXOJEa6" role="3Zuir1">
         <property role="TrG5h" value="quantity" />
-        <node concept="3clFbS" id="4IOweXOKfCL" role="3ZuirE">
-          <node concept="3clFbJ" id="4IOweXOKfCM" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfCP" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfCS" role="3uHU7B">
-                <ref role="Z2fbb" node="4IOweXOJEa5" resolve="product" />
+        <node concept="ZuFeo" id="4IOweXONVsY" role="3ZuirE">
+          <node concept="3clFbS" id="4IOweXONVt0" role="ZuXZv">
+            <node concept="3clFbJ" id="4IOweXONVt1" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVt4" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVt7" role="3uHU7B">
+                  <ref role="Z2fbb" node="4IOweXOJEa5" resolve="product" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVt8" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfCT" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVt9" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfCU" role="3clFbx" />
-          </node>
-          <node concept="3clFbJ" id="4IOweXOKfCV" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfCY" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfD1" role="3uHU7B">
-                <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+            <node concept="3clFbJ" id="4IOweXONVta" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVtd" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVtg" role="3uHU7B">
+                  <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVth" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfD2" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVti" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfD3" role="3clFbx" />
-          </node>
-          <node concept="3clFbJ" id="4IOweXOKfD4" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfD7" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfDa" role="3uHU7B">
-                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            <node concept="3clFbJ" id="4IOweXONVtj" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVtm" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVtp" role="3uHU7B">
+                  <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVtq" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfDb" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVtr" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfDc" role="3clFbx" />
           </node>
         </node>
-        <node concept="3clFbS" id="4IOweXOKfDd" role="3ZuirG">
-          <node concept="3clFbJ" id="4IOweXOKfDe" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfDh" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfDk" role="3uHU7B">
-                <ref role="Z2fbb" node="4IOweXOJEa5" resolve="product" />
+        <node concept="ZuFeo" id="4IOweXONVts" role="3ZuirG">
+          <node concept="3clFbS" id="4IOweXONVtu" role="ZuXZv">
+            <node concept="3clFbJ" id="4IOweXONVtv" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVty" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVt_" role="3uHU7B">
+                  <ref role="Z2fbb" node="4IOweXOJEa5" resolve="product" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVtA" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfDl" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVtB" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfDm" role="3clFbx" />
-          </node>
-          <node concept="3clFbJ" id="4IOweXOKfDn" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfDq" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfDt" role="3uHU7B">
-                <ref role="Z2fbb" node="4IOweXOJEa6" resolve="quantity" />
+            <node concept="3clFbJ" id="4IOweXONVtC" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVtF" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVtI" role="3uHU7B">
+                  <ref role="Z2fbb" node="4IOweXOJEa6" resolve="quantity" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVtJ" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfDu" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVtK" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfDv" role="3clFbx" />
-          </node>
-          <node concept="3clFbJ" id="4IOweXOKfDw" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfDz" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfDA" role="3uHU7B">
-                <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+            <node concept="3clFbJ" id="4IOweXONVtL" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVtO" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVtR" role="3uHU7B">
+                  <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVtS" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfDB" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVtT" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfDC" role="3clFbx" />
-          </node>
-          <node concept="3clFbJ" id="4IOweXOKfDD" role="3cqZAp">
-            <node concept="3clFbC" id="4IOweXOKfDG" role="3clFbw">
-              <node concept="Z2fbc" id="4IOweXOKfDJ" role="3uHU7B">
-                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            <node concept="3clFbJ" id="4IOweXONVtU" role="3cqZAp">
+              <node concept="3clFbC" id="4IOweXONVtX" role="3clFbw">
+                <node concept="Z2fbc" id="4IOweXONVu0" role="3uHU7B">
+                  <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+                </node>
+                <node concept="10Nm6u" id="4IOweXONVu1" role="3uHU7w" />
               </node>
-              <node concept="10Nm6u" id="4IOweXOKfDK" role="3uHU7w" />
+              <node concept="3clFbS" id="4IOweXONVu2" role="3clFbx" />
             </node>
-            <node concept="3clFbS" id="4IOweXOKfDL" role="3clFbx" />
           </node>
         </node>
       </node>
@@ -239,62 +250,66 @@
           <node concept="3clFbS" id="4IOweXOKfDU" role="3clFbx" />
         </node>
       </node>
-      <node concept="3clFbS" id="4IOweXOKfBa" role="3ZuirP">
-        <node concept="3clFbJ" id="4IOweXOKfBb" role="3cqZAp">
-          <node concept="3clFbC" id="4IOweXOKfBe" role="3clFbw">
-            <node concept="Z2fbc" id="4IOweXOKfBh" role="3uHU7B">
-              <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+      <node concept="ZuFeo" id="4IOweXONVu3" role="3ZuirP">
+        <node concept="3clFbS" id="4IOweXONVu5" role="ZuXZv">
+          <node concept="3clFbJ" id="4IOweXONVu6" role="3cqZAp">
+            <node concept="3clFbC" id="4IOweXONVu9" role="3clFbw">
+              <node concept="Z2fbc" id="4IOweXONVuc" role="3uHU7B">
+                <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+              </node>
+              <node concept="10Nm6u" id="4IOweXONVud" role="3uHU7w" />
             </node>
-            <node concept="10Nm6u" id="4IOweXOKfBi" role="3uHU7w" />
+            <node concept="3clFbS" id="4IOweXONVue" role="3clFbx" />
           </node>
-          <node concept="3clFbS" id="4IOweXOKfBj" role="3clFbx" />
-        </node>
-        <node concept="3clFbJ" id="4IOweXOKfBk" role="3cqZAp">
-          <node concept="3clFbC" id="4IOweXOKfBn" role="3clFbw">
-            <node concept="Z2fbc" id="4IOweXOKfBq" role="3uHU7B">
-              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+          <node concept="3clFbJ" id="4IOweXONVuf" role="3cqZAp">
+            <node concept="3clFbC" id="4IOweXONVui" role="3clFbw">
+              <node concept="Z2fbc" id="4IOweXONVul" role="3uHU7B">
+                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+              </node>
+              <node concept="10Nm6u" id="4IOweXONVum" role="3uHU7w" />
             </node>
-            <node concept="10Nm6u" id="4IOweXOKfBr" role="3uHU7w" />
+            <node concept="3clFbS" id="4IOweXONVun" role="3clFbx" />
           </node>
-          <node concept="3clFbS" id="4IOweXOKfBs" role="3clFbx" />
         </node>
       </node>
-      <node concept="3clFbS" id="4IOweXOKfBt" role="3ZuirR">
-        <node concept="3clFbJ" id="4IOweXOKfBu" role="3cqZAp">
-          <node concept="3clFbC" id="4IOweXOKfBx" role="3clFbw">
-            <node concept="Z2fbc" id="4IOweXOKfB$" role="3uHU7B">
-              <ref role="Z2fbb" node="4IOweXOJEa5" resolve="product" />
+      <node concept="ZuFeo" id="4IOweXONVuo" role="3ZuirR">
+        <node concept="3clFbS" id="4IOweXONVuq" role="ZuXZv">
+          <node concept="3clFbJ" id="4IOweXONVur" role="3cqZAp">
+            <node concept="3clFbC" id="4IOweXONVuu" role="3clFbw">
+              <node concept="Z2fbc" id="4IOweXONVux" role="3uHU7B">
+                <ref role="Z2fbb" node="4IOweXOJEa5" resolve="product" />
+              </node>
+              <node concept="10Nm6u" id="4IOweXONVuy" role="3uHU7w" />
             </node>
-            <node concept="10Nm6u" id="4IOweXOKfB_" role="3uHU7w" />
+            <node concept="3clFbS" id="4IOweXONVuz" role="3clFbx" />
           </node>
-          <node concept="3clFbS" id="4IOweXOKfBA" role="3clFbx" />
-        </node>
-        <node concept="3clFbJ" id="4IOweXOKfBB" role="3cqZAp">
-          <node concept="3clFbC" id="4IOweXOKfBE" role="3clFbw">
-            <node concept="Z2fbc" id="4IOweXOKfBH" role="3uHU7B">
-              <ref role="Z2fbb" node="4IOweXOJEa6" resolve="quantity" />
+          <node concept="3clFbJ" id="4IOweXONVu$" role="3cqZAp">
+            <node concept="3clFbC" id="4IOweXONVuB" role="3clFbw">
+              <node concept="Z2fbc" id="4IOweXONVuE" role="3uHU7B">
+                <ref role="Z2fbb" node="4IOweXOJEa6" resolve="quantity" />
+              </node>
+              <node concept="10Nm6u" id="4IOweXONVuF" role="3uHU7w" />
             </node>
-            <node concept="10Nm6u" id="4IOweXOKfBI" role="3uHU7w" />
+            <node concept="3clFbS" id="4IOweXONVuG" role="3clFbx" />
           </node>
-          <node concept="3clFbS" id="4IOweXOKfBJ" role="3clFbx" />
-        </node>
-        <node concept="3clFbJ" id="4IOweXOKfBK" role="3cqZAp">
-          <node concept="3clFbC" id="4IOweXOKfBN" role="3clFbw">
-            <node concept="Z2fbc" id="4IOweXOKfBQ" role="3uHU7B">
-              <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+          <node concept="3clFbJ" id="4IOweXONVuH" role="3cqZAp">
+            <node concept="3clFbC" id="4IOweXONVuK" role="3clFbw">
+              <node concept="Z2fbc" id="4IOweXONVuN" role="3uHU7B">
+                <ref role="Z2fbb" node="4IOweXOJEa7" resolve="orderService" />
+              </node>
+              <node concept="10Nm6u" id="4IOweXONVuO" role="3uHU7w" />
             </node>
-            <node concept="10Nm6u" id="4IOweXOKfBR" role="3uHU7w" />
+            <node concept="3clFbS" id="4IOweXONVuP" role="3clFbx" />
           </node>
-          <node concept="3clFbS" id="4IOweXOKfBS" role="3clFbx" />
-        </node>
-        <node concept="3clFbJ" id="4IOweXOKfBT" role="3cqZAp">
-          <node concept="3clFbC" id="4IOweXOKfBW" role="3clFbw">
-            <node concept="Z2fbc" id="4IOweXOKfBZ" role="3uHU7B">
-              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+          <node concept="3clFbJ" id="4IOweXONVuQ" role="3cqZAp">
+            <node concept="3clFbC" id="4IOweXONVuT" role="3clFbw">
+              <node concept="Z2fbc" id="4IOweXONVuW" role="3uHU7B">
+                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+              </node>
+              <node concept="10Nm6u" id="4IOweXONVuX" role="3uHU7w" />
             </node>
-            <node concept="10Nm6u" id="4IOweXOKfC0" role="3uHU7w" />
+            <node concept="3clFbS" id="4IOweXONVuY" role="3clFbx" />
           </node>
-          <node concept="3clFbS" id="4IOweXOKfC1" role="3clFbx" />
         </node>
       </node>
     </node>

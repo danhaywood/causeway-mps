@@ -62,8 +62,12 @@ generator-authoring boundary).
 
 ## 4. Typesystem (typed blocks)
 
-- [ ] 4.1 Type each block to its contract: `hide`→`boolean`; `disable`/`validate`→reason `String`-or-null;
+- [x] 4.1 Type each block to its contract: `hide`→`boolean`; `disable`/`validate`→reason `String`-or-null;
   `choices`/`autoComplete`→`Collection<ParamType>`; `default`→`ParamType`.
+  DONE: lifecycle roles now contain `LifecycleBlock`, an `IMethodLike` wrapper around a BaseLanguage `StatementList`.
+  `LifecycleBlock.getExpectedRetType()` derives `boolean`, `String`, the copied parameter type, or `Collection<copied ParamType>` from the block's containment role.
+  `EntityType` now extends BaseLanguage `Type`, so both Java-backed and entity-backed parameter types can be embedded as generic arguments.
+  The six `Customer.scopeProbe` supporting blocks were migrated without losing their scope-reference fixtures, and the language Make plus root checks are clean apart from the existing informational String recommendation and the behavior quotation's raw-Collection warning.
 - [ ] 4.2 Confirm a wrong-typed block body is an edit-time type error.
 
 ## 5. Constraints

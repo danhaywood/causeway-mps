@@ -18,7 +18,8 @@ The generator reads this singleton root for module-level metadata and does not e
 ## Create an action
 
 Start with a small `causeway.structure.Action` root or nested child containing only `name`, `semantics`, parameters, and types.
-Add BaseLanguage statement-list bodies and supporting blocks incrementally because they are large and scope-sensitive.
+Add the action body and typed `LifecycleBlock` supporting blocks incrementally because they are large and scope-sensitive.
+Each lifecycle block owns its BaseLanguage statements under the mandatory `body` child; do not place statements directly under the wrapper.
 Use `ActionVariableReference` for parameters, the entity mixee, and injected services.
 Action hide/disable blocks see no parameters, parameter blocks see earlier parameters (plus self for validate), and action validate/body see all parameters; mixee and services are universal.
 Use `mps_mcp_parse_java_and_insert` for ordinary Java statements where the target role accepts parsed BaseLanguage nodes.

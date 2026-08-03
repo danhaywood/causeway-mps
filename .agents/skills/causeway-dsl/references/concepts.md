@@ -33,7 +33,7 @@ A named entity property with an optional `type : Type` child.
 ### `causeway.structure.Parameter`
 
 A named action parameter with an optional `type : Type` child.
-It also owns `choices`, `default`, `validate`, `autoComplete`, `hide`, and `disable` BaseLanguage statement-list roles.
+It also owns `choices`, `default`, `validate`, `autoComplete`, `hide`, and `disable` typed `LifecycleBlock` roles.
 It implements `ScopeProvider`: non-validation blocks see only earlier parameters, while validation also sees the current parameter; mixee and injected services are always visible.
 Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814596961145`.
 
@@ -46,6 +46,13 @@ It implements BaseLanguage `IVariableDeclaration` and is exposed by the action a
 
 A smart-reference BaseLanguage expression whose `variable` reference targets `IVariableDeclaration`.
 Its scope follows the lifecycle lattice implemented by the enclosing `Action` or `Parameter` scope provider.
+
+### `causeway.structure.LifecycleBlock`
+
+An `IMethodLike` wrapper containing a mandatory BaseLanguage `StatementList` in its `body` role.
+Its expected return type is derived from its containment role: hide is `boolean`, disable/validate is `String`, default is the parameter type, and choices/autoComplete is `Collection<ParamType>`.
+Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814597746873`.
+Editor root: `r:f92574fd-2f37-4189-8af1-9a167710122f(causeway.editor)/5455126814597830208`.
 
 ## Type concepts
 
@@ -60,7 +67,8 @@ The generator currently handles this variant, including primitive `int` and clas
 
 ### `causeway.structure.EntityType`
 
-References an `Entity` through its optional `entity` reference.
+Extends BaseLanguage `Type`, implements the DSL `Type` union, and references an `Entity` through its optional `entity` reference.
+Being a BaseLanguage type allows an entity-backed parameter type to participate in lifecycle contracts such as `Collection<ParamType>`.
 Generator resolution through the `entityToClass` mapping label is currently parked because the reduction-rule template cannot yet resolve a suitable classifier fragment.
 
 ## Enumeration

@@ -10,6 +10,9 @@
 - Action-body variable references use the smart-reference expression `ActionVariableReference`; ordinary BaseLanguage variable references do not target Causeway declarations.
 - Because `ActionVariableReference` extends BaseLanguage `Expression`, the `causeway` language must both extend and have a default dependency on `jetbrains.mps.baseLanguage`.
 - Lifecycle scope is split between `Action` and `Parameter` scope providers because `ScopeProvider.getScope` receives the provider's direct child; the action provider cannot distinguish which supporting block contains a reference nested under a parameter.
+- Lifecycle roles contain `LifecycleBlock`, not a raw `StatementList`; BaseLanguage statements belong under its mandatory `body` child.
+- `LifecycleBlock` must wrap rather than extend `StatementList`, because directly subclassing `StatementList` inherits `ImplementationWithStubPart` and produces `Missing stub for a non-stub ImplementationWithStubPart concept`.
+- The `Collection<ParamType>` behavior builds a parameterized type at runtime from a raw `Collection` quotation, so the behavior model currently reports a benign raw-use warning on the quotation node.
 - To verify completion scope without UI automation, set an `ActionVariableReference.variable` by plain name: name resolution uses the same search scope as completion and returns `NOT_FOUND` for omitted candidates.
 - To verify the edit-time diagnostic, temporarily bind an out-of-scope target by persistent `r:` reference, check for `The reference … is out of search scope`, and restore the original target immediately.
 - The action template is outside the completed entity-state generator slice.

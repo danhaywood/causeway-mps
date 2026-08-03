@@ -17,14 +17,15 @@
 - `Product.name` property: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717570`.
 - `Product.price` property: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5357476581549964898`.
 - `Customer.scopeProbe` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814596702852`.
-- Action hide scope fixture: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814596856266`.
-- Action validate scope fixture: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814596856285`.
-- First-parameter choices/validate fixtures: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814596856322` and `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814596856341`.
-- Second-parameter choices/validate fixtures: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814596856369` and `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814596856397`.
+- Action hide scope fixture: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814597822339`.
+- Action validate scope fixture: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814597822360`.
+- First-parameter choices/validate fixtures: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814597822219` and `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814597822240`.
+- Second-parameter choices/validate fixtures: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814597822270` and `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814597822300`.
 
 `Customer.name` demonstrates a `JavaType` wrapping BaseLanguage `ClassifierType(String)`.
 `Product.price` demonstrates a `JavaType` wrapping BaseLanguage `IntegerType`.
 `Customer.scopeProbe` exercises the lifecycle scope lattice across action hide, action validate/body, parameter choices, and parameter validate blocks.
+Its six supporting fixtures are typed `LifecycleBlock` wrappers whose `body` children retain the original BaseLanguage scope probes.
 Its `product`, `quantity`, `orderService`, and `Customer` smart references provide positive examples of ordered parameter scope plus universal service/mixee scope.
 Name-based resolution rejects out-of-scope parameter names, and a deliberately forced out-of-scope persistent reference is reported as `The reference … is out of search scope` by the model checker.
 The action is a scope-validation fixture rather than the final `placeOrder` sample.

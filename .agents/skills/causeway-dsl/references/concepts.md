@@ -52,6 +52,8 @@ Its scope follows the lifecycle lattice implemented by the enclosing `Action` or
 An `IMethodLike` wrapper containing a mandatory BaseLanguage `StatementList` in its `body` role.
 Its expected return type is derived from its containment role: hide is `boolean`, disable/validate is `String`, default is the parameter type, and choices/autoComplete is `Collection<ParamType>`.
 Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814597746873`.
+Typesystem root: `r:bdf61bbe-2bbc-43ea-97e7-6e690ac637df(causeway.typesystem)/5455126814597979820`.
+The typesystem rule collects return statements and constrains each returned expression to the behavior-derived expected type.
 Editor root: `r:f92574fd-2f37-4189-8af1-9a167710122f(causeway.editor)/5455126814597830208`.
 
 ## Type concepts

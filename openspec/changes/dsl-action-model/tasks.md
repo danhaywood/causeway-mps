@@ -68,7 +68,10 @@ generator-authoring boundary).
   `LifecycleBlock.getExpectedRetType()` derives `boolean`, `String`, the copied parameter type, or `Collection<copied ParamType>` from the block's containment role.
   `EntityType` now extends BaseLanguage `Type`, so both Java-backed and entity-backed parameter types can be embedded as generic arguments.
   The six `Customer.scopeProbe` supporting blocks were migrated without losing their scope-reference fixtures, and the language Make plus root checks are clean apart from the existing informational String recommendation and the behavior quotation's raw-Collection warning.
-- [ ] 4.2 Confirm a wrong-typed block body is an edit-time type error.
+- [x] 4.2 Confirm a wrong-typed block body is an edit-time type error.
+  DONE: added `typeOf_LifecycleBlock`, which collects the wrapper's return statements and constrains each returned expression to the behavior-derived expected type.
+  A temporary `return "wrong"` in action hide produced the edit-time error `type string is not a subtype of boolean`.
+  The deliberately invalid return was removed immediately afterward; `Customer` returned to its prior no-error state.
 
 ## 5. Constraints
 

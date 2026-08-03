@@ -13,6 +13,8 @@
 - Lifecycle roles contain `LifecycleBlock`, not a raw `StatementList`; BaseLanguage statements belong under its mandatory `body` child.
 - `LifecycleBlock` must wrap rather than extend `StatementList`, because directly subclassing `StatementList` inherits `ImplementationWithStubPart` and produces `Missing stub for a non-stub ImplementationWithStubPart concept`.
 - The `Collection<ParamType>` behavior builds a parameterized type at runtime from a raw `Collection` quotation, so the behavior model currently reports a benign raw-use warning on the quotation node.
+- Implementing `IMethodLike.getExpectedRetType()` is not sufficient by itself to report bad returns: `LifecycleBlock` also needs its `typeOf_LifecycleBlock` inference rule to collect return statements and constrain their expression types.
+- To verify a lifecycle return contract, temporarily insert a deliberately wrong return and inspect the parser/checker `problems` result, then restore the original `StatementList` immediately.
 - To verify completion scope without UI automation, set an `ActionVariableReference.variable` by plain name: name resolution uses the same search scope as completion and returns `NOT_FOUND` for omitted candidates.
 - To verify the edit-time diagnostic, temporarily bind an out-of-scope target by persistent `r:` reference, check for `The reference … is out of search scope`, and restore the original target immediately.
 - The action template is outside the completed entity-state generator slice.

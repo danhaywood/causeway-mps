@@ -235,6 +235,9 @@
     <node concept="PrWs8" id="4IOweXOJ78L" role="PzmwI">
       <ref role="PrY4T" to="tpee:4H$HgYMZ7sw" resolve="IVariableDeclaration" />
     </node>
+    <node concept="PrWs8" id="4IOweXOKzPE" role="PzmwI">
+      <ref role="PrY4T" to="tpck:3fifI_xCcJN" resolve="ScopeProvider" />
+    </node>
   </node>
   <node concept="1TIwiD" id="10">
     <property role="EcuMT" value="8900000000000000010" />

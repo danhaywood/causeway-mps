@@ -9,6 +9,7 @@
 - `EntityType` contains an entity reference and its generator reduction remains parked.
 - Action-body variable references use the smart-reference expression `ActionVariableReference`; ordinary BaseLanguage variable references do not target Causeway declarations.
 - Because `ActionVariableReference` extends BaseLanguage `Expression`, the `causeway` language must both extend and have a default dependency on `jetbrains.mps.baseLanguage`.
+- Lifecycle scope is split between `Action` and `Parameter` scope providers because `ScopeProvider.getScope` receives the provider's direct child; the action provider cannot distinguish which supporting block contains a reference nested under a parameter.
 - The action template is outside the completed entity-state generator slice.
 - Causeway/Jakarta stubs live in `causeway.stubs`; template models may still require explicit stub-model imports for classifier resolution.
 - A broken stub path can warn without making `checkModels` fail, so retain positive type-resolution and generated-Java compilation checks.

@@ -49,9 +49,12 @@ generator-authoring boundary).
   DONE: `ActionVariableReference` is a smart-reference BaseLanguage expression, and `Action.getScope` exposes all action parameters, declared injected services, and the enclosing entity.
   The `scopeProbe` sandbox action resolves `product`, `orderService`, and `Customer` references from its body.
   MPS 2026.1 Make, MCP validation, `./gradlew checkModels --rerun-tasks`, and `./gradlew generateModels --rerun-tasks` are green.
-- [ ] 3.2 Implement the full lifecycle lattice (`dsl-action-scoping`): action `hide`/`disable` → no
+- [x] 3.2 Implement the full lifecycle lattice (`dsl-action-scoping`): action `hide`/`disable` → no
   params; param *i* `default`/`choices`/`hide`/`disable`/`autoComplete` → `[0..i-1]`; param *i*
   `validate` → `[0..i]`; action `validate`/`act` → all. Mixee + services universal.
+  DONE: `Action` scopes action-level blocks, while `Parameter` now implements `ScopeProvider` and scopes parameter-level blocks using declaration order.
+  `Customer.scopeProbe` exercises action availability, action validation/body, first- and second-parameter choices, and parameter validation with resolved mixee/service references.
+  MPS 2026.1 Make, MCP root validation, `./gradlew checkModels --rerun-tasks`, and `./gradlew generateModels --rerun-tasks` are green.
 - [ ] 3.3 Confirm completion offers only in-scope params and an out-of-scope reference is an edit-time
   error.
 

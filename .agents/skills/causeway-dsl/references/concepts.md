@@ -19,8 +19,10 @@ Its `actions` role contains zero or more nested `Action` nodes.
 
 A rootable or entity-nested action with inherited `name` and `semantics : SemanticsOf`.
 It contains `parameters`, optional `returnType`, optional BaseLanguage `body`, `injectedServices`, lifecycle/supporting blocks, and optional `target` entity nodes.
-Its prototype `ScopeProvider.getScope` implementation exposes all parameters, injected services, and the enclosing entity to `ActionVariableReference` expressions inside the body.
-The current OpenSpec work still needs the full lifecycle scope lattice and action mixin generation.
+Its `ScopeProvider.getScope` implementation exposes all parameters in action validation and body blocks, but no parameters in action hide/disable blocks.
+Injected services and the enclosing entity mixee remain visible in every action-level block.
+Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814596634176`.
+Action mixin generation remains active OpenSpec work.
 
 ## Member concepts
 
@@ -32,16 +34,18 @@ A named entity property with an optional `type : Type` child.
 
 A named action parameter with an optional `type : Type` child.
 It also owns `choices`, `default`, `validate`, `autoComplete`, `hide`, and `disable` BaseLanguage statement-list roles.
+It implements `ScopeProvider`: non-validation blocks see only earlier parameters, while validation also sees the current parameter; mixee and injected services are always visible.
+Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814596961145`.
 
 ### `causeway.structure.InjectedService`
 
 A named injected service with an optional `type : Type` child.
-It implements BaseLanguage `IVariableDeclaration` and is exposed by the prototype action scope provider.
+It implements BaseLanguage `IVariableDeclaration` and is exposed by the action and parameter scope providers.
 
 ### `causeway.structure.ActionVariableReference`
 
 A smart-reference BaseLanguage expression whose `variable` reference targets `IVariableDeclaration`.
-Its scope currently contains the enclosing action's parameters, injected services, and nested entity mixee.
+Its scope follows the lifecycle lattice implemented by the enclosing `Action` or `Parameter` scope provider.
 
 ## Type concepts
 

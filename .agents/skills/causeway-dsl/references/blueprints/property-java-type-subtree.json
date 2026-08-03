@@ -1,0 +1,35 @@
+{
+  "concept": "causeway.structure.Property",
+  "properties": [
+    {
+      "name": "name",
+      "value": "example"
+    }
+  ],
+  "children": [
+    {
+      "role": "type",
+      "nodes": [
+        {
+          "concept": "causeway.structure.JavaType",
+          "children": [
+            {
+              "role": "javaType",
+              "nodes": [
+                {
+                  "concept": "jetbrains.mps.baseLanguage.structure.ClassifierType",
+                  "references": [
+                    {
+                      "role": "classifier",
+                      "target": "String"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

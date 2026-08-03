@@ -1,0 +1,59 @@
+# Causeway concept catalog
+
+Language reference: `l:99bd0b43-8ce5-4eaa-aac8-ff12e0700f84:causeway`.
+
+## Rootable concepts
+
+### `causeway.structure.Module`
+
+A singleton metadata root for a model/module namespace.
+It has the inherited `name` property and currently has no DSL children.
+
+### `causeway.structure.Entity`
+
+A Causeway domain entity root with inherited `name`.
+Its `properties` role contains zero or more `Property` nodes.
+Its `actions` role contains zero or more nested `Action` nodes.
+
+### `causeway.structure.Action`
+
+A rootable or entity-nested action with inherited `name` and `semantics : SemanticsOf`.
+It contains `parameters`, optional `returnType`, optional BaseLanguage `body`, `injectedServices`, lifecycle/supporting blocks, and optional `target` entity nodes.
+The current OpenSpec work still needs BaseLanguage scope wiring and action mixin generation.
+
+## Member concepts
+
+### `causeway.structure.Property`
+
+A named entity property with an optional `type : Type` child.
+
+### `causeway.structure.Parameter`
+
+A named action parameter with an optional `type : Type` child.
+It also owns `choices`, `default`, `validate`, `autoComplete`, `hide`, and `disable` BaseLanguage statement-list roles.
+
+### `causeway.structure.InjectedService`
+
+A named injected service with an optional `type : Type` child.
+Declared services are not yet in scope inside action bodies until the action scope-provider work is completed.
+
+## Type concepts
+
+### `causeway.structure.Type`
+
+An abstract interface concept implemented by `JavaType` and `EntityType`.
+
+### `causeway.structure.JavaType`
+
+Wraps one BaseLanguage `Type` in its `javaType` role.
+The generator currently handles this variant, including primitive `int` and classifier `String` examples.
+
+### `causeway.structure.EntityType`
+
+References an `Entity` through its optional `entity` reference.
+Generator resolution through the `entityToClass` mapping label is currently parked because the reduction-rule template cannot yet resolve a suitable classifier fragment.
+
+## Enumeration
+
+`Action.semantics` uses `SemanticsOf`.
+Retrieve current enumeration literals with `mps_mcp_query_structure` operation `GET_ENUMERATION_LITERALS` rather than guessing serialized values.

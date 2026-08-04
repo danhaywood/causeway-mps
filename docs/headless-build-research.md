@@ -2,6 +2,7 @@
 
 Decision record for the `headless-mps-build` change.
 The original investigation was performed on 2026-06-16 and the MPS 2026.1 alignment was verified on 2026-08-03.
+See [Headless build](headless-build.md) for the current production command, toolchains, bootstrap, caching, and troubleshooting guide.
 
 ## Verdict
 
@@ -32,15 +33,14 @@ The Itemis `MpsCheck` and `MpsGenerate` task types directly match this project's
 
 ## Commands
 
-Run with JDK 21 selected:
+Run the production pipeline with JDK 21 and JDK 25 available to Gradle toolchain discovery:
 
 ```bash
-JAVA_HOME="$HOME/.sdkman/candidates/java/21.0.10-tem" ./gradlew checkModels --rerun-tasks
-JAVA_HOME="$HOME/.sdkman/candidates/java/21.0.10-tem" ./gradlew generateModels --rerun-tasks
+./gradlew headlessBuild --no-daemon --stacktrace
 ```
 
+The command bootstraps language deployment under JDK 25, generates the sandbox, runs modelcheck, and compiles generated Java for release 21.
 The Gradle build resolves the pinned MPS distribution into `build/mps` and stages Causeway/Jakarta stub dependencies under `languages/causeway.stubs/libs`.
-A declarative Gradle Java toolchain remains desirable so callers do not need to set `JAVA_HOME` explicitly.
 
 ## MPS 2025.3 to 2026.1 alignment
 
@@ -50,7 +50,7 @@ The fix is to align the downloaded headless distribution with the authoring base
 
 Whenever MPS is upgraded, verify both `checkModels` and `generateModels` against the new downloaded distribution before accepting the baseline change.
 
-## Remaining pipeline work
+## Production pipeline status
 
-The MPS generate and modelcheck stages are operational.
-The remaining `headless-mps-build` work is to automate compilation of generated Java together with `reference-app`, expose a single fail-fast command, and add the CI workflow and caches.
+The single fail-fast command, clean-checkout Ant Make bootstrap, generated-Java compilation, CI workflow, and dependency caches are operational.
+The explicit hand-written `OrderService` coexistence fixture remains owned by the separate `sandbox-sample-and-e2e` change.

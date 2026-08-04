@@ -37,7 +37,8 @@
 ## 4. CI pipeline
 
 - [x] 4.1 Add a CI workflow that runs the single build command on push and PR — DONE: `.github/workflows/headless-build.yml` runs `./gradlew headlessBuild --no-daemon --stacktrace` on both events with read-only repository permissions.
-- [ ] 4.2 Provision the pinned JDK 21 and MPS 2026.1 distribution on the runner (no preinstalled IDE)
+- [ ] 4.2 Provision pinned JDK 21 and JDK 25 toolchains plus the MPS 2026.1 distribution on the runner (no preinstalled IDE).
+  Bootstrap the ignored `causeway.Language` and `causeway.generator.Generator` deployment descriptors with MPS Ant Make under JDK 25 before running generation/modelcheck under JDK 21, and prove the complete build from a clean checkout.
 - [ ] 4.3 Cache the MPS distribution and Gradle dependencies for stable runs
 - [ ] 4.4 Confirm CI fails on a deliberately broken model and passes on a clean one
 

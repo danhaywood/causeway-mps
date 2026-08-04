@@ -21,7 +21,14 @@ The `causeway-mps` repo is an MPS project (`causeway` language + `causeway.runti
 
 **Pin MPS 2026.1 and download it for the build.** The build should fetch the pinned MPS distribution (matching baseline 261) rather than depend on the locally installed `MPS.app`, so CI and any developer machine are identical. Version pinned in a single place (gradle properties / version catalog).
 
-**Select a JDK 17+ via Gradle toolchains.** The project default `java` is 11, which cannot run MPS 2026.1 / build Causeway 3.x. The Gradle Java toolchain pins 21 (matching `reference-app`) and is resolved independently of `JAVA_HOME`/PATH.
+**Bootstrap language deployment before consumer generation.** A clean checkout has no ignored `source_gen` or `classes_gen` output, and `MpsGenerate` generates and compiles the language aspect models but does not emit the `causeway.Language` and `causeway.generator.Generator` deployment descriptors needed to load the language in a subsequent MPS process.
+Run the MPS Ant `mps.make` task against the `causeway` language module before the normal generation pass so those descriptors are generated and compiled without relying on IDE-created local artifacts.
+Treat this Make step as part of headless generation, preserving the externally visible generate → modelcheck → compile pipeline.
+
+**Use separate pinned JDKs for MPS Make and generated Java.** The project default `java` is 11, which cannot run MPS 2026.1 or build Causeway 3.x.
+Run Gradle and the ordinary MPS generation/modelcheck tasks on JDK 21, matching `reference-app`, while launching the MPS 2026.1 Ant Make worker with JDK 25 because the distribution's `jetbrains.mps.tool.make.MakeExecutor` is compiled for class-file version 69.
+Compile generated application Java with the Gradle Java 21 toolchain and `--release 21`.
+CI provisions both pinned Temurin toolchains without relying on a preinstalled IDE or JDK.
 
 **Compile generated Java with the existing `reference-app` dependency set.** Reuse Causeway 3.6.0 + Jakarta Persistence 3.1.0 + Jakarta Inject 2.0.1 so the headless compile matches the already-verified golden idiom. The generated sources from `causeway.sandbox` are compiled on a classpath that also includes the hand-written `reference-app` code (coexistence).
 
@@ -32,5 +39,7 @@ The `causeway-mps` repo is an MPS project (`causeway` language + `causeway.runti
 - **mps-gradle-plugin compatibility can drift across MPS baselines** → MPS 2026.1 compatibility is proven by fresh `MpsCheck` and `MpsGenerate` runs on JDK 21; rerun both checks whenever the baseline changes.
 - **MPS distribution download size/time in CI** → Cache the MPS distribution and Gradle dependencies in CI; pin exact versions for cache stability.
 - **Headless generation may surface module-metadata/dependency issues hidden by the IDE** (e.g. unresolved devkits, classpath stubs) → Treat the first green headless build as a milestone; expect minor `.mpl`/`.msd`/library adjustments.
+- **Ignored language deployment artifacts can mask a non-hermetic local build** → Validate from a clean clone and run MPS Make before consumer generation so `Language` and `Generator` descriptors are created on every fresh runner.
+- **MPS Make requires a newer runtime than the generated application target** → Provision JDK 25 specifically for the MPS 2026.1 Make worker while retaining JDK 21 and `--release 21` for generated Causeway Java.
 - **Sandbox stub dependencies (Causeway/app jars) must be resolvable headlessly** → Wire the same coordinates the IDE uses into the build; align with `reference-app`.
 - **JDK drift between MPS runtime and Causeway compile** → Use a single toolchain (21) for both where possible; document if MPS requires a different JDK than the Java compile.

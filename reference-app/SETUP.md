@@ -56,34 +56,56 @@ public class Customer {                                                   // PUR
 }
 ```
 
-Under **mixins-everywhere**, the entity class holds only persisted state; every
-action generates as a **mixin class** (state stays in the entity). Per the
-**model=module** decision, a *nested* action (one contained in its `Entity`)
-generates as a **non-static inner mixin class** of the entity — no separate file:
+Under **mixins-everywhere**, the entity class holds only persisted state; every action generates as a **mixin class** while state stays in the entity.
+Per the **model=module** decision, a nested action contained in its `Entity` generates as a static nested mixin class with no separate file:
 
 ```java
 public class Customer {
     // ... persisted state ...
 
-    @Action(semantics = SemanticsOf.IDEMPOTENT)                          // @Action on the (inner) CLASS
-    public class placeOrder {                                            // non-static inner class == mixin
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public static class placeOrder {
+        public static final class Params {
+            private final Product product;
+            private final int quantity;
 
-        @MemberSupport                                                    // mixin main method `act`, encapsulation-ok
-        public Customer act(final Product product, final int quantity) {
-            orderService.placeOrder(Customer.this, product, quantity);   // mixee = Customer.this (no field/ctor)
-            return Customer.this;
+            public Params(Product product, int quantity) {
+                this.product = product;
+                this.quantity = quantity;
+            }
+
+            public Product product() { return product; }
+            public int quantity() { return quantity; }
         }
-        @Inject private OrderService orderService;                       // injected service (allowed; not domain state)
+
+        @Inject private OrderService orderService;
+        private final Customer mixee;
+
+        public placeOrder(Customer mixee) {
+            this.mixee = mixee;
+        }
+
+        @MemberSupport
+        public Customer act(Product product, int quantity) {
+            orderService.placeOrder(mixee, product, quantity);
+            return mixee;
+        }
+
+        public boolean hideProduct(Params params) {
+            return params.product() == null;
+        }
+
+        public String disableProduct(Params params) {
+            return null;
+        }
     }
 }
 ```
 
-The Java compiler synthesises the inner class's constructor as
-`placeOrder(Customer)` — verified in the bytecode — which is exactly the
-single-arg-mixee constructor Causeway requires, with the mixee supplied as
-`Customer.this`. A *top-level / cross-module* action (contributing to an entity
-it does not live beside) instead generates as a separate top-level
-`Mixee_member` class with an explicit mixee ctor.
+The explicit `placeOrder(Customer)` constructor is the single-argument mixee constructor Causeway requires.
+The static shape permits the public immutable `Params` carrier whose full-arguments constructor is required for Causeway's parameter-as-tuple supporting-method lookup.
+By-name lifecycle methods take that carrier, while auto-complete additionally receives `String search`.
+A top-level or cross-module action contributing to an entity it does not live beside instead generates as a separate top-level `Mixee_member` class with the same explicit mixee-constructor pattern.
 
 ## Mapping to the MPS sandbox stubs (Phase B)
 
@@ -99,12 +121,9 @@ alongside the hand-written `app/` code.
 
 ## What this proves — and what it does NOT
 
-**Proven (compile-time):** the idiom is valid Java against real Causeway + Jakarta
-APIs; `jakarta.inject.Named`, `@DomainObject(... introspection = ENCAPSULATION_ENABLED)`,
-`@Property` on an explicit private getter (which meta-includes it under encapsulation),
-`@Action(semantics=…)`, and
-bidirectional generated↔hand-written references all compile. The "no-Lombok →
-annotations on the explicit getter" decision needs no `onMethod_` workaround.
+**Proven (compile-time):** the idiom is valid Java against real Causeway and Jakarta APIs.
+`jakarta.inject.Named`, `@DomainObject(... introspection = ENCAPSULATION_ENABLED)`, `@Property` on an explicit private getter, `@Action(semantics=…)`, the immutable PAT carrier, all action and parameter supporting-method families, the injected service, and bidirectional generated-to-hand-written references all compile.
+The "no-Lombok → annotations on the explicit getter" decision needs no `onMethod_` workaround.
 
 **NOT proven (runtime):** that Causeway's metamodel *introspects* these classes
 correctly under `ENCAPSULATION_ENABLED` (private getter recognised as a property,

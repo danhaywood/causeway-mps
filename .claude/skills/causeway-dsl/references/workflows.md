@@ -48,4 +48,8 @@ Prefer persistent `r:` references for entity targets when names are ambiguous.
 Run `mps_mcp_check_root_node_problems` on each changed root.
 Run `./gradlew checkModels` after DSL model changes.
 Run `./gradlew generateModels` after changes affecting generated output.
-Compare generated `customers` Java with `reference-app/src/main/java/customers/` and compile against `causeway.stubs/libs/*` when working on generator milestones.
+Compare generated `customers` Java with `reference-app/src/main/java/customers/` when working on generator milestones.
+Compile the golden with JDK 21 using `mvn -q -f reference-app/pom.xml clean compile`; it targets Causeway
+3.6.0 and Jakarta.
+Use `javap` on `Customer$placeOrder` and `Customer$placeOrder$Params` when verifying the explicit mixee
+constructor and public complete-signature PAT constructor.

@@ -21,7 +21,7 @@
 - Causeway 3.6 does support per-parameter mixin methods named `hide<ParamName>` and `disable<ParamName>`; their PAT form takes one `Params` object and returns primitive `boolean` or `String`/`TranslatableString` respectively.
 - Causeway's PAT lookup requires a public constructor matching all action parameter types.
 - MPS 2026.1 BaseLanguage has no Java `record` concept, so generate the approved equivalent: `public static final class Params` with private final fields, a public full-arguments constructor, and record-style accessors.
-- A nested action shell must be static and later receive an explicit mixee field and constructor; otherwise a non-static `Params` gains a synthetic outer constructor argument and fails PAT discovery.
+- A nested action shell must be static with an explicit mixee field and constructor; otherwise a non-static `Params` gains a synthetic outer constructor argument and fails PAT discovery.
 - Although PAT exposes all fields structurally, lifecycle scope must continue hiding the current and later parameters from per-parameter hide/disable bodies.
 - The action template now generates the nested static action shell, explicit mixee field/constructor, immutable `Params` carrier, Jakarta-injected service fields, `act`, and all supporting-method families.
 - `$COPY_SRC$` retains `ActionVariableReference` nodes in the BaseLanguage output model, so the language's `ActionVariableReference_TextGen` must remain available during final Java text generation.

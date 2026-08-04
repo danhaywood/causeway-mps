@@ -17,6 +17,9 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import app.OrderService;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * GOLDEN reference for generator output.
  *
@@ -26,10 +29,10 @@ import app.OrderService;
  *  - explicit private getter carrying @Property (read-only; @Property meta-includes it under ENCAPSULATION)
  *
  * A <b>nested</b> action (model=module: an Action contained in its Entity)
- * generates as a <b>non-static inner mixin class</b> of the entity — see
- * {@link placeOrder}. The Java compiler synthesises that inner class's
- * constructor as {@code placeOrder(Customer)}, which IS the single-arg-mixee
- * constructor Causeway requires; the mixee is {@code Customer.this}, for free.
+ * generates as a <b>static nested mixin class</b> of the entity — see
+ * {@link placeOrder}. The mixin has an explicit single-argument mixee constructor,
+ * allowing it to contain the static {@code Params} carrier required by Causeway's
+ * parameter-as-tuple supporting-method convention.
  */
 @Named("customers.Customer")
 @DomainObject(nature = Nature.ENTITY, introspection = Introspection.ENCAPSULATION_ENABLED)
@@ -50,22 +53,91 @@ public class Customer {
     }
 
     /**
-     * GOLDEN reference for a nested action's generated form: a non-static inner
-     * mixin class. No explicit mixee field or constructor — the synthesised
-     * {@code placeOrder(Customer)} ctor supplies the mixee as {@code Customer.this}.
-     * The body references hand-written external code ({@link OrderService}); later
-     * this is the generated embedded-baseLanguage body.
+     * GOLDEN reference for a nested action, its immutable PAT parameter carrier,
+     * action-level lifecycle methods, per-parameter supporting methods, explicit
+     * mixee constructor, and injected service.
      */
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public class placeOrder {
+    public static class placeOrder {
 
-        @MemberSupport
-        public Customer act(final Product product, final int quantity) {
-            orderService.placeOrder(Customer.this, product, quantity);
-            return Customer.this;
+        public static final class Params {
+            private final Product product;
+            private final int quantity;
+
+            public Params(final Product product, final int quantity) {
+                this.product = product;
+                this.quantity = quantity;
+            }
+
+            public Product product() {
+                return product;
+            }
+
+            public int quantity() {
+                return quantity;
+            }
         }
 
         @Inject
         private OrderService orderService;
+
+        private final Customer mixee;
+
+        public placeOrder(final Customer mixee) {
+            this.mixee = mixee;
+        }
+
+        @MemberSupport
+        public Customer act(final Product product, final int quantity) {
+            orderService.placeOrder(mixee, product, quantity);
+            return mixee;
+        }
+
+        public boolean hideAct(final Params params) {
+            return false;
+        }
+
+        public String disableAct(final Params params) {
+            return null;
+        }
+
+        public String validateAct(final Params params) {
+            if (params.product() == null) {
+                return "Product is required";
+            }
+            return params.quantity() > 0 ? null : "Quantity must be positive";
+        }
+
+        public Collection choicesProduct(final Params params) {
+            return List.of();
+        }
+
+        public Collection choicesQuantity(final Params params) {
+            return List.of(1, 2, 3);
+        }
+
+        public int defaultQuantity(final Params params) {
+            return 1;
+        }
+
+        public String validateProduct(final Params params) {
+            return params.product() == null ? "Product is required" : null;
+        }
+
+        public String validateQuantity(final Params params) {
+            return params.quantity() > 0 ? null : "Quantity must be positive";
+        }
+
+        public Collection autoCompleteQuantity(final Params params, final String search) {
+            return List.of(1, 2, 3);
+        }
+
+        public boolean hideQuantity(final Params params) {
+            return params.product() == null;
+        }
+
+        public String disableQuantity(final Params params) {
+            return params.product() == null ? "Choose a product first" : null;
+        }
     }
 }

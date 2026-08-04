@@ -13,10 +13,10 @@ This change closes that coexistence milestone through the existing `customers` s
 ## Capabilities
 
 ### New Capabilities
-- `java-classpath-interop`: Coexistence with hand-written Java through classpath stubs for external application types, embedded action-body references, and generated/hand-written code sharing one compile classpath.
+<!-- None -->
 
 ### Modified Capabilities
-<!-- None -->
+- `java-classpath-interop`: Add application-support stubs, embedded action-body references to hand-written services, and generated/hand-written code sharing one compile classpath.
 
 ## Impact
 

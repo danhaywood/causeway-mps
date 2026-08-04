@@ -77,6 +77,9 @@
         <child id="8900000000000000054" name="hide" index="3ZuirI" />
         <child id="8900000000000000055" name="disable" index="3ZuirJ" />
       </concept>
+      <concept id="8900000000000000007" name="causeway.structure.EntityType" flags="ig" index="3Zuirv">
+        <reference id="8900000000000000031" name="entity" index="3Zuir7" />
+      </concept>
     </language>
     <language id="ceab5195-25ea-4f22-9b92-103b95ca8c0c" name="jetbrains.mps.lang.core">
       <concept id="1169194658468" name="jetbrains.mps.lang.core.structure.INamedConcept" flags="ngI" index="TrEIO">
@@ -158,10 +161,8 @@
             </node>
           </node>
         </node>
-        <node concept="3Zuirg" id="4IOweXOOVgC" role="3Zuir2">
-          <node concept="3uibUv" id="4IOweXOOVgD" role="3ZuirS">
-            <ref role="3uigEE" to="wyt6:~String" resolve="String" />
-          </node>
+        <node concept="3Zuirv" id="4IOweXOYUGy" role="3Zuir2">
+          <ref role="3Zuir7" node="_$TiGuwUQ1" resolve="Product" />
         </node>
       </node>
       <node concept="3Zuiri" id="4IOweXOJEa7" role="3ZuirO">

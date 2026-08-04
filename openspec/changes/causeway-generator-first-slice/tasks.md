@@ -46,7 +46,7 @@ diff every generated file against the golden `reference-app/src/main/java/custom
 - [x] 2.4b Generate each nested action's configured `@Action(semantics = ...)` value instead of a fixed semantics literal — DONE: the template emits an `@Action` annotation whose `$REF$` macro resolves the Causeway `SemanticsOf` constant by the DSL enumeration member name; sandbox `scopeProbe` generates `SemanticsOf.SAFE` from its model value rather than the template's `IDEMPOTENT` placeholder.
 - [x] 2.4c Add the separate root mapping rule for a top-level `Action` targeting its referenced entity — DONE: `Action --> map_Action` is gated by an explicit target, resolves the target entity through `entityToClass`, and the sandbox root `topLevelProbe -> Customer` generates the separate compiling `Customer_topLevelProbe.java` mixin while nested `scopeProbe` remains inside `Customer`.
 - [x] 2.5a Resolve `JavaType` to its wrapped Java type with a reduction rule, exercised by sandbox `Product.price : int`.
-- [ ] 2.5b Resolve `EntityType` to the referenced entity's generated class through the `entityToClass` mapping label. The groundwork exists, but the reduction-rule fragment currently cannot resolve a `ClassifierType` in its scope; revisit the model imports or use `InlineTemplateWithContextRuleConsequence`.
+- [x] 2.5b Resolve `EntityType` to the referenced entity's generated class through the `entityToClass` mapping label — DONE: the `EntityType` reduction emits a `ClassifierType` whose `$REF$` macro looks up `node.entity` through `entityToClass`; sandbox `scopeProbe.product : Product` generates `Product` consistently in `Params`, its constructor/accessor, and `act`, and all generated Java compiles against Causeway 3.6.0.
 
 ## 3. Verify against golden
 

@@ -153,6 +153,7 @@
         <reference id="1167514355421" name="template" index="3lhOvi" />
       </concept>
       <concept id="1167756080639" name="jetbrains.mps.lang.generator.structure.PropertyMacro_GetPropertyValue" flags="in" index="3zFVjK" />
+      <concept id="1167770111131" name="jetbrains.mps.lang.generator.structure.ReferenceMacro_GetReferent" flags="in" index="3$xsQk" />
       <concept id="1167945743726" name="jetbrains.mps.lang.generator.structure.IfMacro_Condition" flags="in" index="3IZrLx" />
       <concept id="1167951910403" name="jetbrains.mps.lang.generator.structure.SourceSubstituteMacro_SourceNodesQuery" flags="ig" index="3JmXsc" />
       <concept id="1168024337012" name="jetbrains.mps.lang.generator.structure.SourceSubstituteMacro_SourceNodeQuery" flags="ig" index="3NFfHV" />
@@ -162,8 +163,12 @@
       <concept id="1118786554307" name="jetbrains.mps.lang.generator.structure.LoopMacro" flags="lg" index="1WS0z7">
         <child id="1167952069335" name="sourceNodesQuery" index="3Jn$fo" />
       </concept>
+      <concept id="1088761943574" name="jetbrains.mps.lang.generator.structure.ReferenceMacro" flags="lg" index="1ZhdrF">
+        <child id="1167770376702" name="referentFunction" index="3$ytzL" />
+      </concept>
     </language>
     <language id="7866978e-a0f0-4cc7-81bc-4d213d9375e1" name="jetbrains.mps.lang.smodel">
+      <concept id="1966870290083281362" name="jetbrains.mps.lang.smodel.structure.EnumMember_NameOperation" flags="ng" index="24Tkf9" />
       <concept id="1177026924588" name="jetbrains.mps.lang.smodel.structure.RefConcept_Reference" flags="nn" index="chp4Y">
         <reference id="1177026940964" name="conceptDeclaration" index="cht4Q" />
       </concept>
@@ -188,6 +193,10 @@
       <concept id="3364660638048049750" name="jetbrains.mps.lang.core.structure.PropertyAttribute" flags="ng" index="A9Btg">
         <property id="1757699476691236117" name="name_DebugInfo" index="2qtEX9" />
         <property id="1341860900487648621" name="propertyId" index="P4ACc" />
+      </concept>
+      <concept id="3364660638048049745" name="jetbrains.mps.lang.core.structure.LinkAttribute" flags="ng" index="A9Btn">
+        <property id="1757699476691236116" name="role_DebugInfo" index="2qtEX8" />
+        <property id="1341860900488019036" name="linkId" index="P3scX" />
       </concept>
       <concept id="1196978630214" name="jetbrains.mps.lang.core.structure.IResolveInfo" flags="ngI" index="2Lv6Xg">
         <property id="1196978656277" name="resolveInfo" index="2Lvdk3" />
@@ -1901,6 +1910,35 @@
                       <node concept="3cmrfG" id="4IOweXOQDth" role="37wK5m">
                         <property role="3cmrfH" value="1" />
                       </node>
+                    </node>
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node concept="2AHcQZ" id="4IOweXOXa_z" role="2AJF6D">
+        <ref role="2AI5Lk" to="xj8n:~Action" resolve="Action" />
+        <node concept="2B6LJw" id="4IOweXOXa_$" role="2B76xF">
+          <ref role="2B6OnR" to="xj8n:~Action.semantics()" resolve="semantics" />
+          <node concept="Rm8GO" id="4IOweXOXa_A" role="2B70Vg">
+            <ref role="Rm8GQ" to="xj8n:~SemanticsOf.IDEMPOTENT" resolve="IDEMPOTENT" />
+            <ref role="1Px2BO" to="xj8n:~SemanticsOf" resolve="SemanticsOf" />
+            <node concept="1ZhdrF" id="4IOweXOXa_B" role="lGtFl">
+              <property role="2qtEX8" value="enumConstantDeclaration" />
+              <property role="P3scX" value="f3061a53-9226-4cc5-a443-f952ceaf5816/1083260308424/1083260308426" />
+              <node concept="3$xsQk" id="4IOweXOXa_E" role="3$ytzL">
+                <node concept="3clFbS" id="4IOweXOXa_G" role="2VODD2">
+                  <node concept="3clFbF" id="4IOweXOXa_H" role="3cqZAp">
+                    <node concept="2OqwBi" id="4IOweXOXa_J" role="3clFbG">
+                      <node concept="2OqwBi" id="4IOweXOXa_M" role="2Oq$k0">
+                        <node concept="30H73N" id="4IOweXOXa_P" role="2Oq$k0" />
+                        <node concept="3TrcHB" id="4IOweXOXa_Q" role="2OqNvi">
+                          <ref role="3TsBF5" to="k3bw:43" resolve="semantics" />
+                        </node>
+                      </node>
+                      <node concept="24Tkf9" id="4IOweXOXa_R" role="2OqNvi" />
                     </node>
                   </node>
                 </node>

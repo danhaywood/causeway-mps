@@ -133,5 +133,13 @@ generator-authoring boundary).
   succeeds against Causeway 3.6.0 and Jakarta.
   JDK 21 `javap` confirms the public one-argument mixee constructor, complete public `Params` constructor,
   record-style accessors, and the expected PAT method descriptors.
-- [ ] 7.2 `./gradlew generateModels` green; diff generated mixins vs the extended golden.
+- [x] 7.2 `./gradlew generateModels` green; diff generated mixins vs the extended golden.
+  DONE: generation succeeds after adding the golden-required `@MemberSupport` annotation to the generated
+  `act` method.
+  The raw diff contains only fixture-specific action/type/body choices, Java-irrelevant `final` modifiers,
+  and the separately tracked dynamic `@Action(semantics=...)` concern from
+  `causeway-generator-first-slice` task 2.4.
+  A declaration-level normalization leaves 24 declarations on each side and a zero-line unified diff,
+  covering the `Params` carrier, injected service, mixee constructor, `act`, and every lifecycle method.
+  Evidence and normalization rules are recorded in `docs/action-golden-comparison.md`.
 - [ ] 7.3 Compile the generated mixins against Causeway 3.6.0 + Jakarta.

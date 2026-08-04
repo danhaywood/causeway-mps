@@ -23,7 +23,8 @@
 - MPS 2026.1 BaseLanguage has no Java `record` concept, so generate the approved equivalent: `public static final class Params` with private final fields, a public full-arguments constructor, and record-style accessors.
 - A nested action shell must be static with an explicit mixee field and constructor; otherwise a non-static `Params` gains a synthetic outer constructor argument and fails PAT discovery.
 - Although PAT exposes all fields structurally, lifecycle scope must continue hiding the current and later parameters from per-parameter hide/disable bodies.
-- The action template now generates the nested static action shell, explicit mixee field/constructor, immutable `Params` carrier, Jakarta-injected service fields, `act`, and all supporting-method families.
+- The action template now generates the nested static action shell, explicit mixee field/constructor, immutable `Params` carrier, Jakarta-injected service fields, `@MemberSupport` `act`, and all supporting-method families.
+- Dynamic `@Action(semantics=...)` generation and the top-level action rule remain tracked by `causeway-generator-first-slice` task 2.4; do not hide that known difference when comparing the nested lifecycle shape.
 - `$COPY_SRC$` retains `ActionVariableReference` nodes in the BaseLanguage output model, so the language's `ActionVariableReference_TextGen` must remain available during final Java text generation.
 - The TextGen helper distinguishes parameters by inspecting the generated nested `Params` members: parameter references become direct names in `act` and `params.<name>()` in PAT methods, while service names stay field references and entity references become `mixee`.
 - Choices and auto-complete methods intentionally generate raw `Collection` return types because copying a primitive parameter type into a Java generic argument would produce invalid output such as `Collection<int>`; lifecycle body typing still enforces `Collection<ParamType>`.

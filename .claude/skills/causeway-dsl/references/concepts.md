@@ -23,7 +23,7 @@ Its `ScopeProvider.getScope` implementation exposes all parameters in action val
 Injected services and the enclosing entity mixee remain visible in every action-level block.
 Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814596634176`.
 The generator emits a static nested mixin shell, explicit mixee field/constructor, immutable `Params`
-carrier, Jakarta-injected service fields, `act`, and all action/per-parameter PAT supporting-method families.
+carrier, Jakarta-injected service fields, `@MemberSupport` `act`, and all action/per-parameter PAT supporting-method families.
 
 ## Member concepts
 

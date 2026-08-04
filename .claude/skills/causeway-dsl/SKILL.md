@@ -7,7 +7,8 @@ description: Use when creating, editing, validating, generating, or inspecting C
 
 The `causeway` language models Apache Causeway domain modules, entities, properties, actions, parameters, injected services, and Java or entity types.
 The current generator emits Causeway 3.6 entity-state Java plus a static nested action mixin shell, explicit mixee constructor, immutable `Params` carrier, Jakarta-injected service fields, `act`, and all by-name PAT supporting-method families from the `customers` sandbox.
-`reference-app` contains the compiling golden for the complete action shape; generated-to-golden comparison and final generated-source verification remain active work.
+`reference-app` contains the compiling golden for the complete action shape, and `docs/action-golden-comparison.md` records the declaration-level match.
+Final generated-source compilation remains active work.
 
 ## Critical rules
 

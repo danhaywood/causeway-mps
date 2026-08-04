@@ -11,8 +11,7 @@ diff every generated file against the golden `reference-app/src/main/java/custom
 ## 1. Generator scaffolding
 
 - [x] 1.1 Confirm `generateModels` (`MpsGenerate`) wiring — DONE: `./gradlew generateModels` BUILD SUCCESSFUL; generated the `causeway` language's own impl Java into `source_gen` (incl. `EnumerationDescriptor_SemanticsOf`, `unique_member_names_NonTypesystemRule`), proving the task + our models are valid. NB this is the *language's* code, not yet Causeway *domain* code (needs the templates + a sandbox program).
-- [~] 1.2 Set up the generator model in `causeway.generator` — PARTIAL. The `main` MappingConfiguration exists (empty). The **"record what needs the GUI" deliverable is DONE**: `docs/generator-template-authoring.md` captures the full template design (source→target mapping, every macro's logic), the source-side concept-ID inventory, the GUI playbook, and the honest GUI-only list. **Still needs the GUI**: capturing the generator-language / baseLanguage / Causeway-classifier IDs by authoring the nodes (fabricating them is the documented failure mode — spike verdict). **Dependency now satisfied** (2026-06-20): the Causeway/Jakarta classpath stubs live in the shared `causeway.stubs` solution (`shared-stubs-solution` change), depended on by **the generator** (and the sandbox), staged by `resolveStubs` — so generator templates can now resolve `@DomainObject`/`@Entity`/`SemanticsOf`/etc. (An earlier step put them only in `causeway.sandbox`, visible to sandbox programs but not the generator — the gap `shared-stubs-solution` closed.)
-  **GUI session (2026-06-18):** `main` now has a root mapping rule `Entity --> map_Entity` and a `map_Entity` root template (class name = property macro `node.name`). With the `customers` sandbox program (entity roots `Customer`/`Product`, `name : String`), `./gradlew generateModels` produces `customers/Customer.java` + `customers/Product.java` skeleton classes (correct package + name). **B1 (skeleton) done.**
+- [x] 1.2 Set up the generator model in `causeway.generator` and document the GUI-authored template workflow — DONE. The `main` MappingConfiguration now contains the entity and nested-action generation implemented through the subsequent template tasks, while `docs/generator-template-authoring.md` records the template design, concept inventory, authoring playbook, and GUI-only steps.
 
 > **Model = module pivot (2026-06-18).** A root mapping rule is 1 input-root → 1 output-root, so a single
 > `Module` root containing entities can't fan out to N class files. Decision (see memory `model-equals-module`):
@@ -43,22 +42,11 @@ diff every generated file against the golden `reference-app/src/main/java/custom
   `node.properties` emits `@Column(name=<prop>, nullable=false, length=255) private <type> <prop>;` and
   `@Property private <type> get<Prop>() { return <field>; }`. Getter body field-ref resolves per-property
   by shared input node (no mapping label). `@Domain.Include` dropped — `@Property` meta-includes it.
-- [~] 2.4 `Action` → mixin class — NESTED FORM COMPLETE via `dsl-action-model` tasks 6.1–7.2. The
-  `customers` sandbox now generates nested `scopeProbe` as a static nested action mixin with the immutable
-  `Params` PAT carrier, explicit mixee field/constructor, Jakarta-injected service fields, `@MemberSupport`
-  `act`, and every action/per-parameter supporting-method family. Static nesting avoids a synthetic outer
-  constructor argument that Causeway PAT cannot match. Still pending here: dynamic
-  `@Action(semantics=...)` generation and the separate top-level action rule.
-- [~] 2.5 `Type` resolution — JavaType DONE (2.5a), EntityType PARKED (2.5b). **2.5a:** field/getter type
-  cells `COPY_SRC node.type`; a reduction rule reduces `JavaType` → its wrapped `javaType` (`COPY_SRC
-  node.javaType`); sandbox `Product.price : int` proves a non-`String` type flows through. **2.5b
-  (parked):** groundwork laid — baseLanguage added as a generator-module dependency + `entityToClass`
-  mapping label (`Entity -> Classifier`) declared and attached to the Entity root rule. The `EntityType`
-  reduction rule itself is **blocked**: authoring its inline-template `ClassifierType` fails because the
-  reduction-rule fragment cell can't resolve stub/JDK classifiers (an MPS scoping quirk) — so the
-  reference macro (`genContext.get output by label and input(entityToClass, node.entity)`) has no
-  `ClassifierType` to attach to. Not exercised by the golden (no cross-entity reference). **Revisit:** try
-  importing the JDK/stub model so the fragment sees a class, or `InlineTemplateWithContextRuleConsequence`.
+- [x] 2.4a Generate a nested `Action` as a static nested mixin with an immutable `Params` PAT carrier, explicit mixee field/constructor, Jakarta-injected service fields, `@MemberSupport` `act`, and every action/per-parameter supporting-method family.
+- [ ] 2.4b Generate each nested action's configured `@Action(semantics = ...)` value instead of a fixed semantics literal.
+- [ ] 2.4c Add the separate root mapping rule for a top-level `Action` targeting its referenced entity.
+- [x] 2.5a Resolve `JavaType` to its wrapped Java type with a reduction rule, exercised by sandbox `Product.price : int`.
+- [ ] 2.5b Resolve `EntityType` to the referenced entity's generated class through the `entityToClass` mapping label. The groundwork exists, but the reduction-rule fragment currently cannot resolve a `ClassifierType` in its scope; revisit the model imports or use `InlineTemplateWithContextRuleConsequence`.
 
 ## 3. Verify against golden
 

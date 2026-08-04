@@ -22,7 +22,9 @@ It contains `parameters`, optional `returnType`, optional BaseLanguage `body`, `
 Its `ScopeProvider.getScope` implementation exposes all parameters in action validation and body blocks, but no parameters in action hide/disable blocks.
 Injected services and the enclosing entity mixee remain visible in every action-level block.
 Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814596634176`.
-Action mixin generation remains active OpenSpec work.
+The generator emits a static nested mixin shell, explicit mixee field/constructor, immutable `Params`
+carrier, `act`, and all action/per-parameter PAT supporting-method families.
+Injected-service field generation remains active OpenSpec work.
 
 ## Member concepts
 
@@ -47,6 +49,11 @@ It implements BaseLanguage `IVariableDeclaration` and is exposed by the action a
 A smart-reference BaseLanguage expression whose `variable` reference targets `IVariableDeclaration`.
 Its scope follows the lifecycle lattice implemented by the enclosing `Action` or `Parameter` scope provider.
 The `warn_forward_parameter_reference` checking rule additionally warns when parameter reordering leaves it targeting a dependency now declared later than its owning parameter.
+Copied generator bodies retain this concept and dispatch through TextGen root
+`r:7ade0248-9beb-4b25-b312-57f1aa5e51e4(causeway.textGen)/5455126814598907233`.
+Helper class `r:7ade0248-9beb-4b25-b312-57f1aa5e51e4(causeway.textGen)/5455126814598882075`
+renders direct argument names in `act`, `params.<name>()` in PAT supporting methods, service field names, and
+`mixee` for the generated entity handle.
 
 ### `causeway.structure.LifecycleBlock`
 

@@ -23,7 +23,10 @@
 - MPS 2026.1 BaseLanguage has no Java `record` concept, so generate the approved equivalent: `public static final class Params` with private final fields, a public full-arguments constructor, and record-style accessors.
 - A nested action shell must be static and later receive an explicit mixee field and constructor; otherwise a non-static `Params` gains a synthetic outer constructor argument and fails PAT discovery.
 - Although PAT exposes all fields structurally, lifecycle scope must continue hiding the current and later parameters from per-parameter hide/disable bodies.
-- The action template now generates the nested static action shell and immutable `Params` carrier; supporting methods, the mixee constructor, and injected fields remain active work.
+- The action template now generates the nested static action shell, explicit mixee field/constructor, immutable `Params` carrier, `act`, and all supporting-method families; injected fields remain active work.
+- `$COPY_SRC$` retains `ActionVariableReference` nodes in the BaseLanguage output model, so the language's `ActionVariableReference_TextGen` must remain available during final Java text generation.
+- The TextGen helper distinguishes parameters by inspecting the generated nested `Params` members: parameter references become direct names in `act` and `params.<name>()` in PAT methods, while service names stay field references and entity references become `mixee`.
+- Choices and auto-complete methods intentionally generate raw `Collection` return types because copying a primitive parameter type into a Java generic argument would produce invalid output such as `Collection<int>`; lifecycle body typing still enforces `Collection<ParamType>`.
 - Causeway/Jakarta stubs live in `causeway.stubs`; template models may still require explicit stub-model imports for classifier resolution.
 - A broken stub path can warn without making `checkModels` fail, so retain positive type-resolution and generated-Java compilation checks.
 - Use persistent `r:` node references rather than XML short IDs.

@@ -26,6 +26,12 @@ Use `mps_mcp_parse_java_and_insert` for ordinary Java statements where the targe
 Use JSON blueprints for MPS-specific scope or model-language constructs that Java parsing cannot express.
 When generating parameter support, use public PAT forms such as `boolean hideProduct(Params params)` and `String disableProduct(Params params)`.
 Generate `Params` as a public static final immutable class whose public constructor covers the complete action signature and whose accessors use the parameter names.
+Copy lifecycle `StatementList` bodies into the corresponding by-name methods and preserve
+`ActionVariableReference` nodes for `ActionVariableReference_TextGen`: it emits direct parameter names in
+`act`, `params.<name>()` in PAT methods, injected-service field names, and `mixee`.
+Use `(Params params, String search)` for auto-complete.
+Use raw `Collection` in generated choices/auto-complete method signatures so primitive parameter types
+remain legal Java; the DSL lifecycle type rule remains responsible for the element-type contract.
 
 ## Choose a type
 

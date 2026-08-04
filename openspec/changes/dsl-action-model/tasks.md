@@ -98,8 +98,22 @@ generator-authoring boundary).
   Causeway PAT's public-constructor contract.
   MPS 2026.1 BaseLanguage has no Java `record` concept, so the approved record-equivalent class is the
   specified output.
-- [ ] 6.2 Generate by-name supporting methods from the blocks; map each param reference to the right form
-  (`act` arg vs `Params` accessor vs validated-param arg).
+- [x] 6.2 Generate by-name supporting methods from the blocks; map each parameter reference to the right
+  form (`act` argument vs `Params` accessor).
+  DONE: the Entity template now emits `act`, action-level `hideAct`/`disableAct`/`validateAct`, and
+  per-parameter `choices<Name>`/`default<Name>`/`validate<Name>`/`autoComplete<Name>`/`hide<Name>`/
+  `disable<Name>` methods only when their corresponding blocks exist.
+  Supporting methods use Causeway 3.6 PAT signatures (`Params params`, plus `String search` for
+  auto-complete), copy the embedded BaseLanguage bodies, and derive per-parameter names and return types.
+  `ActionVariableReference_TextGen` maps copied parameter references to direct `act` arguments or
+  `params.<name>()` accessors according to the generated enclosing method; service references remain field
+  names and mixee references become the explicit `mixee` field.
+  The static nested mixin now also has its explicit mixee field and constructor.
+  The expanded `scopeProbe` fixture exercises every action-level and per-parameter supporting-method family.
+  Generated choices/auto-complete signatures intentionally use raw `Collection`: Causeway discovers these
+  methods by raw return type and the DSL already enforces `Collection<ParamType>`, while copying a primitive
+  parameter type directly into a Java generic argument would produce illegal output such as
+  `Collection<int>`.
 - [ ] 6.3 Generate `@Inject private <Type> <name>;` for each declared injected service.
 
 ## 7. Verify against golden

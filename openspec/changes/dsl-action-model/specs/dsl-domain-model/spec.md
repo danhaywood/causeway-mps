@@ -78,8 +78,8 @@ become by-name supporting methods, and an immutable `Params` value carrier is ge
 parameter-field declarations (parameters are declared once, not restated per supporting method).
 The carrier SHALL be `public static final`, hold private final fields, expose a public constructor matching
 the complete action parameter signature, and provide record-style accessors named after the parameters.
-A parameter reference in a block SHALL be mapped to the correct generated form for that block (an `act`
-argument, a `Params` accessor, or the validated-parameter argument).
+A parameter reference SHALL be mapped to a direct method argument in the generated `act` body and to a
+`Params` accessor in every generated Causeway PAT supporting method.
 
 #### Scenario: Parameters are declared once and generate a Params value carrier
 - **WHEN** an `Action` declares parameters `product` and `quantity` with supporting blocks referencing

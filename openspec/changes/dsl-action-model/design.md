@@ -50,8 +50,8 @@ positional dependency explicit and checked.
 the enclosing entity (`this`/`self`, or the entity's members directly in scope). Both forms supported.
 
 **Generate parameters-class-style mixins.** By-name supporting methods + a generated immutable `Params`
-value carrier from the single param-field declarations. A param reference maps per block: `act` arg vs
-`Params` accessor vs the validated-param arg — the generator picks.
+value carrier from the single param-field declarations. A parameter reference maps to a direct `act`
+argument in the invocation body and to a `Params` accessor in every Causeway PAT supporting method.
 
 **Record-equivalent output.** MPS 2026.1 BaseLanguage has no Java `record` concept, so the generator emits
 `public static final class Params` with private final fields, a public full-arguments constructor, and
@@ -59,6 +59,15 @@ record-style accessors. This is equivalent for Causeway PAT discovery, which req
 constructor matching the complete action signature. A nested action mixin is therefore a static nested
 class with an explicit mixee field and constructor; a non-static inner mixin cannot contain a static PAT
 carrier in MPS and a non-static PAT carrier would gain a synthetic outer constructor argument.
+
+**Copied action-reference text generation.** Generator `$COPY_SRC$` preserves the custom
+`ActionVariableReference` expressions inside BaseLanguage bodies.
+A concept TextGen component renders parameter targets as direct names inside `act` and as
+`params.<name>()` inside PAT supporting methods, renders injected-service targets as field names, and
+renders the entity target as the explicit `mixee` field.
+Choices and auto-complete methods use raw `Collection` return signatures so primitive parameter types do
+not become illegal Java generic arguments such as `Collection<int>`; the DSL typesystem still enforces the
+`Collection<ParamType>` body contract, and Causeway discovers the method by its raw return type.
 
 **Typed baseLanguage blocks (no sugar yet).** Each block body is typed to its contract (`hide`→boolean,
 `disable`/`validate`→reason-or-null, `choices`→`Collection<ParamType>`, `default`→`ParamType`,

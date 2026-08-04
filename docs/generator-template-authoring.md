@@ -198,6 +198,19 @@ Notes:
 - `act` body is a `COPY_SRC` of `Action.body`; external refs (e.g. `OrderService`) resolve on the shared
   classpath — the coexistence milestone, proven in `sandbox-sample-and-e2e`.
 
+**Implemented by `dsl-action-model` task 6.2.** The nested action template now emits the explicit mixee
+field/constructor, `act`, all three action-level support methods, and all six per-parameter support-method
+families.
+Loop and if macros suppress methods whose source blocks are absent, property macros derive by-name method
+names, and copy-source macros preserve each embedded BaseLanguage body.
+All supporting methods use Causeway PAT signatures with `Params params`; auto-complete additionally receives
+`String search`.
+Because copied bodies retain `ActionVariableReference` nodes, the language now has
+`ActionVariableReference_TextGen`, backed by `ActionVariableTextGen.render(SNode)`, to render direct `act`
+arguments, `params.<name>()` supporting-method accessors, injected-service field names, and `mixee`.
+Choices and auto-complete generate raw `Collection` signatures so primitive parameter types never produce
+illegal Java generic arguments; the DSL typesystem retains the element-type contract.
+
 > **RESOLVED — concept now exists (2026-06-17).** The golden mixin has
 > `@Inject private OrderService orderService;` and the body references `orderService`. **Settled in
 > `dsl-action-model/design.md` and implemented:** `Action` has an `injectedServices` child

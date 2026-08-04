@@ -6,7 +6,7 @@ description: Use when creating, editing, validating, generating, or inspecting C
 # Causeway DSL
 
 The `causeway` language models Apache Causeway domain modules, entities, properties, actions, parameters, injected services, and Java or entity types.
-The current generator emits Causeway 3.6 entity-state Java plus a nested action shell and immutable `Params` carrier from the `customers` sandbox, while supporting-method and complete action-mixin generation remain active work.
+The current generator emits Causeway 3.6 entity-state Java plus a static nested action mixin shell, explicit mixee constructor, immutable `Params` carrier, `act`, and all by-name PAT supporting-method families from the `customers` sandbox; injected-service fields and complete Causeway action decoration remain active work.
 
 ## Critical rules
 

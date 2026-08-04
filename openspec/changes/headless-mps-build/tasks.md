@@ -40,7 +40,9 @@
 - [x] 4.2 Provision pinned JDK 21 and JDK 25 toolchains plus the MPS 2026.1 distribution on the runner (no preinstalled IDE) — DONE.
   MPS Ant Make under JDK 25 bootstraps the ignored `causeway.Language` and `causeway.generator.Generator` deployment descriptors before generation/modelcheck under JDK 21.
   A pristine local clone and GitHub Actions run `30922640991` both completed the full `headlessBuild` successfully.
-- [ ] 4.3 Cache the MPS distribution and Gradle dependencies for stable runs
+- [x] 4.3 Cache the MPS distribution and Gradle dependencies for stable runs — DONE.
+  `actions/setup-java` caches Gradle dependencies and the wrapper using the pinned build files, while `actions/cache` stores the unpacked MPS distribution under an OS-, architecture-, and MPS-version-specific key.
+  GitHub Actions run `30928905602` attempt 2 restored both caches, skipped `resolveMps`, and completed `headlessBuild` successfully.
 - [ ] 4.4 Confirm CI fails on a deliberately broken model and passes on a clean one
 
 ## 5. Integration & docs

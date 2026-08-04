@@ -18,6 +18,9 @@
 - To verify completion scope without UI automation, set an `ActionVariableReference.variable` by plain name: name resolution uses the same search scope as completion and returns `NOT_FOUND` for omitted candidates.
 - To verify the edit-time diagnostic, temporarily bind an out-of-scope target by persistent `r:` reference, check for `The reference … is out of search scope`, and restore the original target immediately.
 - Parameter order is dependency order: moving a parameter before one referenced by its supporting blocks produces both the ordinary out-of-search-scope error and the explicit `parameter reference is out of scope after parameter reordering` warning.
+- Causeway 3.6 does support per-parameter mixin methods named `hide<ParamName>` and `disable<ParamName>`; their PAT form takes one `Params` object and returns primitive `boolean` or `String`/`TranslatableString` respectively.
+- Causeway's PAT lookup requires a public constructor matching all action parameter types, so generate `public record Params(...)`, not a package-private or private record.
+- Although PAT exposes all fields structurally, lifecycle scope must continue hiding the current and later parameters from per-parameter hide/disable bodies.
 - The action template is outside the completed entity-state generator slice.
 - Causeway/Jakarta stubs live in `causeway.stubs`; template models may still require explicit stub-model imports for classifier resolution.
 - A broken stub path can warn without making `checkModels` fail, so retain positive type-resolution and generated-Java compilation checks.

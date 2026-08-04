@@ -80,8 +80,12 @@ generator-authoring boundary).
   DONE: `warn_forward_parameter_reference` checks parameter-targeting `ActionVariableReference` nodes through the `LifecycleScopeChecks` helper and reports `parameter reference is out of scope after parameter reordering` when the owning parameter precedes its referenced dependency.
   Moving `quantity` before `product` in `Customer.scopeProbe` produced the explicit warning on both affected `product` references, alongside the existing out-of-search-scope error.
   Restoring `quantity` to index 1 returned `Customer` to its prior no-error state.
-- [ ] 5.2 Verify Causeway 3.6 support + signatures for per-param `hide`/`disable` (the proposal flags
+- [x] 5.2 Verify Causeway 3.6 support + signatures for per-param `hide`/`disable` (the proposal flags
   these as needing confirmation).
+  DONE: verified against Apache Causeway tag `rel/causeway-3.6.0` at commit `07f4bea` that the default programming model registers both parameter factories.
+  Mixin parameter-name conventions support `hide<ParamName>(Params)` returning primitive `boolean` and `disable<ParamName>(Params)` returning `String` or `TranslatableString`; indexed positional names are also supported.
+  PAT discovery requires the generated `Params` type to expose a public constructor matching the complete action parameter signature, so task 6.1 must emit a public record.
+  Evidence and source paths are recorded in `docs/causeway-3.6-parameter-lifecycle-signatures.md`.
 
 ## 6. Generator (parameters-class-style mixins)
 

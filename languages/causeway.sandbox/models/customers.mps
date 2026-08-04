@@ -60,6 +60,7 @@
       </concept>
       <concept id="8900000000000000004" name="causeway.structure.Action" flags="ng" index="3Zuirs">
         <property id="8900000000000000043" name="semantics" index="3ZuirN" />
+        <reference id="8900000000000000048" name="target" index="3ZuirC" />
         <child id="8900000000000000025" name="parameters" index="3Zuir1" />
         <child id="8900000000000000041" name="body" index="3ZuirL" />
         <child id="8900000000000000044" name="injectedServices" index="3ZuirO" />
@@ -462,6 +463,11 @@
   </node>
   <node concept="3Zuirp" id="_$TiGuwUR0">
     <property role="TrG5h" value="customers" />
+  </node>
+  <node concept="3Zuirs" id="4IOweXOYxgJ">
+    <property role="TrG5h" value="topLevelProbe" />
+    <property role="3ZuirN" value="7I39Hy4Yw1s/SAFE" />
+    <ref role="3ZuirC" node="_$TiGuwUPX" resolve="Customer" />
   </node>
 </model>
 

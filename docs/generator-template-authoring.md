@@ -211,16 +211,17 @@ arguments, `params.<name>()` supporting-method accessors, injected-service field
 Choices and auto-complete generate raw `Collection` signatures so primitive parameter types never produce
 illegal Java generic arguments; the DSL typesystem retains the element-type contract.
 
-> **RESOLVED — concept now exists (2026-06-17).** The golden mixin has
-> `@Inject private OrderService orderService;` and the body references `orderService`. **Settled in
-> `dsl-action-model/design.md` and implemented:** `Action` has an `injectedServices` child
-> (`InjectedService` = named field + a `type` reusing the `Type` union; conceptId
-> `8900000000000000010`, link `8900000000000000044`), now in `causeway.structure` and `checkModels`-green
-> (dsl-action-model task 0.1). Each declared service generates as `@Inject private <Type> <name>;` on the
-> mixin; auto-detecting services from the body is deferred v2 sugar. **Still pending** (dsl-action-model
-> task 0.2): the *scope provider* so a body can actually reference the service — until that lands, the
-> sample action body can't yet resolve `orderService`. The Entity/Property/Type templates have no such
-> dependency.
+> **IMPLEMENTED by `dsl-action-model` task 6.3.** The golden mixin has
+> `@Inject private OrderService orderService;` and the body references `orderService`.
+> `Action` owns explicit `injectedServices`; each `InjectedService` is a named declaration with a `type`
+> reusing the DSL `Type` union.
+> The action template loops over those declarations, copies `InjectedService.type.javaType`, derives the
+> field name, and retains Jakarta's `@Inject` annotation.
+> The scope provider makes each service visible throughout the action and its lifecycle blocks, and copied
+> `ActionVariableReference` nodes render as field names.
+> Auto-detecting services from body references remains deferred v2 sugar.
+> When cloning an existing parameter-type copy macro, retarget its `SLinkAccess` from `Parameter.type` to
+> the distinct `InjectedService.type` structure link; equal feature names do not imply equal MPS links.
 
 ## GUI playbook (fast, low-risk sequence)
 

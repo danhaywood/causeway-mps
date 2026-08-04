@@ -114,7 +114,12 @@ generator-authoring boundary).
   methods by raw return type and the DSL already enforces `Collection<ParamType>`, while copying a primitive
   parameter type directly into a Java generic argument would produce illegal output such as
   `Collection<int>`.
-- [ ] 6.3 Generate `@Inject private <Type> <name>;` for each declared injected service.
+- [x] 6.3 Generate `@Inject private <Type> <name>;` for each declared injected service.
+  DONE: the nested action template loops over `Action.injectedServices`, copies each
+  `InjectedService.type.javaType`, derives the field name, and retains Jakarta's `@Inject` annotation.
+  `Customer.scopeProbe.orderService` is now explicitly typed as `Object`; generation emits
+  `@Inject private Object orderService;`, all copied lifecycle references resolve to that field, and JDK 21
+  compiles the generated `Customer.java` and `Product.java` against the Causeway 3.6/Jakarta classpath.
 
 ## 7. Verify against golden
 

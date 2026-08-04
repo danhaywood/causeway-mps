@@ -47,7 +47,9 @@
       <concept id="8900000000000000008" name="causeway.structure.JavaType" flags="ng" index="3Zuirg">
         <child id="8900000000000000032" name="javaType" index="3ZuirS" />
       </concept>
-      <concept id="8900000000000000010" name="causeway.structure.InjectedService" flags="ng" index="3Zuiri" />
+      <concept id="8900000000000000010" name="causeway.structure.InjectedService" flags="ng" index="3Zuiri">
+        <child id="8900000000000000033" name="type" index="3ZuirT" />
+      </concept>
       <concept id="8900000000000000001" name="causeway.structure.Module" flags="ng" index="3Zuirp" />
       <concept id="8900000000000000002" name="causeway.structure.Entity" flags="ng" index="3Zuirq">
         <child id="8900000000000000022" name="properties" index="3Zuire" />
@@ -163,6 +165,11 @@
       </node>
       <node concept="3Zuiri" id="4IOweXOJEa7" role="3ZuirO">
         <property role="TrG5h" value="orderService" />
+        <node concept="3Zuirg" id="4IOweXOUni8" role="3ZuirT">
+          <node concept="3uibUv" id="4IOweXOUni9" role="3ZuirS">
+            <ref role="3uigEE" to="wyt6:~Object" resolve="Object" />
+          </node>
+        </node>
       </node>
       <node concept="3clFbS" id="4IOweXOJEa8" role="3ZuirL">
         <node concept="3clFbJ" id="4IOweXOJEas" role="3cqZAp">

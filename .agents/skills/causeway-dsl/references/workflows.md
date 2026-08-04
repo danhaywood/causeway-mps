@@ -32,6 +32,10 @@ Copy lifecycle `StatementList` bodies into the corresponding by-name methods and
 Use `(Params params, String search)` for auto-complete.
 Use raw `Collection` in generated choices/auto-complete method signatures so primitive parameter types
 remain legal Java; the DSL lifecycle type rule remains responsible for the element-type contract.
+For each `Action.injectedServices` declaration, generate `@Inject private <Type> <name>;` by copying the
+service's `type.javaType` and deriving its declared name.
+If reusing a parameter-type copy macro, retarget the query's feature reference to the distinct
+`InjectedService.type` structure link before generation.
 
 ## Choose a type
 

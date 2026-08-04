@@ -65,6 +65,8 @@ carrier in MPS and a non-static PAT carrier would gain a synthetic outer constru
 A concept TextGen component renders parameter targets as direct names inside `act` and as
 `params.<name>()` inside PAT supporting methods, renders injected-service targets as field names, and
 renders the entity target as the explicit `mixee` field.
+The action template materializes every declared service as `@Inject private <Type> <name>;`, copying the
+service's wrapped BaseLanguage type so those rendered names bind to ordinary Jakarta-injected fields.
 Choices and auto-complete methods use raw `Collection` return signatures so primitive parameter types do
 not become illegal Java generic arguments such as `Collection<int>`; the DSL typesystem still enforces the
 `Collection<ParamType>` body contract, and Causeway discovers the method by its raw return type.

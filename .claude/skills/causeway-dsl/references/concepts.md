@@ -23,8 +23,7 @@ Its `ScopeProvider.getScope` implementation exposes all parameters in action val
 Injected services and the enclosing entity mixee remain visible in every action-level block.
 Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814596634176`.
 The generator emits a static nested mixin shell, explicit mixee field/constructor, immutable `Params`
-carrier, `act`, and all action/per-parameter PAT supporting-method families.
-Injected-service field generation remains active OpenSpec work.
+carrier, Jakarta-injected service fields, `act`, and all action/per-parameter PAT supporting-method families.
 
 ## Member concepts
 
@@ -43,6 +42,8 @@ Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/545512
 
 A named injected service with an optional `type : Type` child.
 It implements BaseLanguage `IVariableDeclaration` and is exposed by the action and parameter scope providers.
+The action generator loops over these declarations and emits `@Inject private <Type> <name>;`, copying the
+wrapped BaseLanguage type.
 
 ### `causeway.structure.ActionVariableReference`
 

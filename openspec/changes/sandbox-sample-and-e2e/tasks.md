@@ -1,7 +1,9 @@
 # Tasks
 
-Exercises `headless-mps-build`'s generate + compile steps. Depends on `causeway-generator-first-slice`
-and `dsl-type-system`.
+Exercises `headless-mps-build`'s generate, modelcheck, and compile stages.
+Use `./gradlew headlessBuild` as the verification oracle so the MPS bootstrap, generation, modelcheck, and generated-Java compilation run in production order.
+This is the current home of the historical `entity-property-action-slice` tasks 5.3–5.5 after that change was re-sliced and archived.
+It depends on `causeway-generator-first-slice` and `dsl-type-system`.
 
 ## 1. Sandbox stubs
 
@@ -16,11 +18,11 @@ and `dsl-type-system`.
 
 - [x] 2.1 Author module/model `customers` with entity `Product` — DONE during `causeway-generator-first-slice`; `Product.price : int` also exercises non-`String` Java type flow.
 - [~] 2.2 Author entity `Customer`: entity and `String name` property DONE during `causeway-generator-first-slice`; `placeOrder(Product, int)` and its `OrderService` body remain deferred until `dsl-action-model` supplies action-body scoping.
-- [x] 2.3 `./gradlew checkModels` clean — DONE for the current `customers` entity-state sandbox; repeat after adding the action body.
+- [x] 2.3 `./gradlew headlessBuild` clean — DONE for the current `customers` entity-state sandbox; repeat the same pipeline after adding the action body.
 
 ## 3. End-to-end
 
-- [~] 3.1 `./gradlew generateModels`; entity-state generation and golden diff DONE during `causeway-generator-first-slice`; repeat and complete the diff after action generation exists.
-- [~] 3.2 Generated `Customer.java` and `Product.java` compile against `causeway.stubs/libs/*`; compiling those sources together with the hand-written `app` remains open until the generated action references `OrderService`.
-- [ ] 3.3 Confirm the generated `placeOrder` body referencing `OrderService` compiles (coexistence milestone)
+- [~] 3.1 `./gradlew headlessBuild` owns generation; entity-state generation and golden diff were completed during `causeway-generator-first-slice`, while the action-aware golden comparison remains explicit work here.
+- [~] 3.2 The pipeline's `compileGeneratedJava` stage compiles generated `Customer.java` and `Product.java` against `causeway.stubs/libs/*`; adding the hand-written app to that classpath remains open until the generated action references `OrderService`.
+- [ ] 3.3 Add the `placeOrder`/`OrderService` fixture, then use `./gradlew headlessBuild` to confirm the generated external-type body compiles end to end (coexistence milestone).
 - [ ] 3.4 (deferred) Boot a Causeway app context to verify runtime introspection under `ENCAPSULATION_ENABLED`

@@ -49,5 +49,7 @@
 
 ## 5. Integration & docs
 
-- [ ] 5.1 Point `entity-property-action-slice` verification (tasks 5.3–5.5) at this headless pipeline
+- [x] 5.1 Point `entity-property-action-slice` verification (tasks 5.3–5.5) at this headless pipeline — DONE.
+  The historical tasks were moved to `sandbox-sample-and-e2e` when the original change was re-sliced; that successor now names `./gradlew headlessBuild` as the production-order oracle for generation, modelcheck, and generated-Java compilation.
+  A `--rerun-tasks` execution completed `bootstrapLanguage` → `generateModels` → `checkModels` → `compileGeneratedJava` successfully.
 - [ ] 5.2 Document the headless build: command, pinned versions, fallback (ant), and known limitations (does not author concepts)

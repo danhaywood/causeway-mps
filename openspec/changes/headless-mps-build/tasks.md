@@ -43,7 +43,9 @@
 - [x] 4.3 Cache the MPS distribution and Gradle dependencies for stable runs — DONE.
   `actions/setup-java` caches Gradle dependencies and the wrapper using the pinned build files, while `actions/cache` stores the unpacked MPS distribution under an OS-, architecture-, and MPS-version-specific key.
   GitHub Actions run `30928905602` attempt 2 restored both caches, skipped `resolveMps`, and completed `headlessBuild` successfully.
-- [ ] 4.4 Confirm CI fails on a deliberately broken model and passes on a clean one
+- [x] 4.4 Confirm CI fails on a deliberately broken model and passes on a clean one — DONE.
+  A temporary probe branch renamed the `Customer` entity to the invalid Java identifier `broken-name`; GitHub Actions run `30931499888` failed at `compileGeneratedJava` with the expected generated-Java syntax errors.
+  Restoring the model through MPS produced successful GitHub Actions run `30931715377`, after which the temporary branch was deleted without changing `main`.
 
 ## 5. Integration & docs
 

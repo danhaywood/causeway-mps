@@ -7,7 +7,8 @@ Implement the remaining tasks one at a time and keep each implementation commit 
 ## 1. Application-support classpath
 
 - [x] 1.1 Resolve Causeway 3.6.0, Jakarta Persistence 3.1.0, and Jakarta Inject 2.0.1 through the shared `causeway.stubs` solution, with jars staged by `resolveStubs`.
-- [ ] 1.2 Build and stage application-support output containing `app.OrderService` for both MPS type resolution and `compileGeneratedJava`, without importing the golden `customers.Customer` or `customers.Product` classifiers as MPS stubs.
+- [x] 1.2 Build and stage application-support output containing `app.OrderService` for both MPS type resolution and `compileGeneratedJava`, without importing the golden `customers.Customer` or `customers.Product` classifiers as MPS stubs.
+  `compileReferenceApp` compiles the complete golden Maven source set, `referenceAppStubs` packages only `app/**`, and `resolveStubs` stages `reference-app-stubs.jar` into `causeway.stubs/libs`.
 - [ ] 1.3 Confirm the actual sandbox `placeOrder` action resolves typed `OrderService` injection and body references through the staged application-support output.
   Treat this as a positive resolution check because a broken stub path can warn without failing `checkModels`.
 

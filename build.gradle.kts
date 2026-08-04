@@ -8,6 +8,7 @@ import de.itemis.mps.gradle.BuildLanguages
 import de.itemis.mps.gradle.tasks.MpsCheck
 import de.itemis.mps.gradle.tasks.MpsGenerate
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 plugins {
@@ -67,10 +68,36 @@ val resolveMps by tasks.registering(Sync::class) {
     }
 }
 
-// Stage the stub jars at the static path the causeway.stubs .msd references (${module}/libs).
-// libs/ is git-ignored; this task repopulates it from the resolved dependencies.
+// Compile the complete golden reference app so its bidirectional Customer/Product signatures resolve,
+// then publish only hand-written application support as an MPS stub artifact.
+val compileReferenceApp by tasks.registering(JavaCompile::class) {
+    description = "Compiles the golden reference app used to build application-support stubs."
+    source(layout.projectDirectory.dir("reference-app/src/main/java"))
+    classpath = stubs
+    destinationDirectory.set(layout.buildDirectory.dir("classes/reference-app"))
+    javaCompiler.set(javaToolchains.compilerFor {
+        languageVersion.set(JavaLanguageVersion.of(generatedJavaVersion))
+    })
+    options.release.set(generatedJavaVersion)
+    options.encoding = "UTF-8"
+}
+
+val referenceAppStubs by tasks.registering(Jar::class) {
+    dependsOn(compileReferenceApp)
+    description = "Packages hand-written reference-app support without golden generated classifiers."
+    archiveFileName.set("reference-app-stubs.jar")
+    destinationDirectory.set(layout.buildDirectory.dir("libs/application-stubs"))
+    from(compileReferenceApp.flatMap { it.destinationDirectory }) {
+        include("app/**")
+    }
+}
+
+// Stage the dependency and application-support jars at the static path the causeway.stubs .msd
+// references (${module}/libs). libs/ is git-ignored and reproduced on every build.
 val resolveStubs by tasks.registering(Sync::class) {
+    dependsOn(referenceAppStubs)
     from(stubs)
+    from(referenceAppStubs.flatMap { it.archiveFile })
     into(layout.projectDirectory.dir("languages/causeway.stubs/libs"))
 }
 
@@ -109,7 +136,7 @@ val compileGeneratedJava by tasks.registering(JavaCompile::class) {
     dependsOn(checkModels)
     description = "Compiles Java generated from the Causeway sandbox models."
     source(layout.projectDirectory.dir("languages/causeway.sandbox/source_gen"))
-    classpath = stubs
+    classpath = stubs + files(referenceAppStubs.flatMap { it.archiveFile })
     destinationDirectory.set(layout.buildDirectory.dir("classes/generated-sandbox"))
     options.release.set(generatedJavaVersion)
     options.encoding = "UTF-8"

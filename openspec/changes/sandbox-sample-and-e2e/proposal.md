@@ -1,39 +1,27 @@
 ## Why
 
-The generator (once built) needs to be exercised by a real DSL program, and the project's central bet —
-that embedded action bodies can call into hand-written Causeway code on a shared classpath — must be
-proven end-to-end. This change wires the `causeway.sandbox` solution to the Causeway + app stubs,
-authors the `customers` sample DSL program, and runs the full generate → diff → compile loop, closing
-the coexistence milestone.
+The project now has a generated Causeway action model and a reproducible headless build, but it has not yet proven that an embedded DSL action body can call hand-written application code.
+This change closes that coexistence milestone through the existing `customers` sandbox program.
 
 ## What Changes
 
-- Import the Causeway applib + Jakarta Persistence/Inject + the hand-written `reference-app` into
-  `causeway.sandbox` as Java classpath **stubs**, so DSL programs and their embedded baseLanguage bodies
-  can reference those external types.
-- Author a sample DSL program in `causeway.sandbox`: module `customers`, entity `Customer` with a
-  `String name` property and a `placeOrder(Product, int)` action whose body calls the hand-written
-  `OrderService` (the coexistence milestone).
-- Run end-to-end: generate the sandbox, diff the output against the golden `reference-app` classes,
-  compile the generated Java together with the hand-written app on one classpath.
-- (Deferred check) boot a Causeway app context to confirm the metamodel introspects the generated
-  classes under `ENCAPSULATION_ENABLED` (compile-time has been proven; runtime has not).
+- Reuse the shared `causeway.stubs` solution for Causeway and Jakarta libraries, and add application-support stubs from `reference-app` so embedded BaseLanguage bodies can resolve `OrderService`.
+- Extend the existing `customers` sandbox program with `Customer.placeOrder(Product, int)`, typed `OrderService` injection, and a body that invokes the hand-written service.
+- Compare the generated `placeOrder` mixin against the corresponding golden reference shape while preserving the existing sandbox probe actions.
+- Run `./gradlew headlessBuild` so bootstrap, generation, modelcheck, and generated-Java compilation verify the complete coexistence path.
 
 ## Capabilities
 
 ### New Capabilities
-- `java-classpath-interop`: Coexistence with hand-written Java — importing the Causeway API and app as
-  classpath stubs so embedded action bodies reference external types, with strictly one-way generation
-  and generated/hand-written code sharing one classpath.
+- `java-classpath-interop`: Coexistence with hand-written Java through classpath stubs for external application types, embedded action-body references, and generated/hand-written code sharing one compile classpath.
 
 ### Modified Capabilities
 <!-- None -->
 
 ## Impact
 
-- **`causeway.sandbox`**: stub/library dependencies + the first DSL program.
-- **`headless-mps-build`**: this change exercises its generate + compile steps (tasks 2.4, 3.x).
-- **Depends on** `causeway-generator-first-slice` (needs the generator) and `dsl-type-system` (the sample
-  uses a `JavaType String`, an `EntityType Product`, and an `Action` body).
-- **Verified** via the headless build; the action-body-calls-`OrderService` compile is the milestone.
-- **Out of scope:** runtime/UI behavior beyond the deferred introspection smoke check; further slices.
+- **`causeway.sandbox`**: adds the sample `placeOrder` action and application-support stub dependency while retaining existing scope and generator probes.
+- **`reference-app` and build wiring**: expose the hand-written `OrderService` to MPS type resolution and generated-Java compilation without generating into the hand-written sources.
+- **Completed prerequisites**: `shared-stubs-solution`, `dsl-action-model`, `causeway-generator-first-slice`, and `headless-mps-build` are implemented and archived.
+- **Verification**: a focused golden comparison plus `./gradlew headlessBuild` establishes the compile-time coexistence milestone.
+- **Out of scope**: Causeway runtime/UI boot and introspection remain a separate follow-up.

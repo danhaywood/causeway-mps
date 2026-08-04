@@ -18,7 +18,7 @@
 - [x] 1.1 Verify plugin compatibility with MPS 2026.1 — DONE: `de.itemis.mps.gradle.common` 1.30.x on **Gradle 9.x** runs both `MpsCheck` and `MpsGenerate` successfully against MPS 2026.1 on JDK 21.
   The original `com.specificlanguages.mps` option remains rejected as packaging-oriented, and the Ant fallback is not needed.
 - [x] 1.2 Pin MPS 2026.1 + download for the build — DONE: the `mps` configuration resolves `com.jetbrains:mps:2026.1` and syncs it to `build/mps`, independently of the local MPS.app.
-- [~] 1.3 JDK 21 — PARTIAL: build currently run with `JAVA_HOME`=SDKMAN JDK 21; a declarative Gradle Java toolchain block is still a refinement.
+- [x] 1.3 Pin declarative Java toolchains — DONE: Gradle uses Java 21 for generated application code and launches the MPS 2026.1 Ant Make worker with Java 25.
 - [x] 1.4 Gradle wrapper + settings — DONE (pinned to Gradle 9.0.0; committed).
 
 ## 2. Headless generation & modelcheck
@@ -26,12 +26,14 @@
 - [x] 2.1 Resolve the `causeway`/`runtime`/`sandbox` modules — DONE (`MpsCheck.projectLocation` = project dir picks them up).
 - [x] 2.2 Wire + verify the `generate` task — DONE via `causeway-generator-first-slice`: `./gradlew generateModels` succeeds and generates the `customers` entity-state Java.
 - [x] 2.3 Modelcheck gate — DONE: `checkModels` fails the build on model errors; passes clean on the current structure and the current `customers` entity-state sandbox.
-- [~] 2.4 Sandbox stub dependencies resolve headlessly — Causeway 3.6.0 and Jakarta stubs DONE via the shared `causeway.stubs` solution and used successfully by generation; the `reference-app`/`OrderService` positive resolution check remains pending until an action body exists.
+- [x] 2.4 Sandbox library stub dependencies resolve headlessly — DONE: Causeway 3.6.0 and Jakarta stubs are staged into the shared `causeway.stubs` solution and used successfully by generation.
+  The hand-written `reference-app`/`OrderService` coexistence fixture remains delegated to `sandbox-sample-and-e2e`.
 
 ## 3. Compile generated Java
 
-- [~] 3.1 Generated `Customer.java` and `Product.java` were compiled successfully with `javac`; configuring that compile as a Gradle pipeline step remains open.
-- [~] 3.2 Causeway 3.6.0 + Jakarta Persistence/Inject are proven on the generated-code classpath via `causeway.stubs/libs/*`; adding the hand-written app/`OrderService` to the same classpath remains open.
+- [x] 3.1 Compile generated `Customer.java`, `Product.java`, and action output through the Gradle pipeline — DONE via `compileGeneratedJava`.
+- [x] 3.2 Prove Causeway 3.6.0 + Jakarta Persistence/Inject on the generated-code classpath — DONE via `causeway.stubs/libs/*`.
+  Adding the hand-written app/`OrderService` to the same classpath remains delegated to `sandbox-sample-and-e2e`.
 - [x] 3.3 Expose a single command that runs generate → modelcheck → compile, fail-fast — DONE: `./gradlew headlessBuild` follows the dependency chain `generateModels` → `checkModels` → `compileGeneratedJava`, using the pinned Java 21 toolchain and the resolved Causeway/Jakarta stub classpath.
 
 ## 4. CI pipeline

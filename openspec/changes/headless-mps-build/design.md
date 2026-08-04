@@ -30,7 +30,9 @@ Run Gradle and the ordinary MPS generation/modelcheck tasks on JDK 21, matching 
 Compile generated application Java with the Gradle Java 21 toolchain and `--release 21`.
 CI provisions both pinned Temurin toolchains without relying on a preinstalled IDE or JDK.
 
-**Compile generated Java with the existing `reference-app` dependency set.** Reuse Causeway 3.6.0 + Jakarta Persistence 3.1.0 + Jakarta Inject 2.0.1 so the headless compile matches the already-verified golden idiom. The generated sources from `causeway.sandbox` are compiled on a classpath that also includes the hand-written `reference-app` code (coexistence).
+**Compile generated Java with the dependency versions established by `reference-app`.** Reuse Causeway 3.6.0 + Jakarta Persistence 3.1.0 + Jakarta Inject 2.0.1 so the headless compile matches the already-verified golden idiom.
+The generated sources from `causeway.sandbox` compile against that resolved dependency closure.
+The explicit hand-written `OrderService` coexistence fixture remains owned by `sandbox-sample-and-e2e`.
 
 **Pipeline order is generate → modelcheck → compile, fail-fast.** Modelcheck gates generation output before the Java compile, so a model error fails the build with a clear MPS diagnostic rather than a downstream Java error.
 

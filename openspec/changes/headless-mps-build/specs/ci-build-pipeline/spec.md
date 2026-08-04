@@ -12,11 +12,11 @@ A CI pipeline SHALL run the headless build (generate → modelcheck → compile)
 - **THEN** the CI pipeline reports success
 
 ### Requirement: Reproducible CI environment
-The CI pipeline SHALL provision the pinned JDK 17+ and the pinned MPS 2026.1 distribution, independent of any preinstalled IDE, and SHALL cache the MPS distribution and build dependencies for stable, repeatable runs.
+The CI pipeline SHALL provision pinned JDK 25 and JDK 21 toolchains plus the pinned MPS 2026.1 distribution, independent of any preinstalled IDE, and SHALL cache the MPS distribution and build dependencies for stable, repeatable runs.
 
 #### Scenario: Fresh CI runner produces the same result
 - **WHEN** the pipeline runs on a fresh runner with no MPS IDE installed
-- **THEN** it provisions the pinned JDK and MPS distribution and runs the full pipeline to the same outcome as a local headless build
+- **THEN** it provisions the pinned JDK toolchains and MPS distribution and runs the full pipeline to the same outcome as a local headless build
 
 ### Requirement: Reproduces entity-property-action-slice verification
 The CI pipeline SHALL exercise the same generate → modelcheck → compile steps that the `entity-property-action-slice` verification tasks (5.3–5.5) require, so those checks run automatically rather than manually in the IDE.

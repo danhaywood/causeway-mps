@@ -1,0 +1,39 @@
+# Causeway DSL gotchas
+
+- Never inspect or edit `.mps` XML directly; use MPS MCP node tools.
+- Concept-detail lookup requires `l:99bd0b43-8ce5-4eaa-aac8-ff12e0700f84:causeway`, not the module reference syntax.
+- Use fully qualified concepts such as `causeway.structure.Entity` in blueprints.
+- One MPS model corresponds to one Causeway module; `Module` is a singleton metadata root, while entities and top-level actions are roots.
+- A root mapping rule emits one output root per input root, which is why class-producing concepts must be rootable.
+- `JavaType` contains a BaseLanguage type node; it is not a textual type-name property.
+- `EntityType` contains an entity reference and its generator reduction remains parked.
+- Action-body variable references use the smart-reference expression `ActionVariableReference`; ordinary BaseLanguage variable references do not target Causeway declarations.
+- Because `ActionVariableReference` extends BaseLanguage `Expression`, the `causeway` language must both extend and have a default dependency on `jetbrains.mps.baseLanguage`.
+- Lifecycle scope is split between `Action` and `Parameter` scope providers because `ScopeProvider.getScope` receives the provider's direct child; the action provider cannot distinguish which supporting block contains a reference nested under a parameter.
+- Lifecycle roles contain `LifecycleBlock`, not a raw `StatementList`; BaseLanguage statements belong under its mandatory `body` child.
+- `LifecycleBlock` must wrap rather than extend `StatementList`, because directly subclassing `StatementList` inherits `ImplementationWithStubPart` and produces `Missing stub for a non-stub ImplementationWithStubPart concept`.
+- The `Collection<ParamType>` behavior builds a parameterized type at runtime from a raw `Collection` quotation, so the behavior model currently reports a benign raw-use warning on the quotation node.
+- Implementing `IMethodLike.getExpectedRetType()` is not sufficient by itself to report bad returns: `LifecycleBlock` also needs its `typeOf_LifecycleBlock` inference rule to collect return statements and constrain their expression types.
+- To verify a lifecycle return contract, temporarily insert a deliberately wrong return and inspect the parser/checker `problems` result, then restore the original `StatementList` immediately.
+- To verify completion scope without UI automation, set an `ActionVariableReference.variable` by plain name: name resolution uses the same search scope as completion and returns `NOT_FOUND` for omitted candidates.
+- To verify the edit-time diagnostic, temporarily bind an out-of-scope target by persistent `r:` reference, check for `The reference … is out of search scope`, and restore the original target immediately.
+- Parameter order is dependency order: moving a parameter before one referenced by its supporting blocks produces both the ordinary out-of-search-scope error and the explicit `parameter reference is out of scope after parameter reordering` warning.
+- Causeway 3.6 does support per-parameter mixin methods named `hide<ParamName>` and `disable<ParamName>`; their PAT form takes one `Params` object and returns primitive `boolean` or `String`/`TranslatableString` respectively.
+- Causeway's PAT lookup requires a public constructor matching all action parameter types.
+- MPS 2026.1 BaseLanguage has no Java `record` concept, so generate the approved equivalent: `public static final class Params` with private final fields, a public full-arguments constructor, and record-style accessors.
+- A nested action shell must be static with an explicit mixee field and constructor; otherwise a non-static `Params` gains a synthetic outer constructor argument and fails PAT discovery.
+- Although PAT exposes all fields structurally, lifecycle scope must continue hiding the current and later parameters from per-parameter hide/disable bodies.
+- The action template now generates the nested static action shell, explicit mixee field/constructor, immutable `Params` carrier, Jakarta-injected service fields, `@MemberSupport` `act`, and all supporting-method families.
+- Dynamic `@Action(semantics=...)` generation and the top-level action rule remain tracked by `causeway-generator-first-slice` task 2.4; do not hide that known difference when comparing the nested lifecycle shape.
+- `$COPY_SRC$` retains `ActionVariableReference` nodes in the BaseLanguage output model, so the language's `ActionVariableReference_TextGen` must remain available during final Java text generation.
+- Headless generation currently logs non-fatal transient-model resolution diagnostics for those copied dynamic references; retained resolve-info still lets the custom TextGen emit valid Java, and generated-source compilation is the positive oracle.
+- The TextGen helper distinguishes parameters by inspecting the generated nested `Params` members: parameter references become direct names in `act` and `params.<name>()` in PAT methods, while service names stay field references and entity references become `mixee`.
+- Choices and auto-complete methods intentionally generate raw `Collection` return types because copying a primitive parameter type into a Java generic argument would produce invalid output such as `Collection<int>`; lifecycle body typing still enforces `Collection<ParamType>`.
+- `Parameter.type` and `InjectedService.type` are distinct MPS structure links despite sharing the same feature name; a cloned generator query must retarget its `SLinkAccess` to the declaration belonging to its new source concept or generation produces `???` and a broken-reference TextGen error.
+- Causeway/Jakarta stubs live in `causeway.stubs`; template models may still require explicit stub-model imports for classifier resolution.
+- A broken stub path can warn without making `checkModels` fail, so retain positive type-resolution and generated-Java compilation checks.
+- Use persistent `r:` node references rather than XML short IDs.
+- A blueprint reference role accepts an `r:` node reference or an in-scope name, never a `c:` concept reference.
+- Prefer skeleton-plus-subtree editing for action bodies and lifecycle blocks.
+- Keep the headless MPS distribution aligned with the authoring IDE; mixing MPS 2026.1-generated behavior classes with an MPS 2025.3 runtime fails with an `SMethodBuilder` ABI mismatch.
+- The project and Gradle oracle currently target MPS 2026.1 and require JDK 21.

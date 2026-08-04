@@ -1,0 +1,9 @@
+{
+  "concept": "causeway.structure.Entity",
+  "properties": [
+    {
+      "name": "name",
+      "value": "ExampleEntity"
+    }
+  ]
+}

@@ -43,10 +43,12 @@ diff every generated file against the golden `reference-app/src/main/java/custom
   `node.properties` emits `@Column(name=<prop>, nullable=false, length=255) private <type> <prop>;` and
   `@Property private <type> get<Prop>() { return <field>; }`. Getter body field-ref resolves per-property
   by shared input node (no mapping label). `@Domain.Include` dropped — `@Property` meta-includes it.
-- [ ] 2.4 `Action` → mixin class — OUT OF B2 SCOPE (the `customers` sandbox has no action). Per
-  `model-equals-module`: a **nested** action generates as a non-static inner class via a `$LOOP$` over
-  `Entity.actions`; a top-level action via its own root rule. Needs a sandbox action + the injected-service
-  scope work (`dsl-action-model`).
+- [~] 2.4 `Action` → mixin class — PARTIAL via `dsl-action-model` task 6.1. The `customers` sandbox now
+  has nested `scopeProbe`, and the Entity template loops over `Entity.actions` to emit a static nested
+  action shell containing the immutable `Params` PAT carrier. Static nesting is required because MPS
+  2026.1 BaseLanguage has no Java record concept and a non-static carrier would gain a synthetic outer
+  constructor argument that Causeway PAT cannot match. Still pending: action annotation, explicit mixee
+  field/constructor, `act` and supporting methods, injected-service fields, and the top-level action rule.
 - [~] 2.5 `Type` resolution — JavaType DONE (2.5a), EntityType PARKED (2.5b). **2.5a:** field/getter type
   cells `COPY_SRC node.type`; a reduction rule reduces `JavaType` → its wrapped `javaType` (`COPY_SRC
   node.javaType`); sandbox `Product.price : int` proves a non-`String` type flows through. **2.5b

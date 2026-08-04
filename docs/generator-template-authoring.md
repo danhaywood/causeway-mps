@@ -161,13 +161,14 @@ union-friendly shape.
 > <field>; }`.
 
 ### Action → mixin class (task 2.4) — NEEDS PIVOT UPDATE
-> **Stale (pre model=module).** This section still describes a *nested* action as a separate top-level
-> `Mixee_member` class via its own root mapping rule. Post-pivot a **nested** action generates as a
-> **non-static inner mixin class** inside the Entity template (a `$LOOP$` over `Entity.actions`, mixee =
-> `Customer.this`, ctor synthesised by javac); only a **top-level** action (explicit `target`) is a root
-> mapping rule producing a separate file. See `archive/2026-06-19-model-equals-module`. The mixin-body /
-> annotation mechanics below still apply; the *where it lives* changes. Out of B2 scope (the `customers`
-> sandbox has no action yet).
+> **Updated by `dsl-action-model` task 6.1.** This section still describes a top-level action class, but a
+> nested action now generates as a **static nested mixin class** inside the Entity template through a
+> `$LOOP$` over `Entity.actions`; only a top-level action with an explicit `target` uses its own root rule.
+> Static nesting permits the generated `public static final class Params` carrier to expose exactly the
+> public constructor Causeway PAT searches for. A non-static carrier would gain a synthetic outer
+> constructor argument, and MPS 2026.1 BaseLanguage has no Java `record` concept. The nested mixin will
+> therefore carry an explicit mixee field and one-argument constructor rather than relying on javac's
+> synthetic inner-class constructor. The mixin-body and annotation mechanics below still apply.
 
 Create a second root mapping rule: `sourceConcept = Action`. Template = a root class:
 

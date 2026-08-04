@@ -24,7 +24,8 @@ Use `ActionVariableReference` for parameters, the entity mixee, and injected ser
 Action hide/disable blocks see no parameters, parameter blocks see earlier parameters (plus self for validate), and action validate/body see all parameters; mixee and services are universal.
 Use `mps_mcp_parse_java_and_insert` for ordinary Java statements where the target role accepts parsed BaseLanguage nodes.
 Use JSON blueprints for MPS-specific scope or model-language constructs that Java parsing cannot express.
-When generating parameter support, use public PAT forms such as `boolean hideProduct(Params params)` and `String disableProduct(Params params)`; the `Params` record must be public and cover the complete action signature.
+When generating parameter support, use public PAT forms such as `boolean hideProduct(Params params)` and `String disableProduct(Params params)`.
+Generate `Params` as a public static final immutable class whose public constructor covers the complete action signature and whose accessors use the parameter names.
 
 ## Choose a type
 

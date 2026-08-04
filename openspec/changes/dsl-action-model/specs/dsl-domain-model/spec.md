@@ -6,8 +6,8 @@ nested child of an `Entity` (the `actions` containment) **and** rootable as a to
 `Action` SHALL be authored in one of two forms, discriminated by its optional `target` reference:
 
 - **nested** within an `Entity` — `target` empty, mixee implicitly the enclosing entity; generates as a
-  **non-static inner mixin class** of the entity's class (the javac-synthesised `Mixin(Outer)`
-  constructor is the 1-arg-mixee ctor; mixee = `Outer.this`); or
+  **static nested mixin class** of the entity's class with an explicit mixee field and one-argument
+  constructor; or
 - **top-level** — a root with an explicit `target` `Entity` and a mixee name (e.g. `action … on Customer
   as customer`); generates as a **separate top-level mixin class** via a root mapping rule, enabling
   contribution to an entity in another module (a cross-model reference).
@@ -74,13 +74,15 @@ auto-detection remains a deferred v2 convenience layered over this.)
 
 ### Requirement: Actions generate parameters-class-style mixins
 The generator SHALL emit each `Action` as a parameters-class-style mixin: the supporting behaviours
-become by-name supporting methods, and a `Params` record is generated from the single parameter-field
-declarations (parameters are declared once, not restated per supporting method). A parameter reference in
-a block SHALL be mapped to the correct generated form for that block (an `act` argument, a `Params`
-accessor, or the validated-parameter argument).
+become by-name supporting methods, and an immutable `Params` value carrier is generated from the single
+parameter-field declarations (parameters are declared once, not restated per supporting method).
+The carrier SHALL be `public static final`, hold private final fields, expose a public constructor matching
+the complete action parameter signature, and provide record-style accessors named after the parameters.
+A parameter reference in a block SHALL be mapped to the correct generated form for that block (an `act`
+argument, a `Params` accessor, or the validated-parameter argument).
 
-#### Scenario: Parameters are declared once and generate a Params record
+#### Scenario: Parameters are declared once and generate a Params value carrier
 - **WHEN** an `Action` declares parameters `product` and `quantity` with supporting blocks referencing
   them
-- **THEN** the generated mixin has a single `Params` record with `product` and `quantity`, and the
-  by-name supporting methods read those parameters without re-declaring the parameter list
+- **THEN** the generated mixin has a single immutable `Params` carrier with `product` and `quantity`, and
+  the by-name supporting methods read those parameters without re-declaring the parameter list

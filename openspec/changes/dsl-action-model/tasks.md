@@ -84,12 +84,20 @@ generator-authoring boundary).
   these as needing confirmation).
   DONE: verified against Apache Causeway tag `rel/causeway-3.6.0` at commit `07f4bea` that the default programming model registers both parameter factories.
   Mixin parameter-name conventions support `hide<ParamName>(Params)` returning primitive `boolean` and `disable<ParamName>(Params)` returning `String` or `TranslatableString`; indexed positional names are also supported.
-  PAT discovery requires the generated `Params` type to expose a public constructor matching the complete action parameter signature, so task 6.1 must emit a public record.
+  PAT discovery requires the generated `Params` type to expose a public constructor matching the complete action parameter signature, so task 6.1 must emit a public immutable value carrier.
   Evidence and source paths are recorded in `docs/causeway-3.6-parameter-lifecycle-signatures.md`.
 
 ## 6. Generator (parameters-class-style mixins)
 
-- [ ] 6.1 Generate the `Params` record from the single parameter-field declarations.
+- [x] 6.1 Generate the immutable `Params` value carrier from the single parameter-field declarations.
+  DONE: the Entity root template now loops over nested actions and emits one static action shell containing
+  `public static final class Params`, private final fields, a public full-arguments constructor, and
+  record-style accessors generated from the ordered parameter declarations.
+  The `scopeProbe` sandbox fixture now declares `product : String` and `quantity : int`; generated
+  `Customer.java` contains the matching carrier, compiles with JDK 21 against Causeway 3.6.0, and satisfies
+  Causeway PAT's public-constructor contract.
+  MPS 2026.1 BaseLanguage has no Java `record` concept, so the approved record-equivalent class is the
+  specified output.
 - [ ] 6.2 Generate by-name supporting methods from the blocks; map each param reference to the right form
   (`act` arg vs `Params` accessor vs validated-param arg).
 - [ ] 6.3 Generate `@Inject private <Type> <name>;` for each declared injected service.

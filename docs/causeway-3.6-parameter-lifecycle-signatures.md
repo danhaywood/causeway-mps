@@ -30,10 +30,21 @@ Causeway searches parameters-as-a-tuple (PAT) signatures before positional sweep
 
 A PAT supporting method takes one tuple argument whose class has a public constructor matching the complete action parameter signature.
 
-For a generated mixin with `Product product` and `int quantity`, the intended generated forms are therefore:
+For a generated mixin with `Product product` and `int quantity`, the generated record-equivalent PAT forms are therefore:
 
 ```java
-public record Params(Product product, int quantity) {}
+public static final class Params {
+    private final Product product;
+    private final int quantity;
+
+    public Params(Product product, int quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    public Product product() { return product; }
+    public int quantity() { return quantity; }
+}
 
 public boolean hideProduct(Params params) {
     // generated lifecycle body
@@ -44,7 +55,8 @@ public String disableProduct(Params params) {
 }
 ```
 
-The generated `Params` record must be public because Causeway discovers it through a public constructor lookup.
+The generated `Params` carrier and its full-arguments constructor must be public because Causeway discovers the carrier through a public constructor lookup.
+MPS 2026.1 BaseLanguage has no Java `record` concept, so the immutable class form supplies the same PAT contract.
 
 Causeway constructs the tuple from the pending action arguments and invokes the supporting method with that tuple.
 

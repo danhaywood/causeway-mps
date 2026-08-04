@@ -37,7 +37,7 @@ runs*:
 ```
 
 **Why this beats both Java styles.** Positional supporting methods are safe (can't read a later param)
-but clunky and name-repeating; the parameters-class style is clean by-name but its `Params` record exposes
+but clunky and name-repeating; the parameters-class style is clean by-name but its `Params` carrier exposes
 not-yet-entered params (reading an unset later param is a real, silent bug). The DSL generates the clean
 parameters-class style **but** the edit-time scope only ever offers preceding params — so the generated
 body never reads an unentered param. By-name cleanliness + positional safety.
@@ -49,9 +49,16 @@ positional dependency explicit and checked.
 **Mixee handle.** Top-level form names it (`action … on Customer as customer`); nested form defaults it to
 the enclosing entity (`this`/`self`, or the entity's members directly in scope). Both forms supported.
 
-**Generate parameters-class-style mixins.** By-name supporting methods + a generated `Params` record from
-the single param-field declarations. A param reference maps per block: `act` arg vs `Params` accessor vs
-the validated-param arg — the generator picks.
+**Generate parameters-class-style mixins.** By-name supporting methods + a generated immutable `Params`
+value carrier from the single param-field declarations. A param reference maps per block: `act` arg vs
+`Params` accessor vs the validated-param arg — the generator picks.
+
+**Record-equivalent output.** MPS 2026.1 BaseLanguage has no Java `record` concept, so the generator emits
+`public static final class Params` with private final fields, a public full-arguments constructor, and
+record-style accessors. This is equivalent for Causeway PAT discovery, which requires only a public
+constructor matching the complete action signature. A nested action mixin is therefore a static nested
+class with an explicit mixee field and constructor; a non-static inner mixin cannot contain a static PAT
+carrier in MPS and a non-static PAT carrier would gain a synthetic outer constructor argument.
 
 **Typed baseLanguage blocks (no sugar yet).** Each block body is typed to its contract (`hide`→boolean,
 `disable`/`validate`→reason-or-null, `choices`→`Collection<ParamType>`, `default`→`ParamType`,

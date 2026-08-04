@@ -56,6 +56,7 @@
         <child id="8900000000000000047" name="validate" index="3ZuirR" />
       </concept>
       <concept id="8900000000000000005" name="causeway.structure.Parameter" flags="ng" index="3Zuirt">
+        <child id="8900000000000000026" name="type" index="3Zuir2" />
         <child id="8900000000000000050" name="choices" index="3ZuirE" />
         <child id="8900000000000000052" name="validate" index="3ZuirG" />
       </concept>
@@ -132,6 +133,11 @@
               </node>
               <node concept="3clFbS" id="4IOweXONVsX" role="3clFbx" />
             </node>
+          </node>
+        </node>
+        <node concept="3Zuirg" id="4IOweXOOVgC" role="3Zuir2">
+          <node concept="3uibUv" id="4IOweXOOVgD" role="3ZuirS">
+            <ref role="3uigEE" to="wyt6:~String" resolve="String" />
           </node>
         </node>
       </node>
@@ -310,6 +316,9 @@
               <node concept="3clFbS" id="4IOweXONVu2" role="3clFbx" />
             </node>
           </node>
+        </node>
+        <node concept="3Zuirg" id="4IOweXOOVgE" role="3Zuir2">
+          <node concept="10Oyi0" id="4IOweXOOVgF" role="3ZuirS" />
         </node>
       </node>
     </node>

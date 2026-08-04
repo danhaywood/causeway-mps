@@ -6,9 +6,18 @@
 
 import de.itemis.mps.gradle.tasks.MpsCheck
 import de.itemis.mps.gradle.tasks.MpsGenerate
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 plugins {
+    java
     id("de.itemis.mps.gradle.common") version "1.30.1.1.bc0f59d"
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 }
 
 repositories {
@@ -48,14 +57,30 @@ val resolveStubs by tasks.registering(Sync::class) {
     into(layout.projectDirectory.dir("languages/causeway.stubs/libs"))
 }
 
-tasks.register<MpsCheck>("checkModels") {
+val generateModels by tasks.registering(MpsGenerate::class) {
     dependsOn(resolveMps, resolveStubs)
     mpsHome.set(mpsHomeDir)
     projectLocation.set(layout.projectDirectory)
 }
 
-tasks.register<MpsGenerate>("generateModels") {
-    dependsOn(resolveMps, resolveStubs)
+val checkModels by tasks.registering(MpsCheck::class) {
+    dependsOn(generateModels)
     mpsHome.set(mpsHomeDir)
     projectLocation.set(layout.projectDirectory)
+}
+
+val compileGeneratedJava by tasks.registering(JavaCompile::class) {
+    dependsOn(checkModels)
+    description = "Compiles Java generated from the Causeway sandbox models."
+    source(layout.projectDirectory.dir("languages/causeway.sandbox/source_gen"))
+    classpath = stubs
+    destinationDirectory.set(layout.buildDirectory.dir("classes/generated-sandbox"))
+    options.release.set(21)
+    options.encoding = "UTF-8"
+}
+
+tasks.register("headlessBuild") {
+    group = "build"
+    description = "Generates models, checks them, then compiles generated Java."
+    dependsOn(compileGeneratedJava)
 }

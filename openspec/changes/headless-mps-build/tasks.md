@@ -32,7 +32,7 @@
 
 - [~] 3.1 Generated `Customer.java` and `Product.java` were compiled successfully with `javac`; configuring that compile as a Gradle pipeline step remains open.
 - [~] 3.2 Causeway 3.6.0 + Jakarta Persistence/Inject are proven on the generated-code classpath via `causeway.stubs/libs/*`; adding the hand-written app/`OrderService` to the same classpath remains open.
-- [ ] 3.3 Expose a single command that runs generate → modelcheck → compile, fail-fast
+- [x] 3.3 Expose a single command that runs generate → modelcheck → compile, fail-fast — DONE: `./gradlew headlessBuild` follows the dependency chain `generateModels` → `checkModels` → `compileGeneratedJava`, using the pinned Java 21 toolchain and the resolved Causeway/Jakarta stub classpath.
 
 ## 4. CI pipeline
 

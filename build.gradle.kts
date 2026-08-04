@@ -53,10 +53,18 @@ dependencies {
 }
 
 val mpsHomeDir = layout.buildDirectory.dir("mps")
+val mpsVersionMarker = mpsHomeDir.map { it.file(".resolved-version") }
 
 val resolveMps by tasks.registering(Sync::class) {
     from({ mps.map { zipTree(it) } })
     into(mpsHomeDir)
+    onlyIf("the cached MPS distribution does not match the pinned version") {
+        val marker = mpsVersionMarker.get().asFile
+        !marker.isFile || marker.readText().trim() != pinnedMpsVersion
+    }
+    doLast {
+        mpsVersionMarker.get().asFile.writeText("$pinnedMpsVersion\n")
+    }
 }
 
 // Stage the stub jars at the static path the causeway.stubs .msd references (${module}/libs).

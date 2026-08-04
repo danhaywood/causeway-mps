@@ -16,13 +16,15 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Read pinned Java versions
-        id: java-versions
+      - name: Read pinned build versions
+        id: build-versions
         shell: bash
         run: |
+          mps_version=$(awk -F= '$1 == "mpsVersion" { print $2 }' gradle.properties)
           mps_runtime=$(awk -F= '$1 == "mpsRuntimeJavaVersion" { print $2 }' gradle.properties)
           generated_java=$(awk -F= '$1 == "generatedJavaVersion" { print $2 }' gradle.properties)
-          test -n "$mps_runtime" && test -n "$generated_java"
+          test -n "$mps_version" && test -n "$mps_runtime" && test -n "$generated_java"
+          echo "mps-version=$mps_version" >> "$GITHUB_OUTPUT"
           echo "mps-runtime=$mps_runtime" >> "$GITHUB_OUTPUT"
           echo "generated-java=$generated_java" >> "$GITHUB_OUTPUT"
 
@@ -30,13 +32,25 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: ${{ steps.java-versions.outputs.mps-runtime }}
+          java-version: ${{ steps.build-versions.outputs.mps-runtime }}
 
       - name: Set up generated Java JDK
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: ${{ steps.java-versions.outputs.generated-java }}
+          java-version: ${{ steps.build-versions.outputs.generated-java }}
+          cache: gradle
+          cache-dependency-path: |
+            build.gradle.kts
+            settings.gradle.kts
+            gradle.properties
+            gradle/wrapper/gradle-wrapper.properties
+
+      - name: Cache pinned MPS distribution
+        uses: actions/cache@v5
+        with:
+          path: build/mps
+          key: mps-${{ runner.os }}-${{ runner.arch }}-${{ steps.build-versions.outputs.mps-version }}
 
       - name: Bootstrap, generate, model-check, and compile
         run: ./gradlew headlessBuild --no-daemon --stacktrace

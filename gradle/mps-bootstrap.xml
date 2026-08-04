@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="causeway-mps-bootstrap" default="make-language"
+         xmlns:mps="antlib:jetbrains.mps.build.ant">
+  <target name="make-language">
+    <mps:mps.make mpsHome="${mps.home}" failOnError="true">
+      <mps:repository>
+        <mps:modules dir="${project.dir}/languages"/>
+      </mps:repository>
+      <mps:module file="${project.dir}/languages/causeway/causeway.mpl"/>
+    </mps:mps.make>
+  </target>
+</project>

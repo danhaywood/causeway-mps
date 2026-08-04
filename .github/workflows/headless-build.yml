@@ -16,11 +16,27 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - name: Read pinned Java versions
+        id: java-versions
+        shell: bash
+        run: |
+          mps_runtime=$(awk -F= '$1 == "mpsRuntimeJavaVersion" { print $2 }' gradle.properties)
+          generated_java=$(awk -F= '$1 == "generatedJavaVersion" { print $2 }' gradle.properties)
+          test -n "$mps_runtime" && test -n "$generated_java"
+          echo "mps-runtime=$mps_runtime" >> "$GITHUB_OUTPUT"
+          echo "generated-java=$generated_java" >> "$GITHUB_OUTPUT"
+
+      - name: Set up MPS runtime JDK
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: ${{ steps.java-versions.outputs.mps-runtime }}
 
-      - name: Generate, model-check, and compile
+      - name: Set up generated Java JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ steps.java-versions.outputs.generated-java }}
+
+      - name: Bootstrap, generate, model-check, and compile
         run: ./gradlew headlessBuild --no-daemon --stacktrace

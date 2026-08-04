@@ -4,6 +4,7 @@
 // for hand-authored .mps models. Toolchain: docs/headless-build-research.md.
 // Requires Gradle 9.x. Plugin + MPS distribution resolved from the itemis repo.
 
+import de.itemis.mps.gradle.BuildLanguages
 import de.itemis.mps.gradle.tasks.MpsCheck
 import de.itemis.mps.gradle.tasks.MpsGenerate
 import org.gradle.api.tasks.compile.JavaCompile
@@ -14,10 +15,18 @@ plugins {
     id("de.itemis.mps.gradle.common") version "1.30.1.1.bc0f59d"
 }
 
+val pinnedMpsVersion = providers.gradleProperty("mpsVersion").get()
+val mpsRuntimeJavaVersion = providers.gradleProperty("mpsRuntimeJavaVersion").get().toInt()
+val generatedJavaVersion = providers.gradleProperty("generatedJavaVersion").get().toInt()
+
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(generatedJavaVersion))
     }
+}
+
+val mpsRuntimeJava = javaToolchains.launcherFor {
+    languageVersion.set(JavaLanguageVersion.of(mpsRuntimeJavaVersion))
 }
 
 repositories {
@@ -36,7 +45,7 @@ val mps: Configuration by configurations.creating
 // full compile closure (Spring/Jackson/…), mirroring reference-app's classpath.
 val stubs: Configuration by configurations.creating { isTransitive = true }
 dependencies {
-    mps("com.jetbrains:mps:2026.1")
+    mps("com.jetbrains:mps:$pinnedMpsVersion")
 
     stubs("org.apache.causeway.core:causeway-applib:3.6.0")
     stubs("jakarta.persistence:jakarta.persistence-api:3.1.0")
@@ -57,8 +66,27 @@ val resolveStubs by tasks.registering(Sync::class) {
     into(layout.projectDirectory.dir("languages/causeway.stubs/libs"))
 }
 
-val generateModels by tasks.registering(MpsGenerate::class) {
+// MpsGenerate compiles language aspect models from a clean checkout, but it does not emit the
+// Language/Generator deployment descriptors needed by the next headless MPS process.
+// MPS 2026.1's Ant Make worker is compiled for JDK 25; generated application Java remains on 21.
+val bootstrapLanguage by tasks.registering(BuildLanguages::class) {
     dependsOn(resolveMps, resolveStubs)
+    description = "Makes the Causeway language and generator deployable from a clean checkout."
+    script = layout.projectDirectory.file("gradle/mps-bootstrap.xml")
+    targets("make-language")
+    scriptArgs = listOf(
+        "-Dmps.home=${mpsHomeDir.get().asFile.absolutePath}",
+        "-Dproject.dir=${layout.projectDirectory.asFile.absolutePath}",
+    )
+    scriptClasspath = files(
+        fileTree(mpsHomeDir.map { it.dir("lib") }) { include("*.jar") },
+        fileTree(mpsHomeDir.map { it.dir("lib/ant/lib") }) { include("*.jar") },
+    )
+    executable(mpsRuntimeJava.get().executablePath.asFile.absolutePath)
+}
+
+val generateModels by tasks.registering(MpsGenerate::class) {
+    dependsOn(bootstrapLanguage)
     mpsHome.set(mpsHomeDir)
     projectLocation.set(layout.projectDirectory)
 }
@@ -75,7 +103,7 @@ val compileGeneratedJava by tasks.registering(JavaCompile::class) {
     source(layout.projectDirectory.dir("languages/causeway.sandbox/source_gen"))
     classpath = stubs
     destinationDirectory.set(layout.buildDirectory.dir("classes/generated-sandbox"))
-    options.release.set(21)
+    options.release.set(generatedJavaVersion)
     options.encoding = "UTF-8"
 }
 

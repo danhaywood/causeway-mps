@@ -55,3 +55,6 @@ Compile the golden with JDK 21 using `mvn -q -f reference-app/pom.xml clean comp
 3.6.0 and Jakarta.
 Use `javap` on `Customer$placeOrder` and `Customer$placeOrder$Params` when verifying the explicit mixee
 constructor and public complete-signature PAT constructor.
+For generated-source verification, resolve the classpath from `reference-app/pom.xml` and compile
+`languages/causeway.sandbox/source_gen/customers/Customer.java` plus `Product.java` with the explicit JDK 21
+`javac`; see `docs/action-golden-comparison.md` for the validated result and transient-reference warning.

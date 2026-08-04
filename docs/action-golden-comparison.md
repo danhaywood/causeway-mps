@@ -40,4 +40,10 @@ The matching declarations cover:
 ## Generation result
 
 `JAVA_HOME=$HOME/.sdkman/candidates/java/21.0.10-tem ./gradlew generateModels --rerun-tasks` succeeds.
-The generated Java contains no TextGen errors.
+Headless generation logs non-fatal transient-model resolution diagnostics for copied dynamic `ActionVariableReference` nodes.
+The custom TextGen reads the retained resolve-info and still emits complete Java without failed TextGen outcomes.
+
+Maven resolves a 17-entry Causeway 3.6.0/Jakarta compile classpath containing `causeway-applib`, `jakarta.inject`, and `jakarta.persistence`.
+JDK 21 `javac` compiles the generated `Customer.java` and `Product.java` against that classpath.
+`javap` confirms the public mixee constructor, complete public `Params` constructor, record-style accessors, `act`, and all lifecycle supporting-method descriptors.
+The generated source imports and uses Jakarta `@Inject` and Causeway `@MemberSupport`.

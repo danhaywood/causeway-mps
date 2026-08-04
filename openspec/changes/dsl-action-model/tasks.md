@@ -142,4 +142,14 @@ generator-authoring boundary).
   A declaration-level normalization leaves 24 declarations on each side and a zero-line unified diff,
   covering the `Params` carrier, injected service, mixee constructor, `act`, and every lifecycle method.
   Evidence and normalization rules are recorded in `docs/action-golden-comparison.md`.
-- [ ] 7.3 Compile the generated mixins against Causeway 3.6.0 + Jakarta.
+- [x] 7.3 Compile the generated mixins against Causeway 3.6.0 + Jakarta.
+  DONE: `generateModels --rerun-tasks` succeeds, Maven resolves the Causeway 3.6.0/Jakarta classpath, and
+  JDK 21 `javac` compiles generated `customers.Customer` and `customers.Product` into a clean output
+  directory.
+  `javap` confirms the generated one-argument `Customer$scopeProbe(Customer)` mixee constructor, public
+  complete-signature `Params(String, int)` constructor, record-style accessors, `act`, and all expected PAT
+  supporting-method descriptors.
+  The generated source imports and uses both Jakarta `@Inject` and Causeway `@MemberSupport`.
+  Headless generation still logs non-fatal transient-model resolution diagnostics for copied dynamic
+  `ActionVariableReference` nodes; the custom TextGen uses their retained resolve-info and emits valid Java,
+  as demonstrated by the successful compilation.

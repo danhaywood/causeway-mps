@@ -46,6 +46,7 @@ It implements BaseLanguage `IVariableDeclaration` and is exposed by the action a
 
 A smart-reference BaseLanguage expression whose `variable` reference targets `IVariableDeclaration`.
 Its scope follows the lifecycle lattice implemented by the enclosing `Action` or `Parameter` scope provider.
+The `warn_forward_parameter_reference` checking rule additionally warns when parameter reordering leaves it targeting a dependency now declared later than its owning parameter.
 
 ### `causeway.structure.LifecycleBlock`
 

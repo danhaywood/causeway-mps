@@ -75,8 +75,11 @@ generator-authoring boundary).
 
 ## 5. Constraints
 
-- [ ] 5.1 Warn at edit time when reordering parameters invalidates an existing reference (param order =
+- [x] 5.1 Warn at edit time when reordering parameters invalidates an existing reference (param order =
   dependency order).
+  DONE: `warn_forward_parameter_reference` checks parameter-targeting `ActionVariableReference` nodes through the `LifecycleScopeChecks` helper and reports `parameter reference is out of scope after parameter reordering` when the owning parameter precedes its referenced dependency.
+  Moving `quantity` before `product` in `Customer.scopeProbe` produced the explicit warning on both affected `product` references, alongside the existing out-of-search-scope error.
+  Restoring `quantity` to index 1 returned `Customer` to its prior no-error state.
 - [ ] 5.2 Verify Causeway 3.6 support + signatures for per-param `hide`/`disable` (the proposal flags
   these as needing confirmation).
 

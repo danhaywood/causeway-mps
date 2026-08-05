@@ -15,7 +15,7 @@ Deferred follow-up of `model-equals-module` + `causeway-generator-first-slice` B
 
 - [x] 2.1 Repoint the Entity template `@Named` value macro to `logicalTypeNamePrefix ?? name`.
 - [x] 2.2 Repoint the `@Table` schema macro to `schema ?? name`. (`@Table` name stays `node.name`.)
-- [ ] 2.3 `./gradlew generateModels` green; defaults (both unset) reproduce the current output.
+- [x] 2.3 `./gradlew generateModels` green; defaults (both unset) reproduce the current output.
 
 ## 3. Sandbox + verify
 

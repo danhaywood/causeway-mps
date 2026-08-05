@@ -2,7 +2,7 @@
 
 - [x] 1.1 Add the `ActionInvocation` BaseLanguage expression concept with a target expression, an `Action` reference, and ordered argument expressions, then rebuild and reload the language runtime.
 - [x] 1.2 Add an editor that projects `ActionInvocation` as `target.action(args)` with normal expression and argument-list editing behavior.
-- [ ] 1.3 Restrict `ActionInvocation` placement to embedded DSL action code and provide exact-entity reference scope over nested and explicit-target root actions.
+- [x] 1.3 Restrict `ActionInvocation` placement to embedded DSL action code and provide exact-entity reference scope over nested and explicit-target root actions.
 - [ ] 1.4 Infer the invocation result from the referenced action's optional return type and diagnose targets that do not resolve to a DSL entity.
 - [ ] 1.5 Diagnose unresolved or ambiguous action identity, incorrect arity, and incompatible positional argument types.
 

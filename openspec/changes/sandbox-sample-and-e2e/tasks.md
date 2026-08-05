@@ -26,7 +26,7 @@ Implement the remaining tasks one at a time and keep each implementation commit 
 
 - [x] 3.1 Retain the existing `customers` model with `Product.price : int`, `Customer.name : String`, and the established nested and top-level probe actions.
 - [x] 3.2 Add nested action `Customer.placeOrder(Product product, int quantity)`, returning `Customer`, with typed `OrderService` injection and a body that calls `orderService.placeOrder(mixee, product, quantity)`.
-- [ ] 3.3 Confirm the completed action resolves the typed injection, exact external method, entity arguments, primitive argument, and return expression without errors or unresolved references.
+- [x] 3.3 Confirm the completed action resolves the typed injection, exact external method, entity arguments, primitive argument, and return expression without errors or unresolved references.
 
 ## 4. End-to-end verification
 

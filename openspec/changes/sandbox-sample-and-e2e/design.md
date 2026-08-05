@@ -6,15 +6,21 @@ The remaining boundary is to resolve `OrderService` inside an MPS action body an
 
 ## Goals / Non-Goals
 
-**Goals:** expose `app.OrderService` to MPS and generated Java, add `Customer.placeOrder(Product, int)` to the existing sandbox fixture, compare its generated shape with the golden mixin, and pass `./gradlew headlessBuild`.
+**Goals:** expose exact `app.OrderService` signatures to MPS, infer embedded action-variable types, bridge matching DSL entity and Java classifier types, add `Customer.placeOrder(Product, int)` to the existing sandbox fixture, compare its generated shape with the golden mixin, and pass `./gradlew headlessBuild`.
 
-**Non-Goals:** changing the language structure or generator, replacing the existing sandbox probe actions, exact whole-file equality with the golden classes, and Causeway runtime/UI boot or introspection.
+**Non-Goals:** changing the language structure or generator, replacing the existing sandbox probe actions, exact whole-file equality with the golden classes, a general two-phase bootstrap for external code without precompiled entity-signature counterparts, and Causeway runtime/UI boot or introspection.
 
 ## Decisions
 
-**Keep library and application stubs distinct.** `causeway.sandbox` continues to obtain Causeway applib 3.6.0, Jakarta Persistence 3.1.0, and Jakarta Inject 2.0.1 through the shared `causeway.stubs` solution.
-Build wiring additionally stages application-support output containing `app.OrderService` for MPS type resolution and generated-Java compilation.
-The golden `customers.Customer` and `customers.Product` classes are not imported as MPS stubs because the sandbox defines those same classifiers.
+**Keep library, MPS-signature, and generated-compilation artifacts distinct.** `causeway.sandbox` continues to obtain Causeway applib 3.6.0, Jakarta Persistence 3.1.0, and Jakarta Inject 2.0.1 through the shared `causeway.stubs` solution.
+The staged `reference-app-stubs.jar` becomes an MPS-only exact signature artifact containing `app.OrderService` and the golden `customers` classifiers required to resolve its concrete method descriptors.
+A separate app-only support JAR supplies `app/**` to `compileGeneratedJava`, so golden `customers.Customer` and `customers.Product` classes never enter the generated-Java compilation classpath.
+The sandbox imports the `app@java_stub` model for the injected service while the golden customer classifiers serve only as referenced signature counterparts.
+
+**Bridge custom action expressions to exact Java signatures.** BaseLanguage's `typeOf_VarRef` rule applies to its concrete `VariableReference`, not to Causeway's custom `ActionVariableReference` implementation of `IVariableReference`.
+A Causeway inference rule therefore unwraps `JavaType` declarations and assigns `EntityType` to entity-valued parameters and the mixee.
+A focused type-lattice rule accepts a DSL `EntityType` where a Java `ClassifierType` is required only when the entity's generated FQN equals the classifier's qualified name.
+Mismatched classifiers remain errors, preserving exact argument checking rather than erasing parameters to `Object`.
 
 **Extend rather than replace the sandbox fixture.** The existing `Customer`, `Product`, `scopeProbe`, and top-level probe remain in place because they carry prior generator and scoping coverage.
 The new nested `Customer.placeOrder` action adds typed `OrderService` injection and invokes `orderService.placeOrder(mixee, product, quantity)` from its action body.
@@ -31,22 +37,19 @@ A successful run is the compile-time coexistence milestone.
 ## Risks / Trade-offs
 
 - **MPS may only warn when an application stub path is broken** → validate `OrderService` through an actual typed sandbox reference and confirm generated-Java compilation.
-- **Importing the complete golden application could introduce duplicate `customers` classifiers** → stage only application-support classes such as `app.OrderService`.
+- **The exact MPS signature artifact contains golden `customers` classifiers that duplicate generated FQNs** → use it only as an MPS model root, import only `app@java_stub` directly into the sandbox, and exclude it from `compileGeneratedJava`.
 - **Generated output may not byte-match the golden because of formatting or retained probes** → compare the `placeOrder` structure and semantics rather than the whole file.
 - **The external reference may not survive copying through the generator** → treat modelcheck and generated-Java compilation as separate mandatory gates.
 
-## Discovered Java Type-Bridge Blocker
+## Resolved Java Type-Bridge Investigation
 
-The staged `reference-app-stubs.jar` and its `java_classes` model root successfully expose `app.OrderService` to MPS.
-Its concrete `placeOrder(customers.Customer, customers.Product, int)` signature nevertheless remains unresolved because the JAR intentionally omits the golden `customers.Customer` and `customers.Product` classifiers.
-Those classifiers are produced only after MPS generation, while modelcheck needs them beforehand to validate the external call, creating a circular dependency.
+The initial app-only `reference-app-stubs.jar` exposed `app.OrderService` but left its concrete `Customer` and `Product` method parameters unresolved.
+A controlled spike showed that an MPS-only JAR containing the complete reference-app class set exposes `app@java_stub` and `customers@java_stub`, and that `OrderService.placeOrder(Customer, Product, int)` then has no stub-model errors.
+The same spike showed that the remaining out-of-scope method reference is caused by `ActionVariableReference` having no inference rule, rather than by the external method signature.
 
-Adding an `Object` overload to the hand-written service was considered and rejected because it would permanently weaken the application API even though the generated action itself would remain typed.
-A separate MPS-only erased-signature stub JAR would isolate that workaround from application and generated code, but it would also weaken MPS argument-type verification and has not been adopted.
+Adding an `Object` overload to the hand-written service and using an erased MPS-only stub were rejected because both weaken the modeled API.
+The approved design retains the exact method descriptor, adds explicit Causeway expression inference, and bridges entity types only to same-FQN Java classifiers.
+Generated action code remains fully typed and the hand-written `OrderService` remains unchanged.
 
-The preferred long-term solution is a shared contract layer whose stable Java interfaces are visible to MPS, whose interfaces are implemented by generated entities, and whose compatibility is represented by the Causeway DSL typesystem.
-This is a medium-to-large follow-up because it affects contracts, `EntityType` compatibility, generation, modelcheck, and tests.
-Retaining the exact concrete `Customer` and `Product` service signature instead would require a more complex two-phase generation and bootstrap pipeline.
-
-Task 2.2 was rolled back after proving this blocker, so the sandbox model remains free of the incomplete `placeOrder` action.
-The change must choose and specify a type-bridge strategy before tasks 1.3, 2.2, and 2.3 can be completed honestly.
+The complete reference-app classes are acceptable only as fixture signature counterparts for MPS.
+Projects whose external code depends solely on classifiers that do not yet exist in any compilable form still require a shared contract layer or a two-phase generation/bootstrap design outside this change.

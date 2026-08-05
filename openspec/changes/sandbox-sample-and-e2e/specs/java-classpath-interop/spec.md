@@ -1,13 +1,32 @@
 ## ADDED Requirements
 
-### Requirement: Sandbox resolves external Java via shared stubs
+### Requirement: Sandbox resolves exact external Java signatures via shared stubs
 The `causeway.sandbox` solution SHALL obtain Causeway applib and Jakarta Persistence/Inject through the shared `causeway.stubs` solution rather than importing those jars directly.
-The build SHALL additionally expose application-support classes containing `app.OrderService` to MPS without importing the golden `customers.Customer` or `customers.Product` classifiers as stubs.
-DSL programs and embedded BaseLanguage bodies SHALL resolve those external types.
+The build SHALL expose an exact MPS-only signature artifact containing `app.OrderService` and the golden entity classifiers required by its concrete method descriptors.
+The build SHALL separately expose an app-only support artifact to generated-Java compilation so golden `customers.Customer` and `customers.Product` classes are absent from that compilation classpath.
+DSL programs and embedded BaseLanguage bodies SHALL resolve the exact external types and method signatures.
 
-#### Scenario: External types resolve in the sandbox
-- **WHEN** the actual sandbox `placeOrder` action declares a typed `OrderService` injection and invokes that service from its body
-- **THEN** `OrderService`, Causeway services, and Causeway/Jakarta annotations resolve as BaseLanguage types without modelcheck errors
+#### Scenario: Exact external types resolve in the sandbox
+- **WHEN** the actual sandbox `placeOrder` action declares a typed `OrderService` injection and invokes `placeOrder(Customer, Product, int)` from its body
+- **THEN** the injected classifier, concrete method declaration, and Causeway/Jakarta dependencies resolve without modelcheck errors
+
+#### Scenario: Generated compilation excludes golden entities
+- **WHEN** `compileGeneratedJava` assembles its application-support classpath
+- **THEN** it includes `app.OrderService` but does not include golden `customers.Customer` or `customers.Product` classes
+
+### Requirement: Causeway action expressions bridge to matching Java classifiers
+The Causeway typesystem SHALL infer the type of each `ActionVariableReference` from its referenced declaration.
+A reference to a `JavaType` declaration SHALL have the wrapped BaseLanguage type.
+A reference to an entity-valued declaration or the containing mixee SHALL have the corresponding `EntityType`.
+An `EntityType` SHALL satisfy a required Java `ClassifierType` only when the entity's generated FQN equals the classifier's qualified name.
+
+#### Scenario: Embedded service invocation type-checks exactly
+- **WHEN** `orderService.placeOrder(mixee, product, quantity)` is checked in the sandbox action body
+- **THEN** `orderService` has Java type `app.OrderService`, the two entity arguments match `customers.Customer` and `customers.Product`, and `quantity` has Java type `int`
+
+#### Scenario: A mismatched Java classifier remains invalid
+- **WHEN** an entity-valued action reference is supplied where a different Java classifier is required
+- **THEN** modelcheck reports an incompatible argument rather than treating the entity as `Object` or accepting it by name alone
 
 ### Requirement: Sample DSL program
 The `causeway.sandbox` SHALL retain its existing `customers` fixture and SHALL add a nested `Customer.placeOrder(Product, int)` action with typed `OrderService` injection and a body that calls the hand-written service.

@@ -5,7 +5,8 @@ This change closes that coexistence milestone through the existing `customers` s
 
 ## What Changes
 
-- Reuse the shared `causeway.stubs` solution for Causeway and Jakarta libraries, and add application-support stubs from `reference-app` so embedded BaseLanguage bodies can resolve `OrderService`.
+- Reuse the shared `causeway.stubs` solution for Causeway and Jakarta libraries, and split reference-app output into an exact MPS signature JAR and an app-only generated-Java support JAR.
+- Add Causeway typesystem rules that infer custom action-variable references and bridge each DSL `EntityType` to the corresponding Java classifier when their generated FQNs match.
 - Extend the existing `customers` sandbox program with `Customer.placeOrder(Product, int)`, typed `OrderService` injection, and a body that invokes the hand-written service.
 - Compare the generated `placeOrder` mixin against the corresponding golden reference shape while preserving the existing sandbox probe actions.
 - Run `./gradlew headlessBuild` so bootstrap, generation, modelcheck, and generated-Java compilation verify the complete coexistence path.
@@ -20,8 +21,9 @@ This change closes that coexistence milestone through the existing `customers` s
 
 ## Impact
 
+- **`causeway.typesystem`**: infers `ActionVariableReference` types and bridges matching DSL entity and Java classifier types.
 - **`causeway.sandbox`**: adds the sample `placeOrder` action and application-support stub dependency while retaining existing scope and generator probes.
-- **`reference-app` and build wiring**: expose the hand-written `OrderService` to MPS type resolution and generated-Java compilation without generating into the hand-written sources.
+- **`reference-app` and build wiring**: expose exact application signatures to MPS while keeping golden entity classes off the generated-Java compilation classpath.
 - **Completed prerequisites**: `shared-stubs-solution`, `dsl-action-model`, `causeway-generator-first-slice`, and `headless-mps-build` are implemented and archived.
-- **Verification**: a focused golden comparison plus `./gradlew headlessBuild` establishes the compile-time coexistence milestone.
-- **Out of scope**: Causeway runtime/UI boot and introspection remain a separate follow-up.
+- **Verification**: focused type-system checks, a golden comparison, and `./gradlew headlessBuild` establish the compile-time coexistence milestone.
+- **Out of scope**: Causeway runtime/UI boot, runtime introspection, and a general two-phase bootstrap for external code that has no precompiled entity-signature counterparts remain separate follow-ups.

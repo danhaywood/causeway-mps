@@ -19,7 +19,7 @@ Deferred follow-up of `model-equals-module` + `causeway-generator-first-slice` B
 
 ## 3. Sandbox + verify
 
-- [ ] 3.1 Optionally set the `customers` `Module` fields to demonstrate divergence (e.g.
+- [x] 3.1 Optionally set the `customers` `Module` fields to demonstrate divergence (e.g.
   `logicalTypeNamePrefix = sharedKernel.customers`, `schema = customers`); confirm `@Named` and `@Table`
   pick up the distinct values.
 - [ ] 3.2 Confirm the unset/default path still matches the golden.

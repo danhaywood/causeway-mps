@@ -27,6 +27,7 @@
       <concept id="1169125787135" name="jetbrains.mps.lang.structure.structure.AbstractConceptDeclaration" flags="ig" index="PkWjJ">
         <property id="6714410169261853888" name="conceptId" index="EcuMT" />
         <property id="4628067390765907488" name="conceptShortDescription" index="R4oN_" />
+        <property id="5092175715804935370" name="conceptAlias" index="34LRSv" />
         <child id="1071489727083" name="linkDeclaration" index="1TKVEi" />
         <child id="1071489727084" name="propertyDeclaration" index="1TKVEl" />
       </concept>
@@ -352,6 +353,37 @@
       <property role="20lmBu" value="fLJjDmT/aggregation" />
       <property role="20lbJX" value="fLJekj4/_1" />
       <ref role="20lvS9" to="tpee:fzclF80" resolve="StatementList" />
+    </node>
+  </node>
+  <node concept="1TIwiD" id="6kis6yMFgl1">
+    <property role="EcuMT" value="7283007142388106561" />
+    <property role="TrG5h" value="ActionInvocation" />
+    <property role="34LRSv" value="action invocation" />
+    <property role="R4oN_" value="Invokes a DSL action transparently on an entity expression." />
+    <property role="3GE5qa" value="behavior" />
+    <ref role="1TJDcQ" to="tpee:fz3vP1J" resolve="Expression" />
+    <node concept="t5JxF" id="6kis6yMFgl2" role="lGtFl">
+      <property role="t5JxN" value="References a nested or explicit-target Action and generates Causeway FactoryService mixin invocation plumbing." />
+    </node>
+    <node concept="1TJgyj" id="6kis6yMFgl3" role="1TKVEi">
+      <property role="IQ2ns" value="7283007142388106563" />
+      <property role="20kJfa" value="target" />
+      <property role="20lmBu" value="fLJjDmT/aggregation" />
+      <property role="20lbJX" value="fLJekj4/_1" />
+      <ref role="20lvS9" to="tpee:fz3vP1J" resolve="Expression" />
+    </node>
+    <node concept="1TJgyj" id="6kis6yMFgl4" role="1TKVEi">
+      <property role="IQ2ns" value="7283007142388106564" />
+      <property role="20kJfa" value="arguments" />
+      <property role="20lmBu" value="fLJjDmT/aggregation" />
+      <property role="20lbJX" value="fLJekj5/_0__n" />
+      <ref role="20lvS9" to="tpee:fz3vP1J" resolve="Expression" />
+    </node>
+    <node concept="1TJgyj" id="6kis6yMFgl5" role="1TKVEi">
+      <property role="IQ2ns" value="7283007142388106565" />
+      <property role="20kJfa" value="action" />
+      <property role="20lbJX" value="fLJekj4/_1" />
+      <ref role="20lvS9" node="4" resolve="Action" />
     </node>
   </node>
 </model>

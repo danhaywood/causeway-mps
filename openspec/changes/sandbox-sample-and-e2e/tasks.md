@@ -33,5 +33,5 @@ Implement the remaining tasks one at a time and keep each implementation commit 
 - [x] 4.1 Preserve the completed entity/property golden comparison and the current passing `./gradlew headlessBuild` baseline.
 - [x] 4.2 Correct `map_Action` so the generated `act` method copies a declared `Action.returnType` and falls back to `void` when no return type is declared.
   Rebuild and reload the generator, then verify `Customer.placeOrder` returns `Customer` while an existing no-return probe remains `void`.
-- [ ] 4.3 Compare the generated nested `Customer.placeOrder` mixin with the golden action section, covering its annotation, immutable `Params` carrier, typed service field, mixee constructor, `act` signature, and body call.
+- [x] 4.3 Compare the generated nested `Customer.placeOrder` mixin with the golden action section, covering its annotation, immutable `Params` carrier, typed service field, mixee constructor, `act` signature, and body call.
 - [ ] 4.4 Run `./gradlew headlessBuild` from clean generated outputs and confirm bootstrap, generation, modelcheck, and generated-Java compilation all succeed with the split application-support classpath.

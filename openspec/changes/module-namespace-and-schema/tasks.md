@@ -8,7 +8,7 @@ Deferred follow-up of `model-equals-module` + `causeway-generator-first-slice` B
 
 ## 1. Structure
 
-- [ ] 1.1 Add optional `logicalTypeNamePrefix` (String) and `schema` (String) properties to `Module` in
+- [x] 1.1 Add optional `logicalTypeNamePrefix` (String) and `schema` (String) properties to `Module` in
   `causeway.structure` (hand-authored IDs per convention). `checkModels` green.
 
 ## 2. Generator

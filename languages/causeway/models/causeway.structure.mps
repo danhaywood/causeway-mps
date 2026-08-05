@@ -69,6 +69,16 @@
     <node concept="PrWs8" id="11" role="PzmwI">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
     </node>
+    <node concept="1TJgyi" id="6kis6yMDDAU" role="1TKVEl">
+      <property role="IQ2nx" value="8900000000000000020" />
+      <property role="TrG5h" value="logicalTypeNamePrefix" />
+      <ref role="AX2Wp" to="tpck:fKAOsGN" resolve="string" />
+    </node>
+    <node concept="1TJgyi" id="6kis6yMDDAZ" role="1TKVEl">
+      <property role="IQ2nx" value="8900000000000000021" />
+      <property role="TrG5h" value="schema" />
+      <ref role="AX2Wp" to="tpck:fKAOsGN" resolve="string" />
+    </node>
   </node>
   <node concept="1TIwiD" id="2">
     <property role="EcuMT" value="8900000000000000002" />

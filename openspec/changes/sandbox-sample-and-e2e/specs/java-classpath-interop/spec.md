@@ -37,7 +37,12 @@ The `causeway.sandbox` SHALL retain its existing `customers` fixture and SHALL a
 
 ### Requirement: End-to-end generate, match golden, and compile
 Generating the sandbox SHALL produce a `Customer.placeOrder` mixin that matches the corresponding golden `reference-app` structure and semantics.
+The generated `act` method SHALL use the DSL action's declared return type when present and SHALL remain `void` when the action has no declared return type.
 The generated Java SHALL compile against Causeway, Jakarta, and the hand-written application-support code on one classpath.
+
+#### Scenario: Declared and absent action return types generate correctly
+- **WHEN** generation processes the returning `placeOrder` action and an existing action without a declared return type
+- **THEN** `placeOrder.act` returns `Customer` and the existing action's `act` method remains `void`
 
 #### Scenario: End-to-end compile succeeds
 - **WHEN** `./gradlew headlessBuild` runs with the completed sandbox fixture and application-support classes

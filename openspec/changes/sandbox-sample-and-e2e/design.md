@@ -6,9 +6,9 @@ The remaining boundary is to resolve `OrderService` inside an MPS action body an
 
 ## Goals / Non-Goals
 
-**Goals:** expose exact `app.OrderService` signatures to MPS, infer embedded action-variable types, bridge matching DSL entity and Java classifier types, add `Customer.placeOrder(Product, int)` to the existing sandbox fixture, compare its generated shape with the golden mixin, and pass `./gradlew headlessBuild`.
+**Goals:** expose exact `app.OrderService` signatures to MPS, infer embedded action-variable types, bridge matching DSL entity and Java classifier types, add `Customer.placeOrder(Product, int)` to the existing sandbox fixture, generate its declared return type while preserving `void` actions, compare its generated shape with the golden mixin, and pass `./gradlew headlessBuild`.
 
-**Non-Goals:** changing the language structure or generator, replacing the existing sandbox probe actions, exact whole-file equality with the golden classes, a general two-phase bootstrap for external code without precompiled entity-signature counterparts, and Causeway runtime/UI boot or introspection.
+**Non-Goals:** changing the language structure or broader generator semantics, replacing the existing sandbox probe actions, exact whole-file equality with the golden classes, a general two-phase bootstrap for external code without precompiled entity-signature counterparts, and Causeway runtime/UI boot or introspection.
 
 ## Decisions
 
@@ -25,6 +25,10 @@ Mismatched classifiers remain errors, preserving exact argument checking rather 
 **Extend rather than replace the sandbox fixture.** The existing `Customer`, `Product`, `scopeProbe`, and top-level probe remain in place because they carry prior generator and scoping coverage.
 The new nested `Customer.placeOrder` action adds typed `OrderService` injection and invokes `orderService.placeOrder(mixee, product, quantity)` from its action body.
 
+**Generate the declared action return type.** The action template currently hardcodes `void` on the generated `act` method even when the DSL action declares a return type, producing invalid Java when the copied body returns the mixee.
+The template will copy `Action.returnType` into `act` when present and retain `void` as the fallback for actions without a declared return type.
+This is a narrow correction required by the existing action contract, not a broader generator redesign.
+
 **Compare the action shape, not the whole generated file.** Existing probe actions make byte-for-byte comparison of the complete generated `Customer.java` with the golden class neither possible nor desirable.
 Verification compares the generated `Customer.placeOrder` mixin's annotation, immutable `Params` carrier, typed injected service, mixee constructor, method signature, and body call with the corresponding golden section.
 Formatting and unrelated probe output are ignored.
@@ -40,6 +44,7 @@ A successful run is the compile-time coexistence milestone.
 - **The exact MPS signature artifact contains golden `customers` classifiers that duplicate generated FQNs** → use it only as an MPS model root, import only `app@java_stub` directly into the sandbox, and exclude it from `compileGeneratedJava`.
 - **Generated output may not byte-match the golden because of formatting or retained probes** → compare the `placeOrder` structure and semantics rather than the whole file.
 - **The external reference may not survive copying through the generator** → treat modelcheck and generated-Java compilation as separate mandatory gates.
+- **The return-type correction could regress existing void actions** → verify both a typed `Customer` return for `placeOrder` and the unchanged `void` signature of an existing probe action.
 
 ## Resolved Java Type-Bridge Investigation
 

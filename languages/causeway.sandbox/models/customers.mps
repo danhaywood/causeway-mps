@@ -7,12 +7,21 @@
   </languages>
   <imports>
     <import index="wyt6" ref="6354ebe7-c22a-4a0f-ac54-50b52ab9b065/java:java.lang(JDK/)" />
+    <import index="22ox" ref="c31c5f46-778f-4244-90d0-c92808fc2b16/java:app(causeway.stubs/)" />
   </imports>
   <registry>
     <language id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage">
+      <concept id="1202948039474" name="jetbrains.mps.baseLanguage.structure.InstanceMethodCallOperation" flags="nn" index="liA8E" />
+      <concept id="1197027756228" name="jetbrains.mps.baseLanguage.structure.DotExpression" flags="nn" index="2OqwBi">
+        <child id="1197027771414" name="operand" index="2Oq$k0" />
+        <child id="1197027833540" name="operation" index="2OqNvi" />
+      </concept>
       <concept id="1070534058343" name="jetbrains.mps.baseLanguage.structure.NullLiteral" flags="nn" index="10Nm6u" />
       <concept id="1070534370425" name="jetbrains.mps.baseLanguage.structure.IntegerType" flags="in" index="10Oyi0" />
       <concept id="1068580123152" name="jetbrains.mps.baseLanguage.structure.EqualsExpression" flags="nn" index="3clFbC" />
+      <concept id="1068580123155" name="jetbrains.mps.baseLanguage.structure.ExpressionStatement" flags="nn" index="3clFbF">
+        <child id="1068580123156" name="expression" index="3clFbG" />
+      </concept>
       <concept id="1068580123159" name="jetbrains.mps.baseLanguage.structure.IfStatement" flags="nn" index="3clFbJ">
         <child id="1068580123160" name="condition" index="3clFbw" />
         <child id="1068580123161" name="ifTrue" index="3clFbx" />
@@ -28,6 +37,10 @@
       </concept>
       <concept id="1068581242878" name="jetbrains.mps.baseLanguage.structure.ReturnStatement" flags="nn" index="3cpWs6">
         <child id="1068581517676" name="expression" index="3cqZAk" />
+      </concept>
+      <concept id="1204053956946" name="jetbrains.mps.baseLanguage.structure.IMethodCall" flags="ngI" index="1ndlxa">
+        <reference id="1068499141037" name="baseMethodDeclaration" index="37wK5l" />
+        <child id="1068499141038" name="actualArgument" index="37wK5m" />
       </concept>
       <concept id="1107535904670" name="jetbrains.mps.baseLanguage.structure.ClassifierType" flags="in" index="3uibUv">
         <reference id="1107535924139" name="classifier" index="3uigEE" />
@@ -63,6 +76,7 @@
         <reference id="8900000000000000048" name="target" index="3ZuirC" />
         <child id="8900000000000000025" name="parameters" index="3Zuir1" />
         <child id="8900000000000000041" name="body" index="3ZuirL" />
+        <child id="8900000000000000042" name="returnType" index="3ZuirM" />
         <child id="8900000000000000044" name="injectedServices" index="3ZuirO" />
         <child id="8900000000000000045" name="hide" index="3ZuirP" />
         <child id="8900000000000000046" name="disable" index="3ZuirQ" />
@@ -440,6 +454,59 @@
         <node concept="3clFbS" id="4IOweXOSSLv" role="ZuXZv">
           <node concept="3cpWs6" id="4IOweXOSSLw" role="3cqZAp">
             <node concept="10Nm6u" id="4IOweXOSSLx" role="3cqZAk" />
+          </node>
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="6kis6yMCBkR" role="3Zuirf">
+      <property role="TrG5h" value="placeOrder" />
+      <property role="3ZuirN" value="7I39Hy4Yw1t/IDEMPOTENT" />
+      <node concept="3Zuirt" id="6kis6yMCBkS" role="3Zuir1">
+        <property role="TrG5h" value="product" />
+        <node concept="3Zuirv" id="6kis6yMCBkT" role="3Zuir2">
+          <ref role="3Zuir7" node="_$TiGuwUQ1" resolve="Product" />
+        </node>
+      </node>
+      <node concept="3Zuirt" id="6kis6yMCBkU" role="3Zuir1">
+        <property role="TrG5h" value="quantity" />
+        <node concept="3Zuirg" id="6kis6yMCBkV" role="3Zuir2">
+          <node concept="10Oyi0" id="6kis6yMCBkW" role="3ZuirS" />
+        </node>
+      </node>
+      <node concept="3Zuirv" id="6kis6yMCBkX" role="3ZuirM">
+        <ref role="3Zuir7" node="_$TiGuwUPX" resolve="Customer" />
+      </node>
+      <node concept="3Zuiri" id="6kis6yMCBkY" role="3ZuirO">
+        <property role="TrG5h" value="orderService" />
+        <node concept="3Zuirg" id="6kis6yMCBkZ" role="3ZuirT">
+          <node concept="3uibUv" id="6kis6yMCBl0" role="3ZuirS">
+            <ref role="3uigEE" to="22ox:~OrderService" resolve="OrderService" />
+          </node>
+        </node>
+      </node>
+      <node concept="3clFbS" id="6kis6yMCBl1" role="3ZuirL">
+        <node concept="3clFbF" id="6kis6yMCBl2" role="3cqZAp">
+          <node concept="2OqwBi" id="6kis6yMCBl4" role="3clFbG">
+            <node concept="Z2fbc" id="6kis6yMCBl7" role="2Oq$k0">
+              <ref role="Z2fbb" node="6kis6yMCBkY" resolve="orderService" />
+            </node>
+            <node concept="liA8E" id="6kis6yMCBl8" role="2OqNvi">
+              <ref role="37wK5l" to="22ox:~OrderService.placeOrder(customers.Customer,customers.Product,int)" resolve="placeOrder" />
+              <node concept="Z2fbc" id="6kis6yMCBl9" role="37wK5m">
+                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+              </node>
+              <node concept="Z2fbc" id="6kis6yMCBla" role="37wK5m">
+                <ref role="Z2fbb" node="6kis6yMCBkS" resolve="product" />
+              </node>
+              <node concept="Z2fbc" id="6kis6yMCBlb" role="37wK5m">
+                <ref role="Z2fbb" node="6kis6yMCBkU" resolve="quantity" />
+              </node>
+            </node>
+          </node>
+        </node>
+        <node concept="3cpWs6" id="6kis6yMCBlc" role="3cqZAp">
+          <node concept="Z2fbc" id="6kis6yMCBld" role="3cqZAk">
+            <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
           </node>
         </node>
       </node>

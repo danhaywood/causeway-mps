@@ -9,7 +9,7 @@ Implement the remaining tasks one at a time and keep each implementation commit 
 - [x] 1.1 Resolve Causeway 3.6.0, Jakarta Persistence 3.1.0, and Jakarta Inject 2.0.1 through the shared `causeway.stubs` solution, with jars staged by `resolveStubs`.
 - [x] 1.2 Compile the complete golden reference app and establish the initial app-only `reference-app-stubs.jar` containing `app.OrderService`.
   `compileReferenceApp` compiles the complete golden source set, `referenceAppStubs` packages `app/**`, and `resolveStubs` stages the artifact into `causeway.stubs/libs`.
-- [ ] 1.3 Split reference-app output into an exact MPS-only signature JAR containing the complete compiled class set and an app-only support JAR used by `compileGeneratedJava`.
+- [x] 1.3 Split reference-app output into an exact MPS-only signature JAR containing the complete compiled class set and an app-only support JAR used by `compileGeneratedJava`.
   Keep `reference-app-stubs.jar` at the existing `java_classes` model-root path for MPS, and ensure the generated-Java classpath uses only the app-only artifact.
 - [ ] 1.4 Verify that MPS resolves `app.OrderService`, `customers.Customer`, `customers.Product`, and the exact `placeOrder(Customer, Product, int)` method without stub-model errors.
   Verify separately that the app-only support JAR contains `app/OrderService.class` and no `customers/**` entries.

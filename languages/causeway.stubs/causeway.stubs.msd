@@ -19,6 +19,7 @@
       <sourceRoot location="spring-core-6.2.17.jar" />
       <sourceRoot location="spring-expression-6.2.17.jar" />
       <sourceRoot location="spring-jcl-6.2.17.jar" />
+      <sourceRoot path="${module}/libs/reference-app-stubs.jar" />
     </modelRoot>
   </models>
   <facets>

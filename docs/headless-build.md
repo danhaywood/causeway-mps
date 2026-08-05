@@ -1,6 +1,6 @@
 # Headless build
 
-The repository provides a reproducible command that bootstraps the Causeway MPS language, generates the sandbox models, runs modelcheck, and compiles the generated Causeway Java.
+The repository provides a reproducible command that bootstraps the Causeway MPS language, generates the sandbox models, runs modelcheck, compiles the generated Causeway Java, and verifies generated action mixins with the Causeway programming model.
 It downloads the pinned MPS distribution and does not depend on an installed MPS IDE.
 
 ## Quick start
@@ -21,7 +21,7 @@ Use `--rerun-tasks` when every stage must execute even if Gradle considers outpu
 ./gradlew headlessBuild --rerun-tasks --no-daemon --stacktrace
 ```
 
-A successful run ends only after generated Java has compiled.
+A successful run ends only after generated Java has compiled and its representative nested and top-level action classes have passed runtime mixin verification.
 Any failing stage stops the dependency chain and returns a non-zero exit code.
 
 ## Pinned toolchain
@@ -52,6 +52,8 @@ Re-run the full pipeline from a clean checkout whenever MPS or either JDK pin ch
 4. `generateModels` generates Java from the Causeway sandbox models.
 5. `checkModels` runs MPS modelcheck as a build gate.
 6. `compileGeneratedJava` compiles `languages/causeway.sandbox/source_gen` against the resolved Causeway and Jakarta classpath with Java 21.
+7. `compileMixinVerificationJava` compiles the isolated Java 21 verification harness against generated classes and Causeway's core metamodel.
+8. `verifyGeneratedMixins` processes representative nested and top-level generated actions through the Causeway programming model and verifies their mixin facets, targets, method names, member ids, and constructors.
 
 The generated classes are written to `build/classes/generated-sandbox`.
 Generated sources and deployment artifacts remain ignored build outputs and must not be edited directly.
@@ -62,6 +64,7 @@ The individual Gradle tasks remain useful for diagnosis, but their dependencies 
 ./gradlew generateModels
 ./gradlew checkModels
 ./gradlew compileGeneratedJava
+./gradlew verifyGeneratedMixins
 ```
 
 ## Clean-checkout bootstrap and Ant fallback
@@ -116,6 +119,7 @@ An `UnsupportedClassVersionError` for `jetbrains.mps.tool.make.MakeExecutor` mea
 A failure in `generateModels` indicates a generator, deployment, classloading, or generation-plan problem.
 A failure in `checkModels` indicates an MPS structure, constraint, reference, or typesystem problem.
 A failure in `compileGeneratedJava` indicates that generated Java is invalid or that its Causeway/Jakarta classpath is incomplete.
+A failure in `verifyGeneratedMixins` indicates that a generated action does not satisfy the Causeway 3.6 runtime mixin contract or that the verifier's metamodel classpath is incomplete.
 
 Run the complete command with `--stacktrace --info` for more Gradle detail.
 Inspect generated sources only to diagnose generator output, and fix the source MPS model or generator rather than the generated file.
@@ -126,5 +130,5 @@ The headless build validates, generates, and compiles existing MPS models; it do
 Create and edit MPS models through the MPS IDE or the MPS MCP tools, never by hand-editing serialized `.mps` or `.mpl` files.
 
 The pipeline does not package or publish the language as an MPS plugin.
-It does not start a Causeway application context or perform runtime introspection tests.
-The pending `sandbox-sample-and-e2e` work still owns the explicit hand-written `OrderService` coexistence fixture and its action-body verification.
+Its runtime verification is deliberately limited to direct Causeway programming-model processing of representative generated mixin classes.
+It does not start a complete Causeway Spring application context, test classpath discovery, or exercise the UI.

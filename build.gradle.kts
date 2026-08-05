@@ -45,12 +45,23 @@ val mps: Configuration by configurations.creating
 // (@Component/@Scope) etc., so the stub class is only valid if those resolve too — we need the
 // full compile closure (Spring/Jackson/…), mirroring reference-app's classpath.
 val stubs: Configuration by configurations.creating { isTransitive = true }
+// Runtime-only verification support for generated mixins; this does not leak into generated
+// application compilation or the MPS stub solution.
+val mixinVerificationDependencies: Configuration by configurations.creating { isTransitive = true }
 dependencies {
     mps("com.jetbrains:mps:$pinnedMpsVersion")
 
     stubs("org.apache.causeway.core:causeway-applib:3.6.0")
     stubs("jakarta.persistence:jakarta.persistence-api:3.1.0")
     stubs("jakarta.inject:jakarta.inject-api:2.0.1")
+
+    mixinVerificationDependencies("org.apache.causeway.core:causeway-core-metamodel:3.6.0")
+}
+
+val mixinVerificationSourceSet = sourceSets.create("mixinVerification") {
+    java.srcDir("verification/src/main/java")
+    compileClasspath += mixinVerificationDependencies
+    runtimeClasspath += output + compileClasspath
 }
 
 val mpsHomeDir = layout.buildDirectory.dir("mps")
@@ -150,8 +161,35 @@ val compileGeneratedJava by tasks.registering(JavaCompile::class) {
     options.encoding = "UTF-8"
 }
 
+val compileMixinVerificationJava = tasks.named<JavaCompile>(mixinVerificationSourceSet.compileJavaTaskName) {
+    dependsOn(compileGeneratedJava)
+    classpath = mixinVerificationDependencies + stubs + files(
+        referenceAppSupport.flatMap { it.archiveFile },
+        compileGeneratedJava.flatMap { it.destinationDirectory },
+    )
+    javaCompiler.set(javaToolchains.compilerFor {
+        languageVersion.set(JavaLanguageVersion.of(generatedJavaVersion))
+    })
+    options.release.set(generatedJavaVersion)
+    options.encoding = "UTF-8"
+}
+
+val verifyGeneratedMixins by tasks.registering(JavaExec::class) {
+    dependsOn(compileMixinVerificationJava)
+    group = "verification"
+    description = "Verifies generated action classes with the Causeway programming model."
+    mainClass.set("causeway.verification.GeneratedMixinRuntimeCheck")
+    classpath = mixinVerificationSourceSet.output + mixinVerificationDependencies + stubs + files(
+        referenceAppSupport.flatMap { it.archiveFile },
+        compileGeneratedJava.flatMap { it.destinationDirectory },
+    )
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(generatedJavaVersion))
+    })
+}
+
 tasks.register("headlessBuild") {
     group = "build"
-    description = "Generates models, checks them, then compiles generated Java."
-    dependsOn(compileGeneratedJava)
+    description = "Generates models, checks and compiles them, then verifies generated Causeway mixins."
+    dependsOn(verifyGeneratedMixins)
 }

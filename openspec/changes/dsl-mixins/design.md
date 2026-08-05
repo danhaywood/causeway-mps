@@ -1,61 +1,103 @@
 ## Context
 
-Explore-mode design capture (2026-06-16). Builds on the archived `dsl-domain-model` foundation and the
-`dsl-type-system` Action-body work. Decides how members map to inline-vs-mixin and how the entity class
-is shaped, ahead of the generator.
+The current Causeway generator has two action placements.
+An action contained by an `Entity` generates as a public static nested class of the generated entity, while a root action with an explicit `target` generates as a top-level class named from the mixee and member.
+Both forms carry class-level `@Action`, a public single-argument mixee constructor, and an `act` method.
+
+Causeway 3.6 defines `@Action` as a type-capable annotation meta-annotated with `@DomainObject(nature = Nature.MIXIN, mixinMethod = "act")`.
+Its mixin naming strategy derives a member id from the final token of either an underscore-separated top-level name or a dollar-separated nested binary name.
+Causeway's own metamodel tests use static nested `@Action` classes as valid mixins.
+
+The generated classes therefore follow supported Causeway forms, but this project currently verifies only source shape and Java compilation.
+The promoted `causeway-generation` specification also conflicts with the implementation by requiring every action to generate as a separate top-level `Mixee_member` class.
 
 ## Goals / Non-Goals
 
-**Goals:** the persisted/derived discriminator; the mixin generation strategy; cross-module contributions;
-the pure-state entity-class shape.
+**Goals:**
 
-**Non-Goals:** the transparent call-site sugar (`customer.placeOrder(..)` / `wrap(..)`) — that is the
-successor `dsl-behavior-extensions`; editability; entity inheritance/interfaces (a separate prerequisite
-for assignability-based contribution).
+- Prove that Causeway 3.6 recognizes generated nested and top-level action classes as mixins.
+- Verify the inferred mixee type, `act` main method, logical member id, and public mixee constructor.
+- Preserve the existing generation topology.
+- Make runtime mixin verification part of the reproducible headless pipeline.
+- Reconcile the promoted generation specification with the implemented topology.
+
+**Non-Goals:**
+
+- Starting a complete Causeway Spring application or UI.
+- Changing nested actions into top-level classes.
+- Adding derived properties or collections.
+- Introducing `IContributedMember` or another generic member abstraction.
+- Adding transparent `target.member(...)` or `wrap(target).member(...)` invocation.
+- Resolving hand-written mixins or assignability through entity inheritance.
 
 ## Decisions
 
-**Persistence is the discriminator (persisted = default).** Following JPA (persistent-unless-`@Transient`),
-properties/collections are persisted/inline by default; the `derived` keyword marks computed members that
-become mixins. Rationale: stored fields are the common case for an entity, so the default minimizes
-ceremony; only the minority (derived) is marked.
+### Preserve authored placement in generated topology
 
-```
-   member kind                       generated as            why
-   ───────────────────────────────   ─────────────────────   ────────────────────────────
-   Action                            mixin (always)          never state
-   Property  (default / persisted)   inline field + getter   IS state → real field, JPA-mapped
-   Property  derived                 mixin (prop())          computed → no backing field
-   Collection(default / persisted)   inline JPA relationship  IS state → @OneToMany etc.
-   Collection derived                mixin (coll())          computed query → no backing field
-   any cross-module contribution     mixin                   can't add a method/field to a foreign class
-```
+A nested DSL action remains a static nested Java mixin class, and a root action with an explicit target remains a top-level Java mixin class.
+This preserves the existing generator, keeps same-entity actions colocated with their entity, and retains top-level classes for cross-model contributions.
 
-**Entity class = pure persisted state.** With actions and derived members hoisted to mixin classes, the
-generated entity holds only fields + getters. Cleaner/more modular than typical hand-written Causeway, and
-it makes call-site transparency (successor change) fall out for free.
+The alternative of flattening every action to `Mixee_member` would invalidate the current golden shape and offers no Causeway compatibility benefit because the framework explicitly supports dollar-separated nested class names.
 
-**Re-golden the reference-app to mixins (the a/b decision → b).** `Customer.placeOrder` becomes a separate
-`Customer_placeOrder` mixin class (with `act(..)`); `Customer.java` keeps only state. This shifts the
-generator's golden target, so it is **an input to `causeway-generator-first-slice`** — execute the
-re-golden there (or in a small prep step), not against the current inline golden. (Explore mode: not
-changing `reference-app` code now.)
+### Treat class-level `@Action` as the mixin declaration
 
-**Authoring placement.** Same-module members (persisted state + same-module derived/actions) are declared
-in the entity body; **cross-module** contributions are declared separately (`mixin … on Entity` /
-`contribute … to Entity`) because the author isn't in the mixee's module. Hence both placements exist.
+The generator SHALL continue to place `@Action` on the generated mixin class.
+It SHALL not add a redundant explicit `@DomainObject(nature = Nature.MIXIN)` annotation because Causeway's `@Action` already carries that meta-annotation and selects `act` as the main method.
 
-**Invariants / constraints (edit-time wins):**
-- `persisted ⇒ owned ⇒ same-module ⇒ inline`; cross-module contribution ⇒ non-persisted.
-- `derived`/mixin members are read-only; `editing=ENABLED` + setter applies only to persisted props.
-- `derived` is valid only on properties/collections, not actions.
+### Verify with Causeway's metamodel, not annotation reflection alone
+
+The verification shall process generated action classes through `MetaModelContext_forTesting` and the active Causeway `ProgrammingModel` factories.
+For each representative generated action class, it shall obtain a `MixinFacet` and assert:
+
+- the facet exists;
+- `isMixinFor` accepts the generated target entity type;
+- the main method name is `act`;
+- the public single-argument constructor accepts the target entity type;
+- the facet can instantiate the mixin for a target instance; and
+- `ProgrammingModel.mixinNamingStrategy().memberId(...)` yields the authored action name.
+
+Direct annotation reflection would prove only metadata presence and could miss programming-model or constructor incompatibilities.
+A full Spring application startup would prove more but adds unrelated module assembly and service configuration to this focused contract test.
+
+### Cover both generated forms
+
+The verification shall include at least one nested generated action, such as `Customer.placeOrder`, and one explicit-target top-level action, such as `Customer_topLevelProbe`.
+This guards both the dollar-token and underscore-token naming paths.
+
+### Integrate verification after generated Java compilation
+
+The headless pipeline shall run mixin verification only after generated Java and its support classes have compiled.
+The verifier shall use the same Causeway 3.6 dependency baseline as generated-source compilation.
+Failure to recognize either representative class as a mixin shall fail the build.
+
+### Defer derived members to a separate change
+
+The earlier design combined action mixins with persisted-versus-derived properties and a not-yet-defined collection model.
+That scope is removed because the current `Property` concept has no derived body and the DSL has no `Collection` concept.
+A future change should decide whether derived members use distinct concepts or conditional forms before adding their generation and invocation semantics.
+
+### Narrow the successor behavior extension
+
+`dsl-behavior-extensions` can initially resolve only DSL `Action` nodes.
+For a target entity it can gather nested actions plus root actions whose explicit target is that entity, then lower invocation to `FactoryService.mixin(...).act(...)` or `WrapperFactory.wrapMixin(...).act(...)`.
+A generic `IContributedMember` abstraction is not a prerequisite for that first slice.
 
 ## Risks / Trade-offs
 
-- **Generator complexity** — emitting `Mixee_member` classes (correct ctor of mixee type, `act/prop/coll`
-  method, `@Action/@Property/@Collection`) is more than inline methods. Mitigate by re-goldening one mixin
-  in `reference-app` first and compiling it, as the generator's verified target.
-- **Mixin method/name conventions** — verify against Causeway 3.6 (`act`/`prop`/`coll`, member name from
-  `Mixee_member`, mixee = ctor arg) when implementing.
-- **Assignability (mixins on interfaces/supertypes)** is the full-power case but needs a DSL type
-  hierarchy we don't have — deliberately out of scope; exact-mixee match for now.
+- **The metamodel verifier does not prove Spring classpath discovery.** It deliberately proves Causeway programming-model recognition while leaving full application assembly to a later end-to-end milestone.
+- **Causeway internal test APIs may change.** Pinning verification to the project's Causeway 3.6 baseline keeps the contract explicit, and compilation will expose incompatible upgrades.
+- **Nested binary names are less conventional than top-level underscore names.** Causeway's naming strategy explicitly handles dollar-separated names, and the verifier protects that behavior.
+- **The change adds another headless verification dependency.** Keeping it as a post-compilation test avoids affecting generated application runtime dependencies.
+
+## Migration Plan
+
+1. Add representative runtime mixin assertions against the existing generated classes.
+2. Add the verification step after generated Java compilation in the headless pipeline.
+3. Correct the `causeway-generation` action-mixin requirement to describe nested and explicit-target forms.
+4. Retain all existing generated Java and golden comparisons unless runtime verification exposes a real incompatibility.
+5. Roll back by removing the verification step and restoring the prior specification; no model migration is required because this change does not alter DSL structure.
+
+## Open Questions
+
+None for this narrowed change.
+Full Spring discovery, derived members, collections, and transparent invocation are explicitly separate follow-up decisions.

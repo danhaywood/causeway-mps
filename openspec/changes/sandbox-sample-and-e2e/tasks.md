@@ -16,7 +16,7 @@ Implement the remaining tasks one at a time and keep each implementation commit 
 
 ## 2. Causeway action-expression type bridge
 
-- [ ] 2.1 Add Causeway typesystem inference for `ActionVariableReference`.
+- [x] 2.1 Add Causeway typesystem inference for `ActionVariableReference`.
   Unwrap `JavaType.javaType` for Java-valued parameters and injected services, retain `EntityType` for entity-valued parameters, and synthesize the containing entity's `EntityType` for the mixee reference.
 - [ ] 2.2 Add an exact `EntityType`-to-`ClassifierType` compatibility rule based on equality between the entity's generated FQN and the Java classifier's qualified name.
   Do not use `Object`, simple-name-only matching, or a permissive fallback for mismatched classifiers.

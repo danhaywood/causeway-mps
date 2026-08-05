@@ -34,3 +34,19 @@ A successful run is the compile-time coexistence milestone.
 - **Importing the complete golden application could introduce duplicate `customers` classifiers** → stage only application-support classes such as `app.OrderService`.
 - **Generated output may not byte-match the golden because of formatting or retained probes** → compare the `placeOrder` structure and semantics rather than the whole file.
 - **The external reference may not survive copying through the generator** → treat modelcheck and generated-Java compilation as separate mandatory gates.
+
+## Discovered Java Type-Bridge Blocker
+
+The staged `reference-app-stubs.jar` and its `java_classes` model root successfully expose `app.OrderService` to MPS.
+Its concrete `placeOrder(customers.Customer, customers.Product, int)` signature nevertheless remains unresolved because the JAR intentionally omits the golden `customers.Customer` and `customers.Product` classifiers.
+Those classifiers are produced only after MPS generation, while modelcheck needs them beforehand to validate the external call, creating a circular dependency.
+
+Adding an `Object` overload to the hand-written service was considered and rejected because it would permanently weaken the application API even though the generated action itself would remain typed.
+A separate MPS-only erased-signature stub JAR would isolate that workaround from application and generated code, but it would also weaken MPS argument-type verification and has not been adopted.
+
+The preferred long-term solution is a shared contract layer whose stable Java interfaces are visible to MPS, whose interfaces are implemented by generated entities, and whose compatibility is represented by the Causeway DSL typesystem.
+This is a medium-to-large follow-up because it affects contracts, `EntityType` compatibility, generation, modelcheck, and tests.
+Retaining the exact concrete `Customer` and `Product` service signature instead would require a more complex two-phase generation and bootstrap pipeline.
+
+Task 2.2 was rolled back after proving this blocker, so the sandbox model remains free of the incomplete `placeOrder` action.
+The change must choose and specify a type-bridge strategy before tasks 1.3, 2.2, and 2.3 can be completed honestly.

@@ -11,11 +11,13 @@ Implement the remaining tasks one at a time and keep each implementation commit 
   `compileReferenceApp` compiles the complete golden Maven source set, `referenceAppStubs` packages only `app/**`, and `resolveStubs` stages `reference-app-stubs.jar` into `causeway.stubs/libs`.
 - [ ] 1.3 Confirm the actual sandbox `placeOrder` action resolves typed `OrderService` injection and body references through the staged application-support output.
   Treat this as a positive resolution check because a broken stub path can warn without failing `checkModels`.
+  Blocked pending a type-bridge decision: `OrderService` resolves, but its concrete `Customer` and `Product` parameter classifiers do not exist until after generation.
 
 ## 2. Complete the sandbox sample
 
 - [x] 2.1 Retain the existing `customers` model with `Product.price : int`, `Customer.name : String`, and the established nested and top-level probe actions.
 - [ ] 2.2 Add nested action `Customer.placeOrder(Product product, int quantity)`, returning `Customer`, with typed `OrderService` injection and a body that calls `orderService.placeOrder(mixee, product, quantity)`.
+  Blocked with task 1.3 until the change specifies either a shared contract/type-system bridge or a two-phase concrete-classifier pipeline.
 - [ ] 2.3 Run modelcheck for the completed sample and verify that the entity types, injected service, parameters, and external body call have no errors or unresolved references.
 
 ## 3. End-to-end verification

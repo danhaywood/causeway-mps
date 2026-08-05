@@ -26,4 +26,4 @@ Deferred follow-up of `model-equals-module` + `causeway-generator-first-slice` B
 
 ## 4. Spec
 
-- [ ] 4.1 At archive time, merge the `dsl-domain-model` Module delta into the promoted spec.
+- [x] 4.1 At archive time, merge the `dsl-domain-model` Module delta into the promoted spec.

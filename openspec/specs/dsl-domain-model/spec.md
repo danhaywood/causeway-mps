@@ -6,21 +6,24 @@ Actions carry ordered parameters, an optional return type, a `SemanticsOf` value
 Their generator emits Causeway parameters-class-style mixins.
 ## Requirements
 ### Requirement: Module concept
-The `causeway` language SHALL provide a `Module` root concept that is an `INamedConcept`. A `Module` SHALL
-be a **singleton metadata root** per model — carrying module identity (the namespace that prefixes each
-`@Named` logical-type-name) — and SHALL NOT contain `Entity` or `Action` children. The model itself is the
-module boundary (one MPS model = one module; the model name maps to the package); entities are top-level
-roots of the model rather than children of the `Module`. The generator SHALL read the `Module` singleton
-for namespace metadata and SHALL produce no class from it (the `Module` root is abandoned in generation).
+The `causeway` language SHALL provide a `Module` root concept that is an `INamedConcept` and a singleton metadata root per model (one MPS model = one module; the model name maps to the package).
+It SHALL NOT contain `Entity` or `Action` children; entities are top-level roots of the model.
+Beyond `name` (the module's identity), a `Module` SHALL carry two optional string properties that the generator reads, each falling back to `name` when unset:
 
-#### Scenario: Module carries namespace, owns no members
-- **WHEN** a model `customers` contains a `Module` singleton and two `Entity` roots
-- **THEN** the model is valid, the `Module` contains no entities or actions, and the entities are roots of
-  the model
+- `logicalTypeNamePrefix` — the prefix applied to each member's `@Named` logical-type-name; and
+- `schema` — the JPA database schema for the module's entities.
 
-#### Scenario: Module namespace prefixes @Named
-- **WHEN** an `Entity` named `Customer` is generated in a model whose `Module` namespace is `customers`
-- **THEN** the generated class's `@Named` logical-type-name is prefixed by that namespace
+These two are deliberately distinct: a module's logical-type-name prefix (for example, `sharedKernel.customers`) may differ from its database schema (for example, `customers`).
+The generator SHALL produce each member's `@Named` from `logicalTypeNamePrefix` (or `name` if unset) and each entity's `@Table(schema=…)` from `schema` (or `name` if unset).
+The generator SHALL produce no class from the `Module` itself; the root is abandoned in generation.
+
+#### Scenario: Defaults fall back to name
+- **WHEN** a `Module` named `customers` sets neither `logicalTypeNamePrefix` nor `schema`
+- **THEN** generated members are `@Named("customers.<Member>")` and entities are `@Table(schema = "customers", …)`
+
+#### Scenario: Prefix and schema diverge
+- **WHEN** a `Module` named `customers` sets `logicalTypeNamePrefix = "sharedKernel.customers"` and `schema = "customers"`
+- **THEN** `Customer` generates `@Named("sharedKernel.customers.Customer")` and `@Table(schema = "customers", name = "Customer")`
 
 ### Requirement: Entity concept
 The `causeway` language SHALL provide an `Entity` **root** concept (`INamedConcept`). An `Entity` SHALL

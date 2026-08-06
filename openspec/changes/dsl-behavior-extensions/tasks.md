@@ -36,7 +36,8 @@
 
 ## 4. Documentation and Validation
 
-- [ ] 4.1 Document transparent action invocation syntax, exact-target resolution, raw invocation semantics, and deferred follow-up capabilities.
+- [x] 4.1 Document transparent action invocation syntax, exact-target resolution, raw invocation semantics, and deferred follow-up capabilities.
+  DONE: `docs/transparent-action-invocation.md` documents expression typing and placement, nested and explicit-target resolution, both generated `FactoryService.mixin(...).act(...)` forms, conditional service plumbing, direct-call semantics, sandbox coverage, and all six named follow-up stubs.
 - [ ] 4.2 Refresh the project-local Causeway DSL skill with the new concept, sandbox examples, blueprint, workflow, and known generation constraints.
 - [ ] 4.3 Run focused positive and negative model checks, generated Java compilation, and runtime mixin verification.
 - [ ] 4.4 Run `./gradlew headlessBuild --no-daemon --stacktrace` with the pinned JDKs and confirm the complete pipeline succeeds.

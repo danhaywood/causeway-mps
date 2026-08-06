@@ -11,7 +11,7 @@
 - [x] 2.1 Add generator queries that detect `ActionInvocation` usage and select the referenced action's nested or top-level generated class form.
 - [x] 2.2 Generate reserved `@Inject private FactoryService __factoryService` plumbing only for action mixins containing transparent invocations, covering both generated action placements.
 - [x] 2.3 Reduce nested-action invocations to `__factoryService.mixin(Entity.action.class, target).act(args)` while preserving expression result typing.
-- [ ] 2.4 Reduce explicit-target action invocations to `__factoryService.mixin(Entity_action.class, target).act(args)` while preserving expression result typing.
+- [x] 2.4 Reduce explicit-target action invocations to `__factoryService.mixin(Entity_action.class, target).act(args)` while preserving expression result typing.
 - [ ] 2.5 Rebuild the generator, reload modules, regenerate the sandbox, and validate every changed MPS root.
 
 ## 3. Fixtures and Verification

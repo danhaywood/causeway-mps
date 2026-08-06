@@ -41,6 +41,8 @@
 - [x] 4.2 Refresh the project-local Causeway DSL skill with the new concept, sandbox examples, blueprint, workflow, and known generation constraints.
   DONE: the synchronized `.pi`, `.agents`, and `.claude` Causeway DSL skills now document `ActionInvocation`, both sandbox callers and invocation refs, exact-target authoring and verification workflow, raw-call and generation gotchas, and a reusable invocation subtree blueprint.
   The blueprint parses and dry-runs successfully in the nested sandbox caller, all cross-links resolve, and the three skill copies are byte-identical.
-- [ ] 4.3 Run focused positive and negative model checks, generated Java compilation, and runtime mixin verification.
+- [x] 4.3 Run focused positive and negative model checks, generated Java compilation, and runtime mixin verification.
+  DONE: final temporary fixtures reconfirmed the exact incorrect-arity and incompatible-positional-type diagnostics, then were removed; the restored `Customer` root has only the existing informational String recommendation.
+  A forced `verifyGeneratedMixins` run completed generation, model checking, generated-source structure checks, Java 21 compilation, caller/target mixin processing, proxy injection, and deliberate invalid-mixin rejection successfully.
 - [ ] 4.4 Run `./gradlew headlessBuild --no-daemon --stacktrace` with the pinned JDKs and confirm the complete pipeline succeeds.
 - [ ] 4.5 Run strict OpenSpec validation and confirm the action-invocation and Causeway-generation deltas remain coherent with generated output.

@@ -10,6 +10,7 @@
 - `Customer` entity: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717565`.
 - `Product` entity: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717569`.
 - `customers` module metadata: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717632`.
+- Explicit-target `topLevelProbe` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814600598575`.
 
 ## Useful subtrees
 
@@ -24,6 +25,11 @@
 - Second-parameter default/auto-complete/hide/disable fixtures: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814599121957`, `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814599121971`, `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814599121985`, and `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814599121999`.
 - Action disable fixture: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814599122013`.
 - Typed `orderService` injected-service fixture: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814596702855`; its `Object` Java type wrapper is `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814599509128`.
+- Nested `placeOrder(Product, int): Customer` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/7283007142387414327`.
+- Nested `invokePlaceOrder(Product, int): Customer` caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/7283007142389228559`.
+- Its nested-action invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/7283007142389228568`.
+- Nested `invokeTopLevelProbe(): Customer` caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/7283007142389542233`.
+- Its explicit-target invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/7283007142389543532`.
 
 `Customer.name` demonstrates a `JavaType` wrapping BaseLanguage `ClassifierType(String)`.
 `Product.price` demonstrates a `JavaType` wrapping BaseLanguage `IntegerType`.
@@ -36,3 +42,9 @@ The generated action mixin also contains `@Inject private Object orderService;`,
 Name-based resolution rejects out-of-scope parameter names, and a deliberately forced out-of-scope persistent reference is reported as `The reference … is out of search scope` by the model checker.
 Temporarily moving `quantity` before `product` also exercises the parameter-order warning because `quantity`'s supporting blocks depend on `product`.
 The action is a scope-validation fixture rather than the final `placeOrder` sample.
+
+`invokePlaceOrder` demonstrates exact-target resolution to the nested `Customer.placeOrder` action with entity, primitive, and entity-return typing.
+Its generated body uses `__factoryService.mixin(placeOrder.class, mixee).act(product, quantity)` because the caller and target are nested in the same generated entity class.
+`invokeTopLevelProbe` demonstrates resolution to the root `topLevelProbe` action whose explicit target is `Customer`.
+Its generated body uses `__factoryService.mixin(Customer_topLevelProbe.class, mixee).act()`.
+Both caller mixins receive the reserved `FactoryService` field, while `placeOrder` and `Customer_topLevelProbe` do not because they contain no transparent invocation.

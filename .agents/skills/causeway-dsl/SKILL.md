@@ -6,8 +6,9 @@ description: Use when creating, editing, validating, generating, or inspecting C
 # Causeway DSL
 
 The `causeway` language models Apache Causeway domain modules, entities, properties, actions, parameters, injected services, and Java or entity types.
-The current generator emits Causeway 3.6 entity-state Java plus a static nested action mixin shell, explicit mixee constructor, immutable `Params` carrier, Jakarta-injected service fields, `act`, and all by-name PAT supporting-method families from the `customers` sandbox.
-`reference-app` contains the compiling golden for the complete action shape, and `docs/action-golden-comparison.md` records the declaration-level match plus successful JDK 21 compilation of generated Java against Causeway 3.6.0 and Jakarta.
+The current generator emits Causeway 3.6 entity-state Java plus nested and explicit-target action mixins, explicit mixee constructors, immutable `Params` carriers, Jakarta-injected service fields, `act`, and all by-name PAT supporting-method families from the `customers` sandbox.
+Embedded action code can use `ActionInvocation` as `target.action(args)`; generation lowers it through Causeway `FactoryService.mixin(...).act(...)` with placement-correct class literals and conditional service plumbing.
+`reference-app` contains the compiling golden for the complete action shape, and `docs/transparent-action-invocation.md` documents the invocation contract and current boundaries.
 
 ## Critical rules
 
@@ -45,3 +46,5 @@ The current generator emits Causeway 3.6 entity-state Java plus a static nested 
 - [Known gotchas](references/gotchas.md)
 - [Entity root skeleton](references/blueprints/entity-skeleton.json)
 - [Java-typed property subtree](references/blueprints/property-java-type-subtree.json)
+- [Transparent action invocation subtree](references/blueprints/action-invocation-subtree.json)
+- [Transparent action invocation guide](../../../docs/transparent-action-invocation.md)

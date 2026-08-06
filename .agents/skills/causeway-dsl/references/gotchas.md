@@ -6,8 +6,15 @@
 - One MPS model corresponds to one Causeway module; `Module` is a singleton metadata root, while entities and top-level actions are roots.
 - A root mapping rule emits one output root per input root, which is why class-producing concepts must be rootable.
 - `JavaType` contains a BaseLanguage type node; it is not a textual type-name property.
-- `EntityType` contains an entity reference and its generator reduction remains parked.
+- `EntityType` contains an entity reference and generation resolves it through the `entityToClass` mapping label; use the exact entity declaration rather than a Java classifier name.
 - Action-body variable references use the smart-reference expression `ActionVariableReference`; ordinary BaseLanguage variable references do not target Causeway declarations.
+- `ActionInvocation` is valid only inside embedded DSL action code and must be used where its expression result is consumed or returned when the referenced action is non-void.
+- Invocation scope uses the target's exact DSL entity declaration and includes only directly nested actions plus root actions explicitly targeting that entity; it does not use inheritance, Java assignability, or handwritten Java mixins.
+- Duplicate action names for one exact target are ambiguous by design; never select one by name when persistent references are available.
+- Invocation arguments are positional, and entity compatibility compares exact entity declarations before Java-type conversion checks.
+- Nested references generate `action.class`, while explicit-target root actions generate `Entity_action.class`; do not derive the class form from call-site text.
+- The generated name `__factoryService` is reserved and appears only in action mixins whose lifecycle subtree contains an `ActionInvocation`.
+- Transparent invocation is a raw `FactoryService.mixin(...).act(...)` call and does not provide Causeway wrapper rule-checking or interaction-event semantics.
 - Because `ActionVariableReference` extends BaseLanguage `Expression`, the `causeway` language must both extend and have a default dependency on `jetbrains.mps.baseLanguage`.
 - Lifecycle scope is split between `Action` and `Parameter` scope providers because `ScopeProvider.getScope` receives the provider's direct child; the action provider cannot distinguish which supporting block contains a reference nested under a parameter.
 - Lifecycle roles contain `LifecycleBlock`, not a raw `StatementList`; BaseLanguage statements belong under its mandatory `body` child.
@@ -24,7 +31,7 @@
 - A nested action shell must be static with an explicit mixee field and constructor; otherwise a non-static `Params` gains a synthetic outer constructor argument and fails PAT discovery.
 - Although PAT exposes all fields structurally, lifecycle scope must continue hiding the current and later parameters from per-parameter hide/disable bodies.
 - The action template now generates the nested static action shell, explicit mixee field/constructor, immutable `Params` carrier, Jakarta-injected service fields, `@MemberSupport` `act`, and all supporting-method families.
-- Dynamic `@Action(semantics=...)` generation and the top-level action rule remain tracked by `causeway-generator-first-slice` task 2.4; do not hide that known difference when comparing the nested lifecycle shape.
+- The generator emits dynamic `@Action(semantics=...)` metadata and supports both nested and explicit-target top-level actions; keep both placements covered when changing action templates.
 - `$COPY_SRC$` retains `ActionVariableReference` nodes in the BaseLanguage output model, so the language's `ActionVariableReference_TextGen` must remain available during final Java text generation.
 - Headless generation currently logs non-fatal transient-model resolution diagnostics for those copied dynamic references; retained resolve-info still lets the custom TextGen emit valid Java, and generated-source compilation is the positive oracle.
 - The TextGen helper distinguishes parameters by inspecting the generated nested `Params` members: parameter references become direct names in `act` and `params.<name>()` in PAT methods, while service names stay field references and entity references become `mixee`.
@@ -36,4 +43,4 @@
 - A blueprint reference role accepts an `r:` node reference or an in-scope name, never a `c:` concept reference.
 - Prefer skeleton-plus-subtree editing for action bodies and lifecycle blocks.
 - Keep the headless MPS distribution aligned with the authoring IDE; mixing MPS 2026.1-generated behavior classes with an MPS 2025.3 runtime fails with an `SMethodBuilder` ABI mismatch.
-- The project and Gradle oracle currently target MPS 2026.1 and require JDK 21.
+- The project and Gradle oracle target MPS 2026.1; native MPS Make uses the pinned JDK 25 while generated Java compilation and runtime verification use JDK 21.

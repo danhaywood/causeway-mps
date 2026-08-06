@@ -37,6 +37,20 @@ service's `type.javaType` and deriving its declared name.
 If reusing a parameter-type copy macro, retarget the query's feature reference to the distinct
 `InjectedService.type` structure link before generation.
 
+## Invoke a DSL action transparently
+
+Use `causeway.structure.ActionInvocation` only inside the body or lifecycle subtree of a DSL `Action`.
+Populate its mandatory `target` expression, mandatory `action` reference, and ordered `arguments` expressions.
+Start from `blueprints/action-invocation-subtree.json` when the target and arguments are `ActionVariableReference` expressions.
+Use persistent `r:` references for the action and variables when names are ambiguous; otherwise in-scope names use the same resolution rules as editor completion.
+The target must resolve to an exact DSL entity type.
+The action scope includes actions nested directly in that entity and root actions explicitly targeting it, but excludes inheritance, Java assignability, and handwritten Java mixins.
+Match argument count and positional types to the referenced action.
+Use the invocation as an expression: return or consume non-void results rather than leaving a value-producing invocation as an illegal statement.
+Remember that generated `FactoryService.mixin(...).act(...)` is a raw direct call, not a Causeway wrapper invocation with rule-checking and interaction semantics.
+Validate the containing action or entity root, then run `verifyGeneratedSourceStructure`, `compileGeneratedJava`, and `verifyGeneratedMixins` for generator-sensitive changes.
+See `docs/transparent-action-invocation.md` for the complete contract and deferred capabilities.
+
 ## Choose a type
 
 Use `JavaType` when the value is represented by a BaseLanguage type such as `String` or `int`.
@@ -48,6 +62,8 @@ Prefer persistent `r:` references for entity targets when names are ambiguous.
 Run `mps_mcp_check_root_node_problems` on each changed root.
 Run `./gradlew checkModels` after DSL model changes.
 Run `./gradlew generateModels` after changes affecting generated output.
+Run `./gradlew verifyGeneratedSourceStructure` to check both transparent-invocation class-literal forms and conditional `FactoryService` injection.
+Run `./gradlew compileGeneratedJava verifyGeneratedMixins` with JDK 21 to compile the generated calls and process the caller and target mixins through the Causeway programming model.
 Compare generated `customers` Java with `reference-app/src/main/java/customers/` when working on generator milestones.
 Use `docs/action-golden-comparison.md` for the lifecycle mixin normalization rules and the known
 `@Action(semantics=...)` boundary.

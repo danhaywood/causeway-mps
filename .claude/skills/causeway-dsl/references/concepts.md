@@ -22,8 +22,9 @@ It contains `parameters`, optional `returnType`, optional BaseLanguage `body`, `
 Its `ScopeProvider.getScope` implementation exposes all parameters in action validation and body blocks, but no parameters in action hide/disable blocks.
 Injected services and the enclosing entity mixee remain visible in every action-level block.
 Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814596634176`.
-The generator emits a static nested mixin shell, explicit mixee field/constructor, immutable `Params`
-carrier, Jakarta-injected service fields, `@MemberSupport` `act`, and all action/per-parameter PAT supporting-method families.
+The generator emits static nested mixins for entity-contained actions and top-level `Entity_action` mixins for explicit-target root actions.
+Both forms receive an explicit mixee field/constructor, immutable `Params` carrier, authored Jakarta-injected service fields, `@MemberSupport` `act`, and all action/per-parameter PAT supporting-method families.
+A mixin whose lifecycle subtree contains `ActionInvocation` additionally receives the reserved `@Inject private FactoryService __factoryService` field.
 
 ## Member concepts
 
@@ -52,9 +53,18 @@ Its scope follows the lifecycle lattice implemented by the enclosing `Action` or
 The `warn_forward_parameter_reference` checking rule additionally warns when parameter reordering leaves it targeting a dependency now declared later than its owning parameter.
 Copied generator bodies retain this concept and dispatch through TextGen root
 `r:7ade0248-9beb-4b25-b312-57f1aa5e51e4(causeway.textGen)/5455126814598907233`.
-Helper class `r:7ade0248-9beb-4b25-b312-57f1aa5e51e4(causeway.textGen)/5455126814598882075`
-renders direct argument names in `act`, `params.<name>()` in PAT supporting methods, service field names, and
-`mixee` for the generated entity handle.
+Helper class `r:7ade0248-9beb-4b25-b312-57f1aa5e51e4(causeway.textGen)/5455126814598882075` renders direct argument names in `act`, `params.<name>()` in PAT supporting methods, service field names, and `mixee` for the generated entity handle.
+
+### `causeway.structure.ActionInvocation`
+
+A non-rootable BaseLanguage expression with mandatory `target : Expression`, ordered `arguments : Expression[0..n]`, and mandatory `action : Action` reference.
+Its structure declaration is `r:4e8cfae1-fc0f-442b-b22c-99efd9c6acf9(causeway.structure)/7283007142388106561`.
+Its editor projects `target.action(arguments)` and its reference scope is derived from the target's exact DSL `EntityType`.
+The scope contains actions nested directly in that entity and root actions whose explicit target is that same entity.
+The expression is valid only within embedded DSL `Action` code.
+Its type is the referenced action return type, or BaseLanguage `void` when no return type is declared.
+Model checking diagnoses non-entity targets, unresolved or ambiguous identity, incorrect arity, and incompatible positional argument types.
+Generation selects either the nested `action.class` form or top-level `Entity_action.class` form from the referenced declaration and lowers the expression to `__factoryService.mixin(...).act(...)`.
 
 ### `causeway.structure.LifecycleBlock`
 
@@ -80,7 +90,7 @@ The generator currently handles this variant, including primitive `int` and clas
 
 Extends BaseLanguage `Type`, implements the DSL `Type` union, and references an `Entity` through its optional `entity` reference.
 Being a BaseLanguage type allows an entity-backed parameter type to participate in lifecycle contracts such as `Collection<ParamType>`.
-Generator resolution through the `entityToClass` mapping label is currently parked because the reduction-rule template cannot yet resolve a suitable classifier fragment.
+Generator resolution uses the `entityToClass` mapping label so entity-backed parameters, returns, targets, and generated action class references resolve to the generated classifier.
 
 ## Enumeration
 

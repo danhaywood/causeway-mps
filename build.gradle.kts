@@ -53,6 +53,7 @@ dependencies {
     mps("com.jetbrains:mps:$pinnedMpsVersion")
 
     stubs("org.apache.causeway.core:causeway-applib:3.6.0")
+    stubs("org.apache.causeway.commons:causeway-commons:3.6.0")
     stubs("jakarta.persistence:jakarta.persistence-api:3.1.0")
     stubs("jakarta.inject:jakarta.inject-api:2.0.1")
 
@@ -158,12 +159,15 @@ val generatedCustomerSource = layout.projectDirectory.file(
 val generatedTopLevelProbeSource = layout.projectDirectory.file(
     "languages/causeway.sandbox/source_gen/customers/Customer_topLevelProbe.java",
 )
+val generatedTopLevelVoidProbeSource = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/customers/Customer_topLevelVoidProbe.java",
+)
 
 val verifyGeneratedSourceStructure by tasks.registering {
     dependsOn(checkModels)
     group = "verification"
-    description = "Verifies transparent invocation structure in generated Java sources."
-    inputs.files(generatedCustomerSource, generatedTopLevelProbeSource)
+    description = "Verifies raw and wrapped invocation structure in generated Java sources."
+    inputs.files(generatedCustomerSource, generatedTopLevelProbeSource, generatedTopLevelVoidProbeSource)
 
     doLast {
         fun classBody(source: String, declaration: String): String {
@@ -201,31 +205,97 @@ val verifyGeneratedSourceStructure by tasks.registering {
 
         val customerSource = generatedCustomerSource.asFile.readText()
         val topLevelProbeSource = generatedTopLevelProbeSource.asFile.readText()
-        val reservedField = "private FactoryService __factoryService;"
+        val topLevelVoidProbeSource = generatedTopLevelVoidProbeSource.asFile.readText()
+        val factoryField = "private FactoryService __factoryService;"
+        val wrapperField = "private WrapperFactory __wrapperFactory;"
         val nestedCaller = classBody(customerSource, "public static class invokePlaceOrder {")
         val topLevelCaller = classBody(customerSource, "public static class invokeTopLevelProbe {")
+        val syncNestedCaller = classBody(customerSource, "public static class wrappedSyncNested {")
+        val syncTopLevelCaller = classBody(customerSource, "public static class wrappedSyncTopLevelControlled {")
+        val asyncValueNestedCaller = classBody(customerSource, "public static class wrappedAsyncValueNested {")
+        val asyncValueTopLevelCaller = classBody(customerSource, "public static class wrappedAsyncValueTopLevel {")
+        val asyncVoidNestedCaller = classBody(customerSource, "public static class wrappedAsyncVoidNestedControlled {")
+        val asyncVoidTopLevelCaller = classBody(customerSource, "public static class wrappedAsyncVoidTopLevelControlled {")
+        val mixedCaller = classBody(customerSource, "public static class mixedRawAndWrapped {")
         val unchangedNestedAction = classBody(customerSource, "public static class placeOrder {")
         val unchangedTopLevelAction = classBody(topLevelProbeSource, "public class Customer_topLevelProbe {")
+        val unchangedTopLevelVoidAction = classBody(
+            topLevelVoidProbeSource,
+            "public class Customer_topLevelVoidProbe {",
+        )
 
-        requireContains(nestedCaller, reservedField, "invokePlaceOrder")
+        requireContains(nestedCaller, factoryField, "invokePlaceOrder")
         requireContains(
             nestedCaller,
             "return __factoryService.mixin(placeOrder.class, mixee).act(product, quantity);",
             "invokePlaceOrder",
         )
-        requireContains(topLevelCaller, reservedField, "invokeTopLevelProbe")
+        requireContains(topLevelCaller, factoryField, "invokeTopLevelProbe")
         requireContains(
             topLevelCaller,
             "return __factoryService.mixin(Customer_topLevelProbe.class, mixee).act();",
             "invokeTopLevelProbe",
         )
-        requireAbsent(unchangedNestedAction, reservedField, "placeOrder")
-        requireAbsent(unchangedTopLevelAction, reservedField, "Customer_topLevelProbe")
+        requireContains(syncNestedCaller, wrapperField, "wrappedSyncNested")
+        requireContains(
+            syncNestedCaller,
+            "return __wrapperFactory.wrapMixin(placeOrder.class, mixee).act(product, quantity);",
+            "wrappedSyncNested",
+        )
+        requireContains(syncTopLevelCaller, wrapperField, "wrappedSyncTopLevelControlled")
+        requireContains(
+            syncTopLevelCaller,
+            "return __wrapperFactory.wrapMixin(Customer_topLevelProbe.class, mixee, syncControl).act();",
+            "wrappedSyncTopLevelControlled",
+        )
+        requireContains(asyncValueNestedCaller, wrapperField, "wrappedAsyncValueNested")
+        requireContains(
+            asyncValueNestedCaller,
+            "return __wrapperFactory.asyncWrapMixin(placeOrder.class, mixee).applyAsync((mixin) -> mixin.act(product, quantity));",
+            "wrappedAsyncValueNested",
+        )
+        requireContains(asyncValueTopLevelCaller, wrapperField, "wrappedAsyncValueTopLevel")
+        requireContains(
+            asyncValueTopLevelCaller,
+            "return __wrapperFactory.asyncWrapMixin(Customer_topLevelProbe.class, mixee).applyAsync((mixin) -> mixin.act());",
+            "wrappedAsyncValueTopLevel",
+        )
+        requireContains(asyncVoidNestedCaller, wrapperField, "wrappedAsyncVoidNestedControlled")
+        requireContains(
+            asyncVoidNestedCaller,
+            "return __wrapperFactory.asyncWrapMixin(recordOrder.class, mixee, asyncControl).acceptAsync((mixin) -> mixin.act(product, quantity));",
+            "wrappedAsyncVoidNestedControlled",
+        )
+        requireContains(asyncVoidTopLevelCaller, wrapperField, "wrappedAsyncVoidTopLevelControlled")
+        requireContains(
+            asyncVoidTopLevelCaller,
+            "return __wrapperFactory.asyncWrapMixin(Customer_topLevelVoidProbe.class, mixee, asyncControl).acceptAsync((mixin) -> mixin.act());",
+            "wrappedAsyncVoidTopLevelControlled",
+        )
+        requireContains(mixedCaller, factoryField, "mixedRawAndWrapped")
+        requireContains(mixedCaller, wrapperField, "mixedRawAndWrapped")
+        requireContains(
+            mixedCaller,
+            "return __wrapperFactory.wrapMixin(placeOrder.class, __factoryService.mixin(placeOrder.class, mixee).act(product, quantity)).act(product, quantity);",
+            "mixedRawAndWrapped",
+        )
+        requireAbsent(unchangedNestedAction, factoryField, "placeOrder")
+        requireAbsent(unchangedNestedAction, wrapperField, "placeOrder")
+        requireAbsent(unchangedTopLevelAction, factoryField, "Customer_topLevelProbe")
+        requireAbsent(unchangedTopLevelAction, wrapperField, "Customer_topLevelProbe")
+        requireAbsent(unchangedTopLevelVoidAction, factoryField, "Customer_topLevelVoidProbe")
+        requireAbsent(unchangedTopLevelVoidAction, wrapperField, "Customer_topLevelVoidProbe")
 
-        val reservedFieldCount = Regex(Regex.escape(reservedField)).findAll(customerSource).count()
-        if (reservedFieldCount != 2) {
+        val factoryFieldCount = Regex(Regex.escape(factoryField)).findAll(customerSource).count()
+        if (factoryFieldCount != 3) {
             throw GradleException(
-                "Expected exactly two generated FactoryService fields in Customer.java, found $reservedFieldCount",
+                "Expected exactly three generated FactoryService fields in Customer.java, found $factoryFieldCount",
+            )
+        }
+        val wrapperFieldCount = Regex(Regex.escape(wrapperField)).findAll(customerSource).count()
+        if (wrapperFieldCount != 7) {
+            throw GradleException(
+                "Expected exactly seven generated WrapperFactory fields in Customer.java, found $wrapperFieldCount",
             )
         }
     }

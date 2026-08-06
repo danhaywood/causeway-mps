@@ -8,13 +8,20 @@
 - `JavaType` contains a BaseLanguage type node; it is not a textual type-name property.
 - `EntityType` contains an entity reference and generation resolves it through the `entityToClass` mapping label; use the exact entity declaration rather than a Java classifier name.
 - Action-body variable references use the smart-reference expression `ActionVariableReference`; ordinary BaseLanguage variable references do not target Causeway declarations.
-- `ActionInvocation` is valid only inside embedded DSL action code and must be used where its expression result is consumed or returned when the referenced action is non-void.
+- `ActionInvocation` and `WrappedActionInvocation` are valid only inside embedded DSL action code and must be used where their expression result is consumed or returned when the referenced action is non-void.
+- `WrappedActionInvocation` preserves exact-target scope and inherited arity, argument, unresolved, ambiguity, and wrong-target diagnostics rather than defining a parallel resolution path.
+- Synchronous controls must have type `SyncControl`, asynchronous controls must have type `AsyncControl`, and asynchronous results are `TryFuture<R>` or `TryFuture<Void>`.
+- MPS enumeration properties expose serialized values through low-level `SNode.getProperty`; do not compare `WrappedInvocationMode` to plain `"ASYNC"` in helper code.
 - Invocation scope uses the target's exact DSL entity declaration and includes only directly nested actions plus root actions explicitly targeting that entity; it does not use inheritance, Java assignability, or handwritten Java mixins.
 - Duplicate action names for one exact target are ambiguous by design; never select one by name when persistent references are available.
 - Invocation arguments are positional, and entity compatibility compares exact entity declarations before Java-type conversion checks.
 - Nested references generate `action.class`, while explicit-target root actions generate `Entity_action.class`; do not derive the class form from call-site text.
-- The generated name `__factoryService` is reserved and appears only in action mixins whose lifecycle subtree contains an `ActionInvocation`.
+- The generated names `__factoryService` and `__wrapperFactory` are reserved; authored injected services using either name are rejected.
+- `__factoryService` appears only for raw invocation, `__wrapperFactory` appears only for wrapped invocation, and a mixed caller receives both.
 - Transparent invocation is a raw `FactoryService.mixin(...).act(...)` call and does not provide Causeway wrapper rule-checking or interaction-event semantics.
+- Wrapped invocation is explicit and lowers through `WrapperFactory`; never silently replace raw dispatch or fall back to `FactoryService` after wrapper rejection.
+- Generate asynchronous value calls with `applyAsync` and asynchronous void calls with `acceptAsync`; using the wrong functional overload changes both typing and execution behavior.
+- A controlled generator reduction should copy the control argument unconditionally once its rule condition has selected the controlled form; stacking `$IF$` and `$COPY_SRC$` on that template argument can accidentally remove it.
 - Because `ActionVariableReference` extends BaseLanguage `Expression`, the `causeway` language must both extend and have a default dependency on `jetbrains.mps.baseLanguage`.
 - Lifecycle scope is split between `Action` and `Parameter` scope providers because `ScopeProvider.getScope` receives the provider's direct child; the action provider cannot distinguish which supporting block contains a reference nested under a parameter.
 - Lifecycle roles contain `LifecycleBlock`, not a raw `StatementList`; BaseLanguage statements belong under its mandatory `body` child.

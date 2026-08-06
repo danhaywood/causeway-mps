@@ -1,0 +1,68 @@
+{
+  "concept": "causeway.structure.WrappedActionInvocation",
+  "properties": [
+    {
+      "name": "mode",
+      "value": "ASYNC"
+    }
+  ],
+  "references": [
+    {
+      "role": "action",
+      "target": "recordOrder"
+    }
+  ],
+  "children": [
+    {
+      "role": "target",
+      "nodes": [
+        {
+          "concept": "causeway.structure.ActionVariableReference",
+          "references": [
+            {
+              "role": "variable",
+              "target": "Customer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": "control",
+      "nodes": [
+        {
+          "concept": "causeway.structure.ActionVariableReference",
+          "references": [
+            {
+              "role": "variable",
+              "target": "asyncControl"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": "arguments",
+      "nodes": [
+        {
+          "concept": "causeway.structure.ActionVariableReference",
+          "references": [
+            {
+              "role": "variable",
+              "target": "product"
+            }
+          ]
+        },
+        {
+          "concept": "causeway.structure.ActionVariableReference",
+          "references": [
+            {
+              "role": "variable",
+              "target": "quantity"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

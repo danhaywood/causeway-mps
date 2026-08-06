@@ -51,6 +51,18 @@ Remember that generated `FactoryService.mixin(...).act(...)` is a raw direct cal
 Validate the containing action or entity root, then run `verifyGeneratedSourceStructure`, `compileGeneratedJava`, and `verifyGeneratedMixins` for generator-sensitive changes.
 See `docs/transparent-action-invocation.md` for the complete contract and deferred capabilities.
 
+## Invoke a DSL action through the Causeway wrapper boundary
+
+Use `causeway.structure.WrappedActionInvocation` only inside the body or lifecycle subtree of a DSL `Action`.
+Start from `blueprints/wrapped-action-invocation-subtree.json` for an asynchronous controlled example, or omit `mode` and `control` for the synchronous default-control form.
+Populate the inherited target, action, and ordered arguments exactly as for raw invocation.
+Set mode to `SYNC` for `wrap` or `ASYNC` for `asyncWrap` through the MPS property API rather than guessing serialized enum values.
+Use a `SyncControl` expression only with `SYNC` and an `AsyncControl` expression only with `ASYNC`.
+Return or otherwise consume asynchronous results because both value and void asynchronous calls produce `TryFuture` values.
+Generation selects `wrapMixin`, `applyAsync`, or `acceptAsync` from the mode and referenced action result, and selects the class literal from the action's nested or explicit-target placement.
+Confirm that the containing generated mixin has `__wrapperFactory`, that raw-only callers retain only `__factoryService`, and that mixed callers receive both fields.
+See `docs/wrapped-action-invocation.md` for the complete wrapper-boundary contract.
+
 ## Choose a type
 
 Use `JavaType` when the value is represented by a BaseLanguage type such as `String` or `int`.
@@ -62,8 +74,8 @@ Prefer persistent `r:` references for entity targets when names are ambiguous.
 Run `mps_mcp_check_root_node_problems` on each changed root.
 Run `./gradlew checkModels` after DSL model changes.
 Run `./gradlew generateModels` after changes affecting generated output.
-Run `./gradlew verifyGeneratedSourceStructure` to check both transparent-invocation class-literal forms and conditional `FactoryService` injection.
-Run `./gradlew compileGeneratedJava verifyGeneratedMixins` with JDK 21 to compile the generated calls and process the caller and target mixins through the Causeway programming model.
+Run `./gradlew verifyGeneratedSourceStructure` to check raw and wrapped class-literal forms, every synchronous and asynchronous wrapper shape, and conditional or mixed service injection.
+Run `./gradlew compileGeneratedJava verifyGeneratedMixins` with JDK 21 to compile generated calls, process caller and target mixins through the Causeway programming model, and exercise the recording `WrapperFactory` boundary.
 Compare generated `customers` Java with `reference-app/src/main/java/customers/` when working on generator milestones.
 Use `docs/action-golden-comparison.md` for the lifecycle mixin normalization rules and the known
 `@Action(semantics=...)` boundary.

@@ -20,6 +20,7 @@
       <sourceRoot location="spring-expression-6.2.17.jar" />
       <sourceRoot location="spring-jcl-6.2.17.jar" />
       <sourceRoot path="${module}/libs/reference-app-stubs.jar" />
+      <sourceRoot location="causeway-commons-3.6.0.jar" />
     </modelRoot>
   </models>
   <facets>

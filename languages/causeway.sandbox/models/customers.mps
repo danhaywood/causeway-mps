@@ -8,6 +8,8 @@
   <imports>
     <import index="wyt6" ref="6354ebe7-c22a-4a0f-ac54-50b52ab9b065/java:java.lang(JDK/)" />
     <import index="22ox" ref="c31c5f46-778f-4244-90d0-c92808fc2b16/java:app(causeway.stubs/)" />
+    <import index="shd6" ref="c31c5f46-778f-4244-90d0-c92808fc2b16/java:org.apache.causeway.applib.services.wrapper.control(causeway.stubs/)" />
+    <import index="p663" ref="c31c5f46-778f-4244-90d0-c92808fc2b16/java:org.apache.causeway.commons.functional(causeway.stubs/)" />
   </imports>
   <registry>
     <language id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage">
@@ -51,6 +53,10 @@
       </concept>
     </language>
     <language id="99bd0b43-8ce5-4eaa-aac8-ff12e0700f84" name="causeway">
+      <concept id="4835663559135129055" name="causeway.structure.WrappedActionInvocation" flags="ng" index="2O_PuX">
+        <property id="4835663559135129057" name="mode" index="2O_Pu3" />
+        <child id="4835663559135129058" name="control" index="2O_Pu0" />
+      </concept>
       <concept id="5455126814596559395" name="causeway.structure.ActionVariableReference" flags="ng" index="Z2fbc">
         <reference id="5455126814596559396" name="variable" index="Z2fbb" />
       </concept>
@@ -568,6 +574,296 @@
         <ref role="3Zuir7" node="_$TiGuwUPX" resolve="Customer" />
       </node>
     </node>
+    <node concept="3Zuirs" id="4crIAbRC71e" role="3Zuirf">
+      <property role="TrG5h" value="recordOrder" />
+      <property role="3ZuirN" value="7I39Hy4Yw1t/IDEMPOTENT" />
+      <node concept="3Zuirt" id="4crIAbRC71f" role="3Zuir1">
+        <property role="TrG5h" value="product" />
+        <node concept="3Zuirv" id="4crIAbRC71g" role="3Zuir2">
+          <ref role="3Zuir7" node="_$TiGuwUQ1" resolve="Product" />
+        </node>
+      </node>
+      <node concept="3Zuirt" id="4crIAbRC71h" role="3Zuir1">
+        <property role="TrG5h" value="quantity" />
+        <node concept="3Zuirg" id="4crIAbRC71i" role="3Zuir2">
+          <node concept="10Oyi0" id="4crIAbRC71j" role="3ZuirS" />
+        </node>
+      </node>
+      <node concept="3clFbS" id="4crIAbRC71k" role="3ZuirL">
+        <node concept="3clFbF" id="4crIAbRC71l" role="3cqZAp">
+          <node concept="2OqwBi" id="4crIAbRC71n" role="3clFbG">
+            <node concept="Z2fbc" id="4crIAbRC71q" role="2Oq$k0">
+              <ref role="Z2fbb" node="4crIAbRC71v" resolve="orderService" />
+            </node>
+            <node concept="liA8E" id="4crIAbRC71r" role="2OqNvi">
+              <ref role="37wK5l" to="22ox:~OrderService.placeOrder(customers.Customer,customers.Product,int)" resolve="placeOrder" />
+              <node concept="Z2fbc" id="4crIAbRC71s" role="37wK5m">
+                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+              </node>
+              <node concept="Z2fbc" id="4crIAbRC71t" role="37wK5m">
+                <ref role="Z2fbb" node="4crIAbRC71f" resolve="product" />
+              </node>
+              <node concept="Z2fbc" id="4crIAbRC71u" role="37wK5m">
+                <ref role="Z2fbb" node="4crIAbRC71h" resolve="quantity" />
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node concept="3Zuiri" id="4crIAbRC71v" role="3ZuirO">
+        <property role="TrG5h" value="orderService" />
+        <node concept="3Zuirg" id="4crIAbRC71w" role="3ZuirT">
+          <node concept="3uibUv" id="4crIAbRC71x" role="3ZuirS">
+            <ref role="3uigEE" to="22ox:~OrderService" resolve="OrderService" />
+          </node>
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="4crIAbRC72T" role="3Zuirf">
+      <property role="TrG5h" value="wrappedSyncNested" />
+      <property role="3ZuirN" value="7I39Hy4Yw1t/IDEMPOTENT" />
+      <node concept="3Zuirt" id="4crIAbRC72U" role="3Zuir1">
+        <property role="TrG5h" value="product" />
+        <node concept="3Zuirv" id="4crIAbRC72V" role="3Zuir2">
+          <ref role="3Zuir7" node="_$TiGuwUQ1" resolve="Product" />
+        </node>
+      </node>
+      <node concept="3Zuirt" id="4crIAbRC72W" role="3Zuir1">
+        <property role="TrG5h" value="quantity" />
+        <node concept="3Zuirg" id="4crIAbRC72X" role="3Zuir2">
+          <node concept="10Oyi0" id="4crIAbRC72Y" role="3ZuirS" />
+        </node>
+      </node>
+      <node concept="3Zuirv" id="4crIAbRC72Z" role="3ZuirM">
+        <ref role="3Zuir7" node="_$TiGuwUPX" resolve="Customer" />
+      </node>
+      <node concept="3clFbS" id="4crIAbRC730" role="3ZuirL">
+        <node concept="3cpWs6" id="4crIAbRC731" role="3cqZAp">
+          <node concept="2O_PuX" id="4crIAbRC732" role="3cqZAk">
+            <ref role="3nJRkH" node="6kis6yMCBkR" resolve="placeOrder" />
+            <node concept="Z2fbc" id="4crIAbRC734" role="3nJRkF">
+              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC735" role="3nJRkG">
+              <ref role="Z2fbb" node="4crIAbRC72U" resolve="product" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC736" role="3nJRkG">
+              <ref role="Z2fbb" node="4crIAbRC72W" resolve="quantity" />
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="4crIAbRC73g" role="3Zuirf">
+      <property role="TrG5h" value="wrappedSyncTopLevelControlled" />
+      <property role="3ZuirN" value="7I39Hy4Yw1s/SAFE" />
+      <node concept="3Zuirv" id="4crIAbRC73h" role="3ZuirM">
+        <ref role="3Zuir7" node="_$TiGuwUPX" resolve="Customer" />
+      </node>
+      <node concept="3clFbS" id="4crIAbRC73i" role="3ZuirL">
+        <node concept="3cpWs6" id="4crIAbRC73j" role="3cqZAp">
+          <node concept="2O_PuX" id="4crIAbRC73k" role="3cqZAk">
+            <ref role="3nJRkH" node="4IOweXOYxgJ" resolve="topLevelProbe" />
+            <node concept="Z2fbc" id="4crIAbRC73m" role="3nJRkF">
+              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC73n" role="2O_Pu0">
+              <ref role="Z2fbb" node="4crIAbRC73o" resolve="syncControl" />
+            </node>
+          </node>
+        </node>
+      </node>
+      <node concept="3Zuiri" id="4crIAbRC73o" role="3ZuirO">
+        <property role="TrG5h" value="syncControl" />
+        <node concept="3Zuirg" id="4crIAbRC73p" role="3ZuirT">
+          <node concept="3uibUv" id="4crIAbRC73q" role="3ZuirS">
+            <ref role="3uigEE" to="shd6:~SyncControl" resolve="SyncControl" />
+          </node>
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="4crIAbRC73$" role="3Zuirf">
+      <property role="TrG5h" value="wrappedAsyncValueNested" />
+      <property role="3ZuirN" value="7I39Hy4Yw1t/IDEMPOTENT" />
+      <node concept="3Zuirg" id="4crIAbRC73_" role="3ZuirM">
+        <node concept="3uibUv" id="4crIAbRC73A" role="3ZuirS">
+          <ref role="3uigEE" to="p663:~TryFuture" resolve="TryFuture" />
+        </node>
+      </node>
+      <node concept="3Zuirt" id="4crIAbRC73B" role="3Zuir1">
+        <property role="TrG5h" value="product" />
+        <node concept="3Zuirv" id="4crIAbRC73C" role="3Zuir2">
+          <ref role="3Zuir7" node="_$TiGuwUQ1" resolve="Product" />
+        </node>
+      </node>
+      <node concept="3Zuirt" id="4crIAbRC73D" role="3Zuir1">
+        <property role="TrG5h" value="quantity" />
+        <node concept="3Zuirg" id="4crIAbRC73E" role="3Zuir2">
+          <node concept="10Oyi0" id="4crIAbRC73F" role="3ZuirS" />
+        </node>
+      </node>
+      <node concept="3clFbS" id="4crIAbRC73G" role="3ZuirL">
+        <node concept="3cpWs6" id="4crIAbRC73H" role="3cqZAp">
+          <node concept="2O_PuX" id="4crIAbRC73I" role="3cqZAk">
+            <property role="2O_Pu3" value="hHTENELp74/ASYNC" />
+            <ref role="3nJRkH" node="6kis6yMCBkR" resolve="placeOrder" />
+            <node concept="Z2fbc" id="4crIAbRC73K" role="3nJRkF">
+              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC73L" role="3nJRkG">
+              <ref role="Z2fbb" node="4crIAbRC73B" resolve="product" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC73M" role="3nJRkG">
+              <ref role="Z2fbb" node="4crIAbRC73D" resolve="quantity" />
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="4crIAbRC73W" role="3Zuirf">
+      <property role="TrG5h" value="wrappedAsyncValueTopLevel" />
+      <property role="3ZuirN" value="7I39Hy4Yw1s/SAFE" />
+      <node concept="3Zuirg" id="4crIAbRC73X" role="3ZuirM">
+        <node concept="3uibUv" id="4crIAbRC73Y" role="3ZuirS">
+          <ref role="3uigEE" to="p663:~TryFuture" resolve="TryFuture" />
+        </node>
+      </node>
+      <node concept="3clFbS" id="4crIAbRC73Z" role="3ZuirL">
+        <node concept="3cpWs6" id="4crIAbRC740" role="3cqZAp">
+          <node concept="2O_PuX" id="4crIAbRC741" role="3cqZAk">
+            <property role="2O_Pu3" value="hHTENELp74/ASYNC" />
+            <ref role="3nJRkH" node="4IOweXOYxgJ" resolve="topLevelProbe" />
+            <node concept="Z2fbc" id="4crIAbRC743" role="3nJRkF">
+              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="4crIAbRC74d" role="3Zuirf">
+      <property role="TrG5h" value="wrappedAsyncVoidNestedControlled" />
+      <property role="3ZuirN" value="7I39Hy4Yw1t/IDEMPOTENT" />
+      <node concept="3Zuirt" id="4crIAbRC74e" role="3Zuir1">
+        <property role="TrG5h" value="product" />
+        <node concept="3Zuirv" id="4crIAbRC74f" role="3Zuir2">
+          <ref role="3Zuir7" node="_$TiGuwUQ1" resolve="Product" />
+        </node>
+      </node>
+      <node concept="3Zuirt" id="4crIAbRC74g" role="3Zuir1">
+        <property role="TrG5h" value="quantity" />
+        <node concept="3Zuirg" id="4crIAbRC74h" role="3Zuir2">
+          <node concept="10Oyi0" id="4crIAbRC74i" role="3ZuirS" />
+        </node>
+      </node>
+      <node concept="3clFbS" id="4crIAbRC74j" role="3ZuirL">
+        <node concept="3cpWs6" id="4crIAbRC7YI" role="3cqZAp">
+          <node concept="2O_PuX" id="4crIAbRC7YJ" role="3cqZAk">
+            <property role="2O_Pu3" value="hHTENELp74/ASYNC" />
+            <ref role="3nJRkH" node="4crIAbRC71e" resolve="recordOrder" />
+            <node concept="Z2fbc" id="4crIAbRC7YL" role="2O_Pu0">
+              <ref role="Z2fbb" node="4crIAbRC74s" resolve="asyncControl" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC7YM" role="3nJRkF">
+              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC7YN" role="3nJRkG">
+              <ref role="Z2fbb" node="4crIAbRC74e" resolve="product" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC7YO" role="3nJRkG">
+              <ref role="Z2fbb" node="4crIAbRC74g" resolve="quantity" />
+            </node>
+          </node>
+        </node>
+      </node>
+      <node concept="3Zuiri" id="4crIAbRC74s" role="3ZuirO">
+        <property role="TrG5h" value="asyncControl" />
+        <node concept="3Zuirg" id="4crIAbRC74t" role="3ZuirT">
+          <node concept="3uibUv" id="4crIAbRC74u" role="3ZuirS">
+            <ref role="3uigEE" to="shd6:~AsyncControl" resolve="AsyncControl" />
+          </node>
+        </node>
+      </node>
+      <node concept="3Zuirg" id="4crIAbRC7YC" role="3ZuirM">
+        <node concept="3uibUv" id="4crIAbRC7YD" role="3ZuirS">
+          <ref role="3uigEE" to="p663:~TryFuture" resolve="TryFuture" />
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="4crIAbRC74C" role="3Zuirf">
+      <property role="TrG5h" value="wrappedAsyncVoidTopLevelControlled" />
+      <property role="3ZuirN" value="7I39Hy4Yw1s/SAFE" />
+      <node concept="3clFbS" id="4crIAbRC74D" role="3ZuirL">
+        <node concept="3cpWs6" id="4crIAbRC7YY" role="3cqZAp">
+          <node concept="2O_PuX" id="4crIAbRC7YZ" role="3cqZAk">
+            <property role="2O_Pu3" value="hHTENELp74/ASYNC" />
+            <ref role="3nJRkH" node="4crIAbRC71E" resolve="topLevelVoidProbe" />
+            <node concept="Z2fbc" id="4crIAbRC7Z1" role="2O_Pu0">
+              <ref role="Z2fbb" node="4crIAbRC74K" resolve="asyncControl" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRC7Z2" role="3nJRkF">
+              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            </node>
+          </node>
+        </node>
+      </node>
+      <node concept="3Zuiri" id="4crIAbRC74K" role="3ZuirO">
+        <property role="TrG5h" value="asyncControl" />
+        <node concept="3Zuirg" id="4crIAbRC74L" role="3ZuirT">
+          <node concept="3uibUv" id="4crIAbRC74M" role="3ZuirS">
+            <ref role="3uigEE" to="shd6:~AsyncControl" resolve="AsyncControl" />
+          </node>
+        </node>
+      </node>
+      <node concept="3Zuirg" id="4crIAbRC7YE" role="3ZuirM">
+        <node concept="3uibUv" id="4crIAbRC7YF" role="3ZuirS">
+          <ref role="3uigEE" to="p663:~TryFuture" resolve="TryFuture" />
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="4crIAbRECfM" role="3Zuirf">
+      <property role="TrG5h" value="mixedRawAndWrapped" />
+      <property role="3ZuirN" value="7I39Hy4Yw1t/IDEMPOTENT" />
+      <node concept="3Zuirt" id="4crIAbRECfN" role="3Zuir1">
+        <property role="TrG5h" value="product" />
+        <node concept="3Zuirv" id="4crIAbRECfO" role="3Zuir2">
+          <ref role="3Zuir7" node="_$TiGuwUQ1" resolve="Product" />
+        </node>
+      </node>
+      <node concept="3Zuirt" id="4crIAbRECfP" role="3Zuir1">
+        <property role="TrG5h" value="quantity" />
+        <node concept="3Zuirg" id="4crIAbRECfQ" role="3Zuir2">
+          <node concept="10Oyi0" id="4crIAbRECfR" role="3ZuirS" />
+        </node>
+      </node>
+      <node concept="3Zuirv" id="4crIAbRECfS" role="3ZuirM">
+        <ref role="3Zuir7" node="_$TiGuwUPX" resolve="Customer" />
+      </node>
+      <node concept="3clFbS" id="4crIAbRECfT" role="3ZuirL">
+        <node concept="3cpWs6" id="4crIAbRECfU" role="3cqZAp">
+          <node concept="2O_PuX" id="4crIAbRECfV" role="3cqZAk">
+            <ref role="3nJRkH" node="6kis6yMCBkR" resolve="placeOrder" />
+            <node concept="3nJRkD" id="4crIAbRECfX" role="3nJRkF">
+              <ref role="3nJRkH" node="6kis6yMCBkR" resolve="placeOrder" />
+              <node concept="Z2fbc" id="4crIAbRECfZ" role="3nJRkF">
+                <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+              </node>
+              <node concept="Z2fbc" id="4crIAbRECg0" role="3nJRkG">
+                <ref role="Z2fbb" node="4crIAbRECfN" resolve="product" />
+              </node>
+              <node concept="Z2fbc" id="4crIAbRECg1" role="3nJRkG">
+                <ref role="Z2fbb" node="4crIAbRECfP" resolve="quantity" />
+              </node>
+            </node>
+            <node concept="Z2fbc" id="4crIAbRECg2" role="3nJRkG">
+              <ref role="Z2fbb" node="4crIAbRECfN" resolve="product" />
+            </node>
+            <node concept="Z2fbc" id="4crIAbRECg3" role="3nJRkG">
+              <ref role="Z2fbb" node="4crIAbRECfP" resolve="quantity" />
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
   </node>
   <node concept="3Zuirq" id="_$TiGuwUQ1">
     <property role="TrG5h" value="Product" />
@@ -601,6 +897,12 @@
         <node concept="10Nm6u" id="6kis6yMKJIr" role="3cqZAk" />
       </node>
     </node>
+  </node>
+  <node concept="3Zuirs" id="4crIAbRC71E">
+    <property role="TrG5h" value="topLevelVoidProbe" />
+    <property role="3ZuirN" value="7I39Hy4Yw1s/SAFE" />
+    <ref role="3ZuirC" node="_$TiGuwUPX" resolve="Customer" />
+    <node concept="3clFbS" id="4crIAbRC71F" role="3ZuirL" />
   </node>
 </model>
 

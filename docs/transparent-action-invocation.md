@@ -78,7 +78,8 @@ Callers must not assume that Causeway visibility, usability, validation, interac
 The invoked action's ordinary Java body and injected services do run.
 
 Use transparent invocation when direct domain behavior composition is intended.
-A future wrapped-invocation capability will address callers that require Causeway rule checking and interaction semantics.
+Use explicit `wrap(target[, control]).action(args)` or `asyncWrap(target[, control]).action(args)` when the caller requires the Causeway wrapper interaction boundary.
+See [Wrapped action invocation](wrapped-action-invocation.md) for that contract.
 
 ## Sandbox examples
 
@@ -95,7 +96,6 @@ The runtime mixin verifier processes and instantiates both caller mixins and bot
 
 The action-only first slice deliberately defers the following capabilities:
 
-- `dsl-wrapped-action-invocation` will add rule-checked invocation through verified Causeway wrapper APIs;
 - `dsl-derived-properties` will define derived-property authoring, typing, lifecycle, and generation before adding transparent property access;
 - `dsl-collection-members` will define collection-member structure and generation before adding transparent collection access;
 - `dsl-contributed-member-abstraction` will consider common `Mixin` and `IContributedMember` abstractions after actions, properties, and collections have compatible concrete models;

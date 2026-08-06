@@ -11,6 +11,7 @@
 - `Product` entity: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717569`.
 - `customers` module metadata: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717632`.
 - Explicit-target `topLevelProbe` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814600598575`.
+- Explicit-target `topLevelVoidProbe` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407658`.
 
 ## Useful subtrees
 
@@ -30,6 +31,14 @@
 - Its nested-action invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/7283007142389228568`.
 - Nested `invokeTopLevelProbe(): Customer` caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/7283007142389542233`.
 - Its explicit-target invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/7283007142389543532`.
+- Nested void `recordOrder(Product, int)` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407630`.
+- Synchronous nested default-control caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407737`; wrapped invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407746`.
+- Synchronous explicit-target controlled caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407760`; wrapped invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407764`.
+- Asynchronous nested value caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407780`; wrapped invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407790`.
+- Asynchronous explicit-target value caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407804`; wrapped invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407809`.
+- Asynchronous nested void controlled caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407821`; wrapped invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136411567`.
+- Asynchronous explicit-target void controlled caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407848`; wrapped invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136411583`.
+- Mixed raw/wrapped caller: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559137068018`; outer wrapped invocation: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559137068027`.
 
 `Customer.name` demonstrates a `JavaType` wrapping BaseLanguage `ClassifierType(String)`.
 `Product.price` demonstrates a `JavaType` wrapping BaseLanguage `IntegerType`.
@@ -47,4 +56,7 @@ The action is a scope-validation fixture rather than the final `placeOrder` samp
 Its generated body uses `__factoryService.mixin(placeOrder.class, mixee).act(product, quantity)` because the caller and target are nested in the same generated entity class.
 `invokeTopLevelProbe` demonstrates resolution to the root `topLevelProbe` action whose explicit target is `Customer`.
 Its generated body uses `__factoryService.mixin(Customer_topLevelProbe.class, mixee).act()`.
-Both caller mixins receive the reserved `FactoryService` field, while `placeOrder` and `Customer_topLevelProbe` do not because they contain no transparent invocation.
+Both raw caller mixins receive the reserved `FactoryService` field, while `placeOrder` and `Customer_topLevelProbe` do not because they contain no transparent invocation.
+The wrapped callers cover nested and explicit-target placement, synchronous and asynchronous mode, default and explicit controls, and value and void results.
+Their generated bodies use `wrapMixin`, `asyncWrapMixin(...).applyAsync(...)`, or `asyncWrapMixin(...).acceptAsync(...)` as appropriate.
+Wrapped-only callers receive `WrapperFactory`, while `mixedRawAndWrapped` receives both reserved service fields and nests raw dispatch inside wrapped dispatch.

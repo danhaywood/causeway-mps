@@ -14,8 +14,10 @@
     <language id="c72da2b9-7cce-4447-8389-f407dc1158b7" name="jetbrains.mps.lang.structure">
       <concept id="3348158742936976480" name="jetbrains.mps.lang.structure.structure.EnumerationMemberDeclaration" flags="ng" index="25R33">
         <property id="1421157252384165432" name="memberId" index="3tVfz5" />
+        <property id="672037151186491528" name="presentation" index="1L1pqM" />
       </concept>
       <concept id="3348158742936976479" name="jetbrains.mps.lang.structure.structure.EnumerationDeclaration" flags="ng" index="25R3W">
+        <reference id="1075010451642646892" name="defaultMember" index="1H5jkz" />
         <child id="3348158742936976577" name="members" index="25R1y" />
       </concept>
       <concept id="7862711839422615209" name="jetbrains.mps.lang.structure.structure.DocumentedNodeAnnotation" flags="ng" index="t5JxF">
@@ -384,6 +386,41 @@
       <property role="20kJfa" value="action" />
       <property role="20lbJX" value="fLJekj4/_1" />
       <ref role="20lvS9" node="4" resolve="Action" />
+    </node>
+  </node>
+  <node concept="25R3W" id="4crIAbRzeRl">
+    <property role="3F6X1D" value="4835663559135129045" />
+    <property role="TrG5h" value="WrappedInvocationMode" />
+    <ref role="1H5jkz" node="4crIAbRzeRn" resolve="SYNC" />
+    <node concept="25R33" id="4crIAbRzeRn" role="25R1y">
+      <property role="3tVfz5" value="6066639903038245635" />
+      <property role="TrG5h" value="SYNC" />
+      <property role="1L1pqM" value="wrap" />
+    </node>
+    <node concept="25R33" id="4crIAbRzeRo" role="25R1y">
+      <property role="3tVfz5" value="319164778960753092" />
+      <property role="TrG5h" value="ASYNC" />
+      <property role="1L1pqM" value="asyncWrap" />
+    </node>
+  </node>
+  <node concept="1TIwiD" id="4crIAbRzeRv">
+    <property role="EcuMT" value="4835663559135129055" />
+    <property role="TrG5h" value="WrappedActionInvocation" />
+    <property role="R4oN_" value="Invokes a DSL action through Causeway WrapperFactory" />
+    <ref role="1TJDcQ" node="6kis6yMFgl1" resolve="ActionInvocation" />
+    <node concept="t5JxF" id="4crIAbRzeRw" role="lGtFl">
+      <property role="t5JxN" value="Explicit synchronous or asynchronous Causeway wrapper dispatch for a DSL-defined action." />
+    </node>
+    <node concept="1TJgyi" id="4crIAbRzeRx" role="1TKVEl">
+      <property role="IQ2nx" value="4835663559135129057" />
+      <property role="TrG5h" value="mode" />
+      <ref role="AX2Wp" node="4crIAbRzeRl" resolve="WrappedInvocationMode" />
+    </node>
+    <node concept="1TJgyj" id="4crIAbRzeRy" role="1TKVEi">
+      <property role="IQ2ns" value="4835663559135129058" />
+      <property role="20kJfa" value="control" />
+      <property role="20lmBu" value="fLJjDmT/aggregation" />
+      <ref role="20lvS9" to="tpee:fz3vP1J" resolve="Expression" />
     </node>
   </node>
 </model>

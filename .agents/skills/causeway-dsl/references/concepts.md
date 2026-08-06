@@ -24,7 +24,9 @@ Injected services and the enclosing entity mixee remain visible in every action-
 Behavior root: `r:649c60cc-9a1a-4bef-8eeb-350f253ffdbd(causeway.behavior)/5455126814596634176`.
 The generator emits static nested mixins for entity-contained actions and top-level `Entity_action` mixins for explicit-target root actions.
 Both forms receive an explicit mixee field/constructor, immutable `Params` carrier, authored Jakarta-injected service fields, `@MemberSupport` `act`, and all action/per-parameter PAT supporting-method families.
-A mixin whose lifecycle subtree contains `ActionInvocation` additionally receives the reserved `@Inject private FactoryService __factoryService` field.
+A mixin whose lifecycle subtree contains raw `ActionInvocation` additionally receives the reserved `@Inject private FactoryService __factoryService` field.
+A mixin whose lifecycle subtree contains `WrappedActionInvocation` additionally receives the reserved `@Inject private WrapperFactory __wrapperFactory` field.
+A mixed caller receives both fields.
 
 ## Member concepts
 
@@ -66,6 +68,17 @@ Its type is the referenced action return type, or BaseLanguage `void` when no re
 Model checking diagnoses non-entity targets, unresolved or ambiguous identity, incorrect arity, and incompatible positional argument types.
 Generation selects either the nested `action.class` form or top-level `Entity_action.class` form from the referenced declaration and lowers the expression to `__factoryService.mixin(...).act(...)`.
 
+### `causeway.structure.WrappedActionInvocation`
+
+A non-rootable subconcept of `ActionInvocation` that reuses target, action, argument, scope, placement, and inherited diagnostic behavior.
+Its structure declaration is `r:4e8cfae1-fc0f-442b-b22c-99efd9c6acf9(causeway.structure)/4835663559135129055`.
+Its `mode : WrappedInvocationMode` property selects synchronous `wrap` or asynchronous `asyncWrap`, and its optional `control : Expression` child accepts `SyncControl` or `AsyncControl` according to that mode.
+The editor projects `wrap(target[, control]).action(arguments)` or `asyncWrap(target[, control]).action(arguments)`.
+Synchronous typing preserves the referenced action result or `void`.
+Asynchronous typing produces `TryFuture<R>` or `TryFuture<Void>`.
+Generation lowers synchronous calls through `WrapperFactory.wrapMixin(...).act(...)`, asynchronous value calls through `asyncWrapMixin(...).applyAsync(...)`, and asynchronous void calls through `asyncWrapMixin(...).acceptAsync(...)`.
+The generated class literal still follows nested versus explicit-target action placement.
+
 ### `causeway.structure.LifecycleBlock`
 
 An `IMethodLike` wrapper containing a mandatory BaseLanguage `StatementList` in its `body` role.
@@ -95,4 +108,6 @@ Generator resolution uses the `entityToClass` mapping label so entity-backed par
 ## Enumeration
 
 `Action.semantics` uses `SemanticsOf`.
+`WrappedActionInvocation.mode` uses `WrappedInvocationMode` with `SYNC` projected as `wrap` and `ASYNC` projected as `asyncWrap`.
 Retrieve current enumeration literals with `mps_mcp_query_structure` operation `GET_ENUMERATION_LITERALS` rather than guessing serialized values.
+When inspecting raw properties through `SNode`, remember that enumeration properties use their serialized literal value rather than the displayed member name.

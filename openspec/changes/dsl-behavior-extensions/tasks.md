@@ -16,7 +16,7 @@
 
 ## 3. Fixtures and Verification
 
-- [ ] 3.1 Add a positive sandbox caller that resolves and invokes a nested action with entity, primitive, and entity-return typing.
+- [x] 3.1 Add a positive sandbox caller that resolves and invokes a nested action with entity, primitive, and entity-return typing.
 - [ ] 3.2 Add a positive sandbox caller that resolves and invokes an explicit-target root action.
 - [ ] 3.3 Add negative model fixtures for a wrong target entity and ambiguous or unresolved action identity.
 - [ ] 3.4 Add negative model fixtures for incorrect arity and incompatible argument types.

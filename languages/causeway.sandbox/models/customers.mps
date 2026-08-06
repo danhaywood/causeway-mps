@@ -57,6 +57,11 @@
       <concept id="5455126814597722999" name="causeway.structure.LifecycleBlock" flags="ng" index="ZuFeo">
         <child id="5455126814597799728" name="body" index="ZuXZv" />
       </concept>
+      <concept id="7283007142388106561" name="causeway.structure.ActionInvocation" flags="ng" index="3nJRkD">
+        <reference id="7283007142388106565" name="action" index="3nJRkH" />
+        <child id="7283007142388106563" name="target" index="3nJRkF" />
+        <child id="7283007142388106564" name="arguments" index="3nJRkG" />
+      </concept>
       <concept id="8900000000000000008" name="causeway.structure.JavaType" flags="ng" index="3Zuirg">
         <child id="8900000000000000032" name="javaType" index="3ZuirS" />
       </concept>
@@ -507,6 +512,41 @@
         <node concept="3cpWs6" id="6kis6yMCBlc" role="3cqZAp">
           <node concept="Z2fbc" id="6kis6yMCBld" role="3cqZAk">
             <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+          </node>
+        </node>
+      </node>
+    </node>
+    <node concept="3Zuirs" id="6kis6yMJygf" role="3Zuirf">
+      <property role="TrG5h" value="invokePlaceOrder" />
+      <property role="3ZuirN" value="7I39Hy4Yw1t/IDEMPOTENT" />
+      <node concept="3Zuirt" id="6kis6yMJygg" role="3Zuir1">
+        <property role="TrG5h" value="product" />
+        <node concept="3Zuirv" id="6kis6yMJygh" role="3Zuir2">
+          <ref role="3Zuir7" node="_$TiGuwUQ1" resolve="Product" />
+        </node>
+      </node>
+      <node concept="3Zuirt" id="6kis6yMJygi" role="3Zuir1">
+        <property role="TrG5h" value="quantity" />
+        <node concept="3Zuirg" id="6kis6yMJygj" role="3Zuir2">
+          <node concept="10Oyi0" id="6kis6yMJygk" role="3ZuirS" />
+        </node>
+      </node>
+      <node concept="3Zuirv" id="6kis6yMJygl" role="3ZuirM">
+        <ref role="3Zuir7" node="_$TiGuwUPX" resolve="Customer" />
+      </node>
+      <node concept="3clFbS" id="6kis6yMJygm" role="3ZuirL">
+        <node concept="3cpWs6" id="6kis6yMJygn" role="3cqZAp">
+          <node concept="3nJRkD" id="6kis6yMJygo" role="3cqZAk">
+            <ref role="3nJRkH" node="6kis6yMCBkR" resolve="placeOrder" />
+            <node concept="Z2fbc" id="6kis6yMJygq" role="3nJRkF">
+              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            </node>
+            <node concept="Z2fbc" id="6kis6yMJygr" role="3nJRkG">
+              <ref role="Z2fbb" node="6kis6yMJygg" resolve="product" />
+            </node>
+            <node concept="Z2fbc" id="6kis6yMJygs" role="3nJRkG">
+              <ref role="Z2fbb" node="6kis6yMJygi" resolve="quantity" />
+            </node>
           </node>
         </node>
       </node>

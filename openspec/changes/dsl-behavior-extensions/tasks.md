@@ -18,7 +18,11 @@
 
 - [x] 3.1 Add a positive sandbox caller that resolves and invokes a nested action with entity, primitive, and entity-return typing.
 - [x] 3.2 Add a positive sandbox caller that resolves and invokes an explicit-target root action.
-- [ ] 3.3 Add negative model fixtures for a wrong target entity and ambiguous or unresolved action identity.
+- [x] 3.3 Add negative model fixtures for a wrong target entity and ambiguous or unresolved action identity.
+  DONE: a temporary `negativeWrongTarget` caller used a `Product` target for `Customer.placeOrder` and model checking reported `The reference placeOrder (action) is out of search scope`.
+  A temporary duplicate nested `placeOrder` action made the positive caller report `action invocation member identity is ambiguous for the target entity`.
+  A temporary invocation with no selected action reported `No reference in the obligatory role 'action'`.
+  All negative fixtures were removed after verification, and the `Customer` root returned to its clean state apart from the existing informational String recommendation.
 - [ ] 3.4 Add negative model fixtures for incorrect arity and incompatible argument types.
 - [ ] 3.5 Extend generated-source structural verification for both invocation class-literal forms and conditional `FactoryService` injection.
 - [ ] 3.6 Extend runtime mixin verification with a JDK proxy `FactoryService` so affected generated callers instantiate without adding a mocking dependency.

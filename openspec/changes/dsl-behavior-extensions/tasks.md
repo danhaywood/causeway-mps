@@ -23,7 +23,10 @@
   A temporary duplicate nested `placeOrder` action made the positive caller report `action invocation member identity is ambiguous for the target entity`.
   A temporary invocation with no selected action reported `No reference in the obligatory role 'action'`.
   All negative fixtures were removed after verification, and the `Customer` root returned to its clean state apart from the existing informational String recommendation.
-- [ ] 3.4 Add negative model fixtures for incorrect arity and incompatible argument types.
+- [x] 3.4 Add negative model fixtures for incorrect arity and incompatible argument types.
+  DONE: a temporary `negativeIncorrectArity` caller omitted the `quantity` argument and model checking reported `action invocation argument count must match the referenced action`.
+  A temporary `negativeIncompatibleArgument` caller supplied `Product` for the `int quantity` position and model checking reported `action invocation arguments must be compatible with the referenced action parameters`.
+  Both negative fixtures were removed after verification, and the `Customer` root returned to its clean state apart from the existing informational String recommendation.
 - [ ] 3.5 Extend generated-source structural verification for both invocation class-literal forms and conditional `FactoryService` injection.
 - [ ] 3.6 Extend runtime mixin verification with a JDK proxy `FactoryService` so affected generated callers instantiate without adding a mocking dependency.
 

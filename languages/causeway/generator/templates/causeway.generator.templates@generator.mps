@@ -21,6 +21,7 @@
     <import index="tpee" ref="r:00000000-0000-4000-0000-011c895902ca(jetbrains.mps.baseLanguage.structure)" />
     <import index="33ny" ref="6354ebe7-c22a-4a0f-ac54-50b52ab9b065/java:java.util(JDK/)" />
     <import index="v5bb" ref="r:8e97c108-eedf-4a08-949b-1be65628da41(causeway.generator.util)" />
+    <import index="ol4i" ref="c31c5f46-778f-4244-90d0-c92808fc2b16/java:org.apache.causeway.applib.services.factory(causeway.stubs/)" />
   </imports>
   <registry>
     <language id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage">
@@ -58,6 +59,9 @@
       <concept id="1070475354124" name="jetbrains.mps.baseLanguage.structure.ThisExpression" flags="nn" index="Xjq3P" />
       <concept id="1070475926800" name="jetbrains.mps.baseLanguage.structure.StringLiteral" flags="nn" index="Xl_RD">
         <property id="1070475926801" name="value" index="Xl_RC" />
+      </concept>
+      <concept id="1081236700937" name="jetbrains.mps.baseLanguage.structure.StaticMethodCall" flags="nn" index="2YIFZM">
+        <reference id="1144433194310" name="classConcept" index="1Pybhc" />
       </concept>
       <concept id="1070534058343" name="jetbrains.mps.baseLanguage.structure.NullLiteral" flags="nn" index="10Nm6u" />
       <concept id="1070534370425" name="jetbrains.mps.baseLanguage.structure.IntegerType" flags="in" index="10Oyi0" />
@@ -1070,6 +1074,29 @@
                   <node concept="3TrcHB" id="4IOweXOTWsr" role="2OqNvi">
                     <ref role="3TsBF5" to="tpck:h0TrG11" resolve="name" />
                   </node>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node concept="312cEg" id="6kis6yMHbPN" role="jymVt">
+        <property role="TrG5h" value="__factoryService" />
+        <node concept="2AHcQZ" id="6kis6yMHbPP" role="2AJF6D">
+          <ref role="2AI5Lk" to="w0p9:~Inject" resolve="jakarta.inject.Inject" />
+        </node>
+        <node concept="3uibUv" id="6kis6yMHbPQ" role="1tU5fm">
+          <ref role="3uigEE" to="ol4i:~FactoryService" resolve="org.apache.causeway.applib.services.factory.FactoryService" />
+        </node>
+        <node concept="3Tm6S6" id="6kis6yMHbPR" role="1B3o_S" />
+        <node concept="1W57fq" id="6kis6yMH_S_" role="lGtFl">
+          <node concept="3IZrLx" id="6kis6yMH_SC" role="3IZSJc">
+            <node concept="3clFbS" id="6kis6yMH_SE" role="2VODD2">
+              <node concept="3clFbF" id="6kis6yMH_SG" role="3cqZAp">
+                <node concept="2YIFZM" id="6kis6yMH_SK" role="3clFbG">
+                  <ref role="1Pybhc" to="v5bb:6kis6yMGjul" resolve="ActionInvocationGeneratorQueries" />
+                  <ref role="37wK5l" to="v5bb:6kis6yMGjv5" resolve="containsTransparentInvocation" />
+                  <node concept="30H73N" id="6kis6yMHZt9" role="37wK5m" />
                 </node>
               </node>
             </node>
@@ -2418,6 +2445,29 @@
         <ref role="2AI5Lk" to="w0p9:~Inject" resolve="Inject" />
       </node>
       <node concept="3Tm6S6" id="4IOweXOXVFd" role="1B3o_S" />
+    </node>
+    <node concept="312cEg" id="6kis6yMGsdL" role="jymVt">
+      <property role="TrG5h" value="__factoryService" />
+      <node concept="2AHcQZ" id="6kis6yMGsdN" role="2AJF6D">
+        <ref role="2AI5Lk" to="w0p9:~Inject" resolve="jakarta.inject.Inject" />
+      </node>
+      <node concept="3uibUv" id="6kis6yMGsdO" role="1tU5fm">
+        <ref role="3uigEE" to="ol4i:~FactoryService" resolve="org.apache.causeway.applib.services.factory.FactoryService" />
+      </node>
+      <node concept="3Tm6S6" id="6kis6yMGsdP" role="1B3o_S" />
+      <node concept="1W57fq" id="6kis6yMGGaa" role="lGtFl">
+        <node concept="3IZrLx" id="6kis6yMGGad" role="3IZSJc">
+          <node concept="3clFbS" id="6kis6yMGGaf" role="2VODD2">
+            <node concept="3clFbF" id="6kis6yMGGah" role="3cqZAp">
+              <node concept="2YIFZM" id="6kis6yMGGal" role="3clFbG">
+                <ref role="1Pybhc" to="v5bb:6kis6yMGjul" resolve="ActionInvocationGeneratorQueries" />
+                <ref role="37wK5l" to="v5bb:6kis6yMGjv5" resolve="containsTransparentInvocation" />
+                <node concept="30H73N" id="6kis6yMGW1$" role="37wK5m" />
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
     </node>
     <node concept="312cEg" id="4IOweXOXVFe" role="jymVt">
       <property role="3TUv4t" value="true" />

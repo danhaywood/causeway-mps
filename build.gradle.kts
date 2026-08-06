@@ -7,6 +7,7 @@
 import de.itemis.mps.gradle.BuildLanguages
 import de.itemis.mps.gradle.tasks.MpsCheck
 import de.itemis.mps.gradle.tasks.MpsGenerate
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
@@ -151,8 +152,87 @@ val checkModels by tasks.registering(MpsCheck::class) {
     projectLocation.set(layout.projectDirectory)
 }
 
-val compileGeneratedJava by tasks.registering(JavaCompile::class) {
+val generatedCustomerSource = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/customers/Customer.java",
+)
+val generatedTopLevelProbeSource = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/customers/Customer_topLevelProbe.java",
+)
+
+val verifyGeneratedSourceStructure by tasks.registering {
     dependsOn(checkModels)
+    group = "verification"
+    description = "Verifies transparent invocation structure in generated Java sources."
+    inputs.files(generatedCustomerSource, generatedTopLevelProbeSource)
+
+    doLast {
+        fun classBody(source: String, declaration: String): String {
+            val declarationIndex = source.indexOf(declaration)
+            if (declarationIndex < 0) {
+                throw GradleException("Generated source is missing '$declaration'")
+            }
+            val openingBrace = source.indexOf('{', declarationIndex)
+            var depth = 0
+            for (index in openingBrace until source.length) {
+                when (source[index]) {
+                    '{' -> depth++
+                    '}' -> {
+                        depth--
+                        if (depth == 0) {
+                            return source.substring(openingBrace + 1, index)
+                        }
+                    }
+                }
+            }
+            throw GradleException("Generated class '$declaration' has unbalanced braces")
+        }
+
+        fun requireContains(body: String, expected: String, owner: String) {
+            if (!body.contains(expected)) {
+                throw GradleException("Generated $owner is missing '$expected'")
+            }
+        }
+
+        fun requireAbsent(body: String, forbidden: String, owner: String) {
+            if (body.contains(forbidden)) {
+                throw GradleException("Generated $owner unexpectedly contains '$forbidden'")
+            }
+        }
+
+        val customerSource = generatedCustomerSource.asFile.readText()
+        val topLevelProbeSource = generatedTopLevelProbeSource.asFile.readText()
+        val reservedField = "private FactoryService __factoryService;"
+        val nestedCaller = classBody(customerSource, "public static class invokePlaceOrder {")
+        val topLevelCaller = classBody(customerSource, "public static class invokeTopLevelProbe {")
+        val unchangedNestedAction = classBody(customerSource, "public static class placeOrder {")
+        val unchangedTopLevelAction = classBody(topLevelProbeSource, "public class Customer_topLevelProbe {")
+
+        requireContains(nestedCaller, reservedField, "invokePlaceOrder")
+        requireContains(
+            nestedCaller,
+            "return __factoryService.mixin(placeOrder.class, mixee).act(product, quantity);",
+            "invokePlaceOrder",
+        )
+        requireContains(topLevelCaller, reservedField, "invokeTopLevelProbe")
+        requireContains(
+            topLevelCaller,
+            "return __factoryService.mixin(Customer_topLevelProbe.class, mixee).act();",
+            "invokeTopLevelProbe",
+        )
+        requireAbsent(unchangedNestedAction, reservedField, "placeOrder")
+        requireAbsent(unchangedTopLevelAction, reservedField, "Customer_topLevelProbe")
+
+        val reservedFieldCount = Regex(Regex.escape(reservedField)).findAll(customerSource).count()
+        if (reservedFieldCount != 2) {
+            throw GradleException(
+                "Expected exactly two generated FactoryService fields in Customer.java, found $reservedFieldCount",
+            )
+        }
+    }
+}
+
+val compileGeneratedJava by tasks.registering(JavaCompile::class) {
+    dependsOn(checkModels, verifyGeneratedSourceStructure)
     description = "Compiles Java generated from the Causeway sandbox models."
     source(layout.projectDirectory.dir("languages/causeway.sandbox/source_gen"))
     classpath = stubs + files(referenceAppSupport.flatMap { it.archiveFile })

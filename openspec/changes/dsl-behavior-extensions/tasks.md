@@ -27,7 +27,9 @@
   DONE: a temporary `negativeIncorrectArity` caller omitted the `quantity` argument and model checking reported `action invocation argument count must match the referenced action`.
   A temporary `negativeIncompatibleArgument` caller supplied `Product` for the `int quantity` position and model checking reported `action invocation arguments must be compatible with the referenced action parameters`.
   Both negative fixtures were removed after verification, and the `Customer` root returned to its clean state apart from the existing informational String recommendation.
-- [ ] 3.5 Extend generated-source structural verification for both invocation class-literal forms and conditional `FactoryService` injection.
+- [x] 3.5 Extend generated-source structural verification for both invocation class-literal forms and conditional `FactoryService` injection.
+  DONE: `verifyGeneratedSourceStructure` checks the nested `placeOrder.class` and top-level `Customer_topLevelProbe.class` invocation forms, requires the reserved field in both calling mixins, and rejects that field in unchanged nested and top-level actions.
+  `compileGeneratedJava` now depends on this source-structure gate, and both a forced verification run and the Java 21 compilation pipeline pass.
 - [ ] 3.6 Extend runtime mixin verification with a JDK proxy `FactoryService` so affected generated callers instantiate without adding a mocking dependency.
 
 ## 4. Documentation and Validation

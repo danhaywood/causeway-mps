@@ -30,7 +30,9 @@
 - [x] 3.5 Extend generated-source structural verification for both invocation class-literal forms and conditional `FactoryService` injection.
   DONE: `verifyGeneratedSourceStructure` checks the nested `placeOrder.class` and top-level `Customer_topLevelProbe.class` invocation forms, requires the reserved field in both calling mixins, and rejects that field in unchanged nested and top-level actions.
   `compileGeneratedJava` now depends on this source-structure gate, and both a forced verification run and the Java 21 compilation pipeline pass.
-- [ ] 3.6 Extend runtime mixin verification with a JDK proxy `FactoryService` so affected generated callers instantiate without adding a mocking dependency.
+- [x] 3.6 Extend runtime mixin verification with a JDK proxy `FactoryService` so affected generated callers instantiate without adding a mocking dependency.
+  DONE: `GeneratedMixinRuntimeCheck` registers a JDK dynamic proxy as the Causeway `FactoryService`, processes both generated caller mixins through the programming model, instantiates them for a `Customer`, and verifies injection into the reserved field.
+  The existing nested and top-level target checks and deliberate invalid-mixin rejection remain green, and no mocking dependency was added.
 
 ## 4. Documentation and Validation
 

@@ -44,5 +44,7 @@
 - [x] 4.3 Run focused positive and negative model checks, generated Java compilation, and runtime mixin verification.
   DONE: final temporary fixtures reconfirmed the exact incorrect-arity and incompatible-positional-type diagnostics, then were removed; the restored `Customer` root has only the existing informational String recommendation.
   A forced `verifyGeneratedMixins` run completed generation, model checking, generated-source structure checks, Java 21 compilation, caller/target mixin processing, proxy injection, and deliberate invalid-mixin rejection successfully.
-- [ ] 4.4 Run `./gradlew headlessBuild --no-daemon --stacktrace` with the pinned JDKs and confirm the complete pipeline succeeds.
-- [ ] 4.5 Run strict OpenSpec validation and confirm the action-invocation and Causeway-generation deltas remain coherent with generated output.
+- [x] 4.4 Run `./gradlew headlessBuild --no-daemon --stacktrace` with the pinned JDKs and confirm the complete pipeline succeeds.
+  DONE: with Gradle launched on pinned JDK 21 and the MPS runtime on pinned JDK 25, the complete `headlessBuild` pipeline succeeded, including language bootstrap, model generation and checking, generated-source structure verification, Java 21 compilation, and runtime mixin verification.
+- [x] 4.5 Run strict OpenSpec validation and confirm the action-invocation and Causeway-generation deltas remain coherent with generated output.
+  DONE: `openspec validate dsl-behavior-extensions --strict --json` passed with no issues after the complete headless build verified the generated action-invocation structure, Java compilation, and runtime mixin behavior.

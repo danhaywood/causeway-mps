@@ -2,8 +2,8 @@
 <model ref="r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)">
   <persistence version="9" />
   <languages>
-    <use id="99bd0b43-8ce5-4eaa-aac8-ff12e0700f84" name="causeway" version="0" />
     <use id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage" version="12" />
+    <devkit ref="7c9b6f21-fd96-42ab-b49b-a290b97fc134(causeway.devkit)" />
   </languages>
   <imports>
     <import index="46v8" ref="r:2adc303c-3561-45fa-953b-45530ec39751(customers)" />

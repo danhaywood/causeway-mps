@@ -73,14 +73,15 @@ The companion `crossModelProbe` action verifies that explicit-target action mixi
 
 ## Cross-model generation contract
 
-The sandbox solution uses `CausewaySandboxPlan` from `causeway.sandbox.generation@genplan` through its Custom Generation facet.
+Consumer models import `causeway.devkit`, which supplies the `causeway` language and selects `CausewayGenerationPlan` from `causeway.generation@genplan`.
 The plan transforms `causeway`, persists checkpoint `after_causeway`, and then transforms `jetbrains.mps.lang.smodel`, `jetbrains.mps.baseLanguage.closures`, `jetbrains.mps.baseLanguageInternal`, and `jetbrains.mps.baseLanguage`.
 The existing `entityToClass` mapping label uses stable source `Entity` identity and survives the checkpoint, so templates keep using `get output by label and input` without a duplicate classifier-name resolver.
-Every model producing or consuming these mappings must use the same effective plan.
-A clean rebuild may delete `languages/causeway.sandbox/source_gen`; generation recreates the per-model checkpoint files before Java TextGen.
+Every model producing or consuming these mappings must import the shared DevKit and must not configure a solution-local Custom Generation facet.
+A clean rebuild may delete `languages/causeway.sandbox/source_gen`; generation recreates `causewaygenerationplan-after_causeway.mps` for producer and consumer models before Java TextGen.
+See `docs/shared-generation-plan.md` for topology, consumer setup, clean rebuilds, and rollback.
 
 ## Deferred capabilities
 
 This change does not add property-access syntax inside embedded BaseLanguage.
 It does not add supporting methods, collections, caching, setters, persistence, or a generic contributed-member abstraction.
-The sandbox plan is project-scoped through the Custom Generation facet; shipping the same plan to external consumer modules would require an appropriate DevKit or equivalent shared attachment mechanism.
+Packaging and publishing the DevKit outside this repository remains separate distribution work.

@@ -120,7 +120,7 @@ The generator currently handles this variant, including primitive `int` and clas
 Extends BaseLanguage `Type`, implements the DSL `Type` union, and references an `Entity` through its optional `entity` reference.
 Being a BaseLanguage type allows an entity-backed parameter type to participate in lifecycle contracts such as `Collection<ParamType>`.
 Generator resolution uses the checkpointed `entityToClass` mapping label so entity-backed parameters, returns, targets, and generated member class references resolve to the generated classifier.
-`CausewaySandboxPlan` transforms `causeway`, persists `after_causeway`, and then applies the smodel, closures, BaseLanguage-internal, and BaseLanguage generators so same-model and imported-model references use the same stable source entity identity.
+`CausewayGenerationPlan`, distributed by `causeway.devkit`, transforms `causeway`, persists `after_causeway`, and then applies the smodel, closures, BaseLanguage-internal, and BaseLanguage generators so same-model and imported-model references use the same stable source entity identity.
 
 ## Enumeration
 

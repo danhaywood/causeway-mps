@@ -5,8 +5,11 @@
 - Sandbox solution: `c44a8d28-571f-4fff-b536-5883d8cb98df(causeway.sandbox)`.
 - Entity-owning model: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)`.
 - Cross-model contribution model: `r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)`.
-- Generation-plan model: `r:523e9bd0-8ee7-4be3-838c-cf911a3d8260(causeway.sandbox.generation@genplan)`.
-- `CausewaySandboxPlan` root: `r:523e9bd0-8ee7-4be3-838c-cf911a3d8260(causeway.sandbox.generation@genplan)/4835663559141768695`.
+- Production DevKit: `7c9b6f21-fd96-42ab-b49b-a290b97fc134(causeway.devkit)`.
+- Generation-plan solution: `1e2065a9-a62c-415c-8f37-47beb6daa6b3(causeway.generation)`.
+- Generation-plan model: `r:0967b094-f6e6-428d-a9e9-3c051bdc791d(causeway.generation@genplan)`.
+- `CausewayGenerationPlan` root: `r:0967b094-f6e6-428d-a9e9-3c051bdc791d(causeway.generation@genplan)/4835663559142235207`.
+- The `causeway.sandbox`, `customers`, and `recommendations` models import `causeway.devkit`; the sandbox solution has no Custom Generation facet.
 
 ## Representative roots
 
@@ -77,4 +80,4 @@ Neither fixture adds a JPA field, entity getter, or setter.
 `recommendations.recommendedCustomer` targets `customers.Customer`, injects and returns `customers.Product`, and generates top-level `recommendations.Customer_recommendedCustomer`.
 Its generated source imports both external classifiers, proving the checkpoint covers mixee, result, and service type references while retaining declaring-model package ownership.
 `recommendations.crossModelProbe` targets and returns `customers.Customer`, proving explicit-target actions use the same checkpointed mapping without template or invocation changes.
-The sandbox Custom Generation facet applies `CausewaySandboxPlan` to every model, and a clean rebuild recreates `causewaysandboxplan-after_causeway.mps` for both producer and consumer models.
+The shared DevKit applies `CausewayGenerationPlan` to every application model, and a clean rebuild recreates `causewaygenerationplan-after_causeway.mps` for both producer and consumer models.

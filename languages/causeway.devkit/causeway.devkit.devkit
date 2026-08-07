@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dev-kit name="causeway.devkit" uuid="7c9b6f21-fd96-42ab-b49b-a290b97fc134">
+  <exported-language name="99bd0b43-8ce5-4eaa-aac8-ff12e0700f84(causeway)" />
+  <generation-plan model="r:0967b094-f6e6-428d-a9e9-3c051bdc791d(causeway.generation@genplan)" />
+</dev-kit>
+

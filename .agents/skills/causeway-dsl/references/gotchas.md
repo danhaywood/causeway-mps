@@ -9,11 +9,12 @@
 - `EntityType` contains an entity reference and generation resolves it through the checkpointed `entityToClass` mapping label; use the exact entity declaration rather than a Java classifier name.
 - A derived property is calculated behavior, not persisted `Property` state; generation must not add a JPA field, entity getter, or setter.
 - A nested derived property must omit `target`, while a root derived property must specify a same-model or imported-model target.
-- Cross-model explicit targets require every producer and consumer model to share `CausewaySandboxPlan`; without its `after_causeway` checkpoint, TextGen reports `Target node is null ... resolve info map_Entity`.
-- The sandbox Custom Generation facet stores `planModel = r:523e9bd0-8ee7-4be3-838c-cf911a3d8260(causeway.sandbox.generation@genplan)` and applies the plan consistently to all sandbox models.
+- Cross-model explicit targets require every producer and consumer model to import `causeway.devkit`; without its `CausewayGenerationPlan` and `after_causeway` checkpoint, TextGen reports `Target node is null ... resolve info map_Entity`.
+- `causeway.devkit` exports the `causeway` language and associates `r:0967b094-f6e6-428d-a9e9-3c051bdc791d(causeway.generation@genplan)`; consumer solutions must not recreate a Custom Generation facet.
+- A model may import only one independently genplan-bearing DevKit; MPS model checking reports `2 devkits supply independent generation plans` for conflicts.
 - The checkpoint plan must transform `jetbrains.mps.lang.smodel` and `jetbrains.mps.baseLanguage.closures` after the checkpoint as well as BaseLanguage; omitting them leaves generator-engagement errors or untransformed closure literals.
 - A genplan `LanguageId` uses the language id rather than the module id; closures is `fd392034-7849-419d-9071-12563d152375`.
-- Clean checkpoint verification deletes the complete sandbox `source_gen` directory and regenerates it; never inspect or edit the persisted checkpoint `.mps` files as source models.
+- Clean checkpoint verification deletes the complete sandbox `source_gen` directory and regenerates it; expect `causewaygenerationplan-after_causeway.mps`, reject obsolete `causewaysandboxplan-after_causeway.mps`, and never inspect or edit persisted checkpoint `.mps` files as source models.
 - Derived-property bodies reuse `ActionVariableReference` for the mixee and injected services, but expose no action parameters.
 - A derived property requires a non-void result type, and every returned expression must satisfy its method-like expected type.
 - Low-level `SAbstractConcept.isSubConceptOf` checks are not reliable as equality checks for exact `JavaType` or `VoidType`; the derived-property helper compares their qualified concept names.

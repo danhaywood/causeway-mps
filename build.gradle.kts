@@ -171,9 +171,64 @@ val generatedCrossModelDerivedPropertySource = layout.projectDirectory.file(
 val generatedCrossModelActionSource = layout.projectDirectory.file(
     "languages/causeway.sandbox/source_gen/recommendations/Customer_crossModelProbe.java",
 )
+val sharedGenerationPlanModel = layout.projectDirectory.file(
+    "languages/causeway.generation/models/causeway.generation@genplan.mps",
+)
+val causewayDevkitDescriptor = layout.projectDirectory.file(
+    "languages/causeway.devkit/causeway.devkit.devkit",
+)
+val generatedCustomerCheckpoint = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/customers/causewaygenerationplan-after_causeway.mps",
+)
+val generatedRecommendationsCheckpoint = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/recommendations/causewaygenerationplan-after_causeway.mps",
+)
+val obsoleteSandboxPlanModel = layout.projectDirectory.file(
+    "languages/causeway.sandbox/models/causeway.sandbox.generation@genplan.mps",
+)
+val obsoleteCustomerCheckpoint = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/customers/causewaysandboxplan-after_causeway.mps",
+)
+val obsoleteRecommendationsCheckpoint = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/recommendations/causewaysandboxplan-after_causeway.mps",
+)
+
+val verifySharedGenerationPlanConfiguration by tasks.registering {
+    dependsOn(checkModels)
+    group = "verification"
+    description = "Verifies production ownership and clean checkpoint output for the shared Causeway plan."
+    inputs.files(
+        sharedGenerationPlanModel,
+        causewayDevkitDescriptor,
+        generatedCustomerCheckpoint,
+        generatedRecommendationsCheckpoint,
+    )
+
+    doLast {
+        listOf(
+            sharedGenerationPlanModel,
+            causewayDevkitDescriptor,
+            generatedCustomerCheckpoint,
+            generatedRecommendationsCheckpoint,
+        ).forEach { requiredFile ->
+            if (!requiredFile.asFile.isFile) {
+                throw GradleException("Required shared-generation-plan artifact is missing: $requiredFile")
+            }
+        }
+        listOf(
+            obsoleteSandboxPlanModel,
+            obsoleteCustomerCheckpoint,
+            obsoleteRecommendationsCheckpoint,
+        ).forEach { obsoleteFile ->
+            if (obsoleteFile.asFile.exists()) {
+                throw GradleException("Obsolete sandbox generation-plan artifact remains: $obsoleteFile")
+            }
+        }
+    }
+}
 
 val verifyGeneratedSourceStructure by tasks.registering {
-    dependsOn(checkModels)
+    dependsOn(verifySharedGenerationPlanConfiguration)
     group = "verification"
     description = "Verifies action invocation and derived-property structure in generated Java sources."
     inputs.files(

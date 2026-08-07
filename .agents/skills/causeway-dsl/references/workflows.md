@@ -46,7 +46,8 @@ Use `ActionVariableReference` expressions for the target mixee and declared inje
 A nested declaration derives its target from its containing entity and must not set `target`.
 For an explicit-target property, insert `DerivedProperty` as a model root and set `target` to an entity in the same model or an imported model.
 For a cross-model target, add a model import to the entity-owning model and keep the contribution root in the declaring model; do not duplicate the generated Java classifier name.
-Ensure the containing solution uses `CausewaySandboxPlan` through its Custom Generation facet so `entityToClass` survives checkpoint `after_causeway`.
+Ensure the declaring and target models import `causeway.devkit`, which supplies `CausewayGenerationPlan` and preserves `entityToClass` through checkpoint `after_causeway`.
+Do not add a solution-local Custom Generation facet or a second independently genplan-bearing DevKit.
 Validate the declaration and its containing entity, regenerate, and inspect either the nested public static class or top-level `Entity_property` class.
 Confirm `@Property`, the final mixee field, public constructor, typed `prop()`, copied body, service fields, and absence of entity persistence state.
 See `docs/derived-properties.md` for the full contract.

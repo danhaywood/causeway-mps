@@ -2,6 +2,8 @@
 <project version="4">
   <component name="MPSProject">
     <projectModules>
+      <modulePath path="$PROJECT_DIR$/languages/causeway.devkit/causeway.devkit.devkit" folder="" />
+      <modulePath path="$PROJECT_DIR$/languages/causeway.generation/causeway.generation.msd" folder="" />
       <modulePath path="$PROJECT_DIR$/languages/causeway.runtime/causeway.runtime.msd" folder="" />
       <modulePath path="$PROJECT_DIR$/languages/causeway.sandbox/causeway.sandbox.msd" folder="" />
       <modulePath path="$PROJECT_DIR$/languages/causeway.stubs/causeway.stubs.msd" folder="" />

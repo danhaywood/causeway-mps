@@ -56,6 +56,12 @@ After configuration, reload modules and inspect the DevKit through MPS repositor
 This discovery step acknowledges the current MCP surface without weakening the production architecture.
 If the installed API cannot persist the required fields programmatically, implementation SHALL pause for a single IDE-mediated configuration step rather than fall back to raw XML editing.
 
+The installed MPS 2026.1 API proof resolved the required operations.
+`jetbrains.mps.project.DevKit#getModuleDescriptor()` returns `jetbrains.mps.project.structure.modules.DevkitDescriptor`; its mutable `getExportedLanguages()` set accepts the `SModuleReference` for `99bd0b43-8ce5-4eaa-aac8-ff12e0700f84(causeway)`, and `setAssociatedPlan(SModelReference)` accepts the persistent `r:<uuid>(<model@genplan>)` model reference.
+After mutation, `DevKit#setModuleDescriptor(descriptor)` reloads descriptor state and marks the module changed, while `DevKit#save()` persists it.
+`org.jetbrains.mps.openapi.persistence.PersistenceFacade#createModuleReference(String)` and `createModelReference(String)` parse the persistent reference forms.
+The proof executed inside an MPS write command through a temporary BaseLanguage helper and the MPS Console, then repository inspection showed both `exportedLanguages` and `associatedGenPlan`.
+
 ### Use the sandbox as the external-consumer acceptance fixture
 
 After the DevKit is ready, add it to every sandbox model, remove redundant direct `causeway` language imports where the DevKit supplies them, and disable the sandbox Custom Generation facet.
@@ -99,7 +105,7 @@ Successful Java generation alone is insufficient because stale checkpoints could
 
 Rollback re-enables the sandbox Custom Generation facet, restores model imports, and retains the original sandbox plan until the migration has passed every gate.
 
-## Open Questions
+## Resolved Questions
 
-- Which installed MPS descriptor method or repository service persists a DevKit's exported languages and generation-plan model reference?
-- Can the one-genplan-bearing-DevKit rule be checked directly in `checkModels`, or should Gradle verification inspect effective model imports and DevKit descriptors?
+- The installed descriptor API persists exported languages through `DevkitDescriptor#getExportedLanguages()` and the plan through `DevkitDescriptor#setAssociatedPlan(SModelReference)`, followed by `DevKit#setModuleDescriptor(...)` and `save()` inside an MPS write command.
+- Model checking reports the exact error `2 devkits supply independent generation plans (not contributing to others): [CausewaySandboxPlan, LangStructurePlan]`; therefore focused model checking can enforce the one-genplan-bearing-DevKit rule, while Gradle verification will additionally inspect the intended production wiring.

@@ -8,12 +8,12 @@ description: Use when creating, editing, validating, generating, or inspecting C
 The `causeway` language models Apache Causeway domain modules, entities, properties, actions, parameters, injected services, and Java or entity types.
 The current generator emits Causeway 3.6 entity-state Java plus nested, same-model, and cross-model explicit-target action and calculated-property mixins.
 Derived properties generate `@Property` classes with explicit mixee constructors, Jakarta-injected service fields, and typed no-argument `prop()` methods without persistent state.
-Cross-model generated classifiers resolve through the sandbox solution's `CausewaySandboxPlan` and its `after_causeway` checkpoint while root mixins remain in their declaring model's package.
+Cross-model generated classifiers resolve through `CausewayGenerationPlan`, distributed by `causeway.devkit`, and its `after_causeway` checkpoint while root mixins remain in their declaring model's package.
 Actions retain explicit mixee constructors, immutable `Params` carriers, Jakarta-injected service fields, `act`, and all by-name PAT supporting-method families from the `customers` sandbox.
 Embedded action code can use raw `ActionInvocation` as `target.action(args)` or explicit `WrappedActionInvocation` as `wrap(target[, control]).action(args)` and `asyncWrap(target[, control]).action(args)`.
 Raw generation uses `FactoryService.mixin(...).act(...)`, while wrapped generation uses Causeway `WrapperFactory` with placement-correct class literals, asynchronous `applyAsync` or `acceptAsync`, and conditional service plumbing.
 `reference-app` contains the compiling golden for the complete action shape.
-`docs/transparent-action-invocation.md`, `docs/wrapped-action-invocation.md`, and `docs/derived-properties.md` document the invocation and calculated-property contracts.
+`docs/transparent-action-invocation.md`, `docs/wrapped-action-invocation.md`, `docs/derived-properties.md`, and `docs/shared-generation-plan.md` document the invocation, calculated-property, and generation-plan contracts.
 
 ## Critical rules
 
@@ -23,6 +23,7 @@ Raw generation uses `FactoryService.mixin(...).act(...)`, while wrapped generati
 - Prefer a root skeleton followed by incremental child insertion for actions and BaseLanguage bodies.
 - Dry-run JSON before insertion.
 - Validate changed roots with `mps_mcp_check_root_node_problems`.
+- Add `causeway.devkit` to every Causeway consumer model; do not restore a sandbox Custom Generation facet or add a second genplan-bearing DevKit.
 - Run `./gradlew checkModels` after model changes and `./gradlew generateModels` after generator-relevant changes.
 
 ## Quick start

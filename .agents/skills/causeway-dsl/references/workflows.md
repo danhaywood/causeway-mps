@@ -37,6 +37,19 @@ service's `type.javaType` and deriving its declared name.
 If reusing a parameter-type copy macro, retarget the query's feature reference to the distinct
 `InjectedService.type` structure link before generation.
 
+## Create a derived property
+
+For a nested calculated property, add `causeway.structure.DerivedProperty` under an entity's `derivedProperties` role.
+Start from `blueprints/derived-property-java-type-subtree.json` for a Java `String` result, or replace the result with `EntityType` for a DSL entity result.
+Give every declaration a non-void result type and a BaseLanguage `StatementList` body whose returned expressions satisfy that type.
+Use `ActionVariableReference` expressions for the target mixee and declared injected services.
+A nested declaration derives its target from its containing entity and must not set `target`.
+For an explicit-target property, insert `DerivedProperty` as a model root and set `target` to an entity in the same model.
+Do not author cross-model explicit targets until the `dsl-cross-model-generated-references` follow-up is implemented.
+Validate the declaration and its containing entity, regenerate, and inspect either the nested public static class or top-level `Entity_property` class.
+Confirm `@Property`, the final mixee field, public constructor, typed `prop()`, copied body, service fields, and absence of entity persistence state.
+See `docs/derived-properties.md` for the full contract.
+
 ## Invoke a DSL action transparently
 
 Use `causeway.structure.ActionInvocation` only inside the body or lifecycle subtree of a DSL `Action`.
@@ -74,8 +87,8 @@ Prefer persistent `r:` references for entity targets when names are ambiguous.
 Run `mps_mcp_check_root_node_problems` on each changed root.
 Run `./gradlew checkModels` after DSL model changes.
 Run `./gradlew generateModels` after changes affecting generated output.
-Run `./gradlew verifyGeneratedSourceStructure` to check raw and wrapped class-literal forms, every synchronous and asynchronous wrapper shape, and conditional or mixed service injection.
-Run `./gradlew compileGeneratedJava verifyGeneratedMixins` with JDK 21 to compile generated calls, process caller and target mixins through the Causeway programming model, and exercise the recording `WrapperFactory` boundary.
+Run `./gradlew verifyGeneratedSourceStructure` to check raw and wrapped class-literal forms, calculated-property mixin shapes, every synchronous and asynchronous wrapper shape, conditional or mixed service injection, and absence of derived persistence state.
+Run `./gradlew compileGeneratedJava verifyGeneratedMixins` with JDK 21 to compile generated calls, process action and property mixins through the Causeway programming model, and exercise the recording `WrapperFactory` boundary.
 Compare generated `customers` Java with `reference-app/src/main/java/customers/` when working on generator milestones.
 Use `docs/action-golden-comparison.md` for the lifecycle mixin normalization rules and the known
 `@Action(semantics=...)` boundary.

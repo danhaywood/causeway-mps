@@ -12,6 +12,8 @@
 - `customers` module metadata: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717632`.
 - Explicit-target `topLevelProbe` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/5455126814600598575`.
 - Explicit-target `topLevelVoidProbe` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407658`.
+- Nested `Customer.recentCustomer` derived property: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559141598468`.
+- Same-model explicit-target `externalLabel` derived property: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559141598502`.
 
 ## Useful subtrees
 
@@ -60,3 +62,9 @@ Both raw caller mixins receive the reserved `FactoryService` field, while `place
 The wrapped callers cover nested and explicit-target placement, synchronous and asynchronous mode, default and explicit controls, and value and void results.
 Their generated bodies use `wrapMixin`, `asyncWrapMixin(...).applyAsync(...)`, or `asyncWrapMixin(...).acceptAsync(...)` as appropriate.
 Wrapped-only callers receive `WrapperFactory`, while `mixedRawAndWrapped` receives both reserved service fields and nests raw dispatch inside wrapped dispatch.
+
+`Customer.recentCustomer` demonstrates an entity-returning nested derived property whose body references both the `Customer` mixee and an injected `OrderService`.
+It generates as public static `Customer.recentCustomer` with `@Property`, an injected service field, a final mixee field, an explicit constructor, and `Customer prop()`.
+The root `externalLabel` demonstrates same-model explicit targeting and a Java `String` result.
+It generates as top-level `customers.Customer_externalLabel` with `String prop()`.
+Neither fixture adds a JPA field, entity getter, or setter.

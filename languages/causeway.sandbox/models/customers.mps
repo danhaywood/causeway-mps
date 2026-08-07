@@ -18,6 +18,9 @@
         <child id="1197027771414" name="operand" index="2Oq$k0" />
         <child id="1197027833540" name="operation" index="2OqNvi" />
       </concept>
+      <concept id="1070475926800" name="jetbrains.mps.baseLanguage.structure.StringLiteral" flags="nn" index="Xl_RD">
+        <property id="1070475926801" name="value" index="Xl_RC" />
+      </concept>
       <concept id="1070534058343" name="jetbrains.mps.baseLanguage.structure.NullLiteral" flags="nn" index="10Nm6u" />
       <concept id="1070534370425" name="jetbrains.mps.baseLanguage.structure.IntegerType" flags="in" index="10Oyi0" />
       <concept id="1068580123152" name="jetbrains.mps.baseLanguage.structure.EqualsExpression" flags="nn" index="3clFbC" />
@@ -57,6 +60,12 @@
         <property id="4835663559135129057" name="mode" index="2O_Pu3" />
         <child id="4835663559135129058" name="control" index="2O_Pu0" />
       </concept>
+      <concept id="4835663559140888301" name="causeway.structure.DerivedProperty" flags="ng" index="2OZRif">
+        <reference id="4835663559140888305" name="target" index="2OZRij" />
+        <child id="4835663559140888302" name="resultType" index="2OZRic" />
+        <child id="4835663559140888303" name="body" index="2OZRid" />
+        <child id="4835663559140888304" name="injectedServices" index="2OZRii" />
+      </concept>
       <concept id="5455126814596559395" name="causeway.structure.ActionVariableReference" flags="ng" index="Z2fbc">
         <reference id="5455126814596559396" name="variable" index="Z2fbb" />
       </concept>
@@ -76,6 +85,7 @@
       </concept>
       <concept id="8900000000000000001" name="causeway.structure.Module" flags="ng" index="3Zuirp" />
       <concept id="8900000000000000002" name="causeway.structure.Entity" flags="ng" index="3Zuirq">
+        <child id="4835663559140888326" name="derivedProperties" index="2OZRl$" />
         <child id="8900000000000000022" name="properties" index="3Zuire" />
         <child id="8900000000000000023" name="actions" index="3Zuirf" />
       </concept>
@@ -864,6 +874,45 @@
         </node>
       </node>
     </node>
+    <node concept="2OZRif" id="4crIAbRVUk4" role="2OZRl$">
+      <property role="TrG5h" value="recentCustomer" />
+      <node concept="3Zuirv" id="4crIAbRVUk7" role="2OZRic">
+        <ref role="3Zuir7" node="_$TiGuwUPX" resolve="Customer" />
+      </node>
+      <node concept="3clFbS" id="4crIAbRVUk8" role="2OZRid">
+        <node concept="3clFbJ" id="4crIAbRVUkc" role="3cqZAp">
+          <node concept="3clFbC" id="4crIAbRVUkf" role="3clFbw">
+            <node concept="Z2fbc" id="4crIAbRVUki" role="3uHU7B">
+              <ref role="Z2fbb" node="4crIAbRVUk9" resolve="orderService" />
+            </node>
+            <node concept="10Nm6u" id="4crIAbRVUkj" role="3uHU7w" />
+          </node>
+          <node concept="3clFbS" id="4crIAbRVUkk" role="3clFbx" />
+        </node>
+        <node concept="3clFbJ" id="4crIAbRVUkl" role="3cqZAp">
+          <node concept="3clFbC" id="4crIAbRVUko" role="3clFbw">
+            <node concept="Z2fbc" id="4crIAbRVUkr" role="3uHU7B">
+              <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+            </node>
+            <node concept="10Nm6u" id="4crIAbRVUks" role="3uHU7w" />
+          </node>
+          <node concept="3clFbS" id="4crIAbRVUkt" role="3clFbx" />
+        </node>
+        <node concept="3cpWs6" id="4crIAbRVUku" role="3cqZAp">
+          <node concept="Z2fbc" id="4crIAbRVUkv" role="3cqZAk">
+            <ref role="Z2fbb" node="_$TiGuwUPX" resolve="Customer" />
+          </node>
+        </node>
+      </node>
+      <node concept="3Zuiri" id="4crIAbRVUk9" role="2OZRii">
+        <property role="TrG5h" value="orderService" />
+        <node concept="3Zuirg" id="4crIAbRVUka" role="3ZuirT">
+          <node concept="3uibUv" id="4crIAbRVUkb" role="3ZuirS">
+            <ref role="3uigEE" to="22ox:~OrderService" resolve="OrderService" />
+          </node>
+        </node>
+      </node>
+    </node>
   </node>
   <node concept="3Zuirq" id="_$TiGuwUQ1">
     <property role="TrG5h" value="Product" />
@@ -903,6 +952,22 @@
     <property role="3ZuirN" value="7I39Hy4Yw1s/SAFE" />
     <ref role="3ZuirC" node="_$TiGuwUPX" resolve="Customer" />
     <node concept="3clFbS" id="4crIAbRC71F" role="3ZuirL" />
+  </node>
+  <node concept="2OZRif" id="4crIAbRVUkA">
+    <property role="TrG5h" value="externalLabel" />
+    <ref role="2OZRij" node="_$TiGuwUPX" resolve="Customer" />
+    <node concept="3Zuirg" id="4crIAbRVUkD" role="2OZRic">
+      <node concept="3uibUv" id="4crIAbRVUkE" role="3ZuirS">
+        <ref role="3uigEE" to="wyt6:~String" resolve="String" />
+      </node>
+    </node>
+    <node concept="3clFbS" id="4crIAbRVUkF" role="2OZRid">
+      <node concept="3cpWs6" id="4crIAbRVUkH" role="3cqZAp">
+        <node concept="Xl_RD" id="4crIAbRVUkI" role="3cqZAk">
+          <property role="Xl_RC" value="external" />
+        </node>
+      </node>
+    </node>
   </node>
 </model>
 

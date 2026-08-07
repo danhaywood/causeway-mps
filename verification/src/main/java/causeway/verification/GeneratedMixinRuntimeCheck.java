@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 import app.OrderService;
 import customers.Customer;
+import customers.Customer_externalLabel;
 import customers.Customer_topLevelProbe;
 import customers.Customer_topLevelVoidProbe;
 import customers.Product;
@@ -22,7 +23,7 @@ import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener
 import org.apache.causeway.commons.functional.TryFuture;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
-/** Executable runtime contract checks for generated Causeway action mixins. */
+/** Executable runtime contract checks for generated Causeway action and property mixins. */
 public final class GeneratedMixinRuntimeCheck {
     private GeneratedMixinRuntimeCheck() {
     }
@@ -42,22 +43,24 @@ public final class GeneratedMixinRuntimeCheck {
                 throw new AssertionError("The invalid action mixin unexpectedly passed verification");
             }
 
-            verifyGeneratedMixinShapes(verifier, factoryService, wrapper);
+            verifyGeneratedMixinShapes(verifier, factoryService, wrapper, orderService);
             verifyWrappedInvocationBoundary(factoryService, wrapper, orderService);
             verifyInvalidRejected(verifier);
             System.out.println(
-                    "Generated action targets plus raw and wrapped invocation callers satisfy the Causeway runtime contract.");
+                    "Generated action and property targets plus raw and wrapped invocation callers satisfy the Causeway runtime contract.");
         }
     }
 
     private static void verifyGeneratedMixinShapes(
             GeneratedMixinVerifier verifier,
             FactoryService factoryService,
-            RecordingWrapperFactory wrapper) throws Exception {
+            RecordingWrapperFactory wrapper,
+            RecordingOrderService orderService) throws Exception {
         verifyValid(verifier, Customer.placeOrder.class, Customer.class, "placeOrder");
         verifyValid(verifier, Customer.recordOrder.class, Customer.class, "recordOrder");
         verifyValid(verifier, Customer_topLevelProbe.class, Customer.class, "topLevelProbe");
         verifyValid(verifier, Customer_topLevelVoidProbe.class, Customer.class, "topLevelVoidProbe");
+        verifyGeneratedPropertyMixins(verifier, orderService);
         Object nestedCaller = verifyValid(verifier, Customer.invokePlaceOrder.class, Customer.class, "invokePlaceOrder");
         Object topLevelCaller = verifyValid(
                 verifier,
@@ -79,6 +82,28 @@ public final class GeneratedMixinRuntimeCheck {
             inject(caller, "__wrapperFactory", wrapper.service());
             verifyWrapperFactoryInjection(caller, wrapper.service());
         }
+    }
+
+    private static void verifyGeneratedPropertyMixins(
+            GeneratedMixinVerifier verifier,
+            OrderService orderService) throws Exception {
+        verifyPropertyValid(
+                verifier,
+                Customer.recentCustomer.class,
+                Customer.class,
+                "recentCustomer");
+        var nestedMixee = new Customer();
+        var nested = new Customer.recentCustomer(nestedMixee);
+        inject(nested, "orderService", orderService);
+        require(nested.prop() == nestedMixee, "nested property mixin returned the wrong value");
+
+        Object topLevel = verifyPropertyValid(
+                verifier,
+                Customer_externalLabel.class,
+                Customer.class,
+                "externalLabel");
+        Object topLevelResult = Customer_externalLabel.class.getMethod("prop").invoke(topLevel);
+        require("external".equals(topLevelResult), "top-level property mixin returned the wrong value");
     }
 
     private static void verifyWrappedInvocationBoundary(
@@ -170,6 +195,28 @@ public final class GeneratedMixinRuntimeCheck {
         Object mixee = mixeeType.getConstructor().newInstance();
         Object mixin = facet.instantiate(mixee);
         require(mixinType.isInstance(mixin), mixinType.getName() + " could not be instantiated for its mixee");
+        return mixin;
+    }
+
+    private static Object verifyPropertyValid(
+            GeneratedMixinVerifier verifier,
+            Class<?> mixinType,
+            Class<?> mixeeType,
+            String expectedMemberId) throws Exception {
+        MixinFacet facet = verifier.process(mixinType);
+        require(facet != null, mixinType.getName() + " has no MixinFacet");
+        require(facet.isMixinFor(mixeeType), mixinType.getName() + " does not target " + mixeeType.getName());
+        require("prop".equals(facet.getMainMethodName()), mixinType.getName() + " does not select prop");
+        require(
+                expectedMemberId.equals(verifier.memberId(mixinType)),
+                mixinType.getName() + " has the wrong member id");
+
+        var constructor = mixinType.getConstructor(mixeeType);
+        require(constructor.getParameterCount() == 1, mixinType.getName() + " has the wrong constructor");
+        Object mixee = mixeeType.getConstructor().newInstance();
+        Object mixin = facet.instantiate(mixee);
+        require(mixinType.isInstance(mixin), mixinType.getName() + " could not be instantiated for its mixee");
+        require(mixinType.getMethod("prop").getParameterCount() == 0, mixinType.getName() + " has the wrong prop method");
         return mixin;
     }
 

@@ -19,7 +19,8 @@ A derived property SHALL represent calculated behavior and SHALL NOT add persist
 
 A `DerivedProperty` SHALL be valid either as a child of an `Entity` with an implicit target or as a model root with an explicit target `Entity` and mixee name.
 A root derived property SHALL require an explicit target, and a nested derived property SHALL derive its target from the containing entity.
-An explicit target SHALL be allowed to reference an entity in another imported model.
+An explicit target SHALL reference an entity in the declaring model for this change.
+Cross-model explicit targets are deferred until generated classifier references can be resolved across model generation boundaries.
 
 #### Scenario: Nested derived property uses its containing entity
 

@@ -14,6 +14,7 @@
   <dependencies>
     <dependency reexport="false">99bd0b43-8ce5-4eaa-aac8-ff12e0700f84(causeway)</dependency>
     <dependency reexport="false">c44a8d28-571f-4fff-b536-5883d8cb98df(causeway.sandbox)</dependency>
+    <dependency reexport="false">6354ebe7-c22a-4a0f-ac54-50b52ab9b065(JDK)</dependency>
   </dependencies>
   <languageVersions>
     <language slang="l:99bd0b43-8ce5-4eaa-aac8-ff12e0700f84:causeway" version="0" />

@@ -16,11 +16,6 @@ A root derived property with an explicit target SHALL generate as a top-level `E
 - **WHEN** root derived property `preferredProduct` targets `Customer` and returns `Product`
 - **THEN** generation emits top-level property mixin `Customer_preferredProduct` with constructor `Customer_preferredProduct(Customer)` and `Product prop()`
 
-#### Scenario: Explicit target belongs to another model
-
-- **WHEN** a derived property declared in model `recommendations` targets `Customer` from model `customers`
-- **THEN** generation emits the mixin in the `recommendations` package with a constructor parameter and mixee field of generated type `customers.Customer`
-
 ### Requirement: Derived property generation preserves authored getter behavior
 
 The generated `prop()` method SHALL contain the authored BaseLanguage getter body and SHALL preserve references to the mixee and declared injected services.

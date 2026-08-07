@@ -1,0 +1,69 @@
+{
+  "concept": "causeway.structure.DerivedProperty",
+  "properties": [
+    {
+      "name": "name",
+      "value": "displayLabel"
+    }
+  ],
+  "children": [
+    {
+      "role": "resultType",
+      "nodes": [
+        {
+          "concept": "causeway.structure.JavaType",
+          "children": [
+            {
+              "role": "javaType",
+              "nodes": [
+                {
+                  "concept": "jetbrains.mps.baseLanguage.structure.ClassifierType",
+                  "references": [
+                    {
+                      "role": "classifier",
+                      "target": "6354ebe7-c22a-4a0f-ac54-50b52ab9b065/java:java.lang(JDK/)/~String"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "nodes": [
+        {
+          "concept": "jetbrains.mps.baseLanguage.structure.StatementList",
+          "children": [
+            {
+              "role": "statement",
+              "nodes": [
+                {
+                  "concept": "jetbrains.mps.baseLanguage.structure.ReturnStatement",
+                  "children": [
+                    {
+                      "role": "expression",
+                      "nodes": [
+                        {
+                          "concept": "jetbrains.mps.baseLanguage.structure.StringLiteral",
+                          "properties": [
+                            {
+                              "name": "value",
+                              "value": "label"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

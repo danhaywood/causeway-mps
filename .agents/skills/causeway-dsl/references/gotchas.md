@@ -6,7 +6,13 @@
 - One MPS model corresponds to one Causeway module; `Module` is a singleton metadata root, while entities and top-level actions are roots.
 - A root mapping rule emits one output root per input root, which is why class-producing concepts must be rootable.
 - `JavaType` contains a BaseLanguage type node; it is not a textual type-name property.
-- `EntityType` contains an entity reference and generation resolves it through the `entityToClass` mapping label; use the exact entity declaration rather than a Java classifier name.
+- `EntityType` contains an entity reference and generation resolves it through the model-local `entityToClass` mapping label; use the exact entity declaration rather than a Java classifier name.
+- A derived property is calculated behavior, not persisted `Property` state; generation must not add a JPA field, entity getter, or setter.
+- A nested derived property must omit `target`, while a root derived property must specify a target in the same model.
+- Cross-model explicit targets currently fail because `entityToClass` output cannot be read across model generation boundaries; defer them to `dsl-cross-model-generated-references` rather than adding unresolved classifier references.
+- Derived-property bodies reuse `ActionVariableReference` for the mixee and injected services, but expose no action parameters.
+- A derived property requires a non-void result type, and every returned expression must satisfy its method-like expected type.
+- Causeway property mixins use `@Property` and public no-argument `prop()`; the pinned Causeway 3.6 form does not require `@MemberSupport` on `prop()`.
 - Action-body variable references use the smart-reference expression `ActionVariableReference`; ordinary BaseLanguage variable references do not target Causeway declarations.
 - `ActionInvocation` and `WrappedActionInvocation` are valid only inside embedded DSL action code and must be used where their expression result is consumed or returned when the referenced action is non-void.
 - `WrappedActionInvocation` preserves exact-target scope and inherited arity, argument, unresolved, ambiguity, and wrong-target diagnostics rather than defining a parallel resolution path.

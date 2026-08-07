@@ -162,12 +162,20 @@ val generatedTopLevelProbeSource = layout.projectDirectory.file(
 val generatedTopLevelVoidProbeSource = layout.projectDirectory.file(
     "languages/causeway.sandbox/source_gen/customers/Customer_topLevelVoidProbe.java",
 )
+val generatedTopLevelDerivedPropertySource = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/customers/Customer_externalLabel.java",
+)
 
 val verifyGeneratedSourceStructure by tasks.registering {
     dependsOn(checkModels)
     group = "verification"
-    description = "Verifies raw and wrapped invocation structure in generated Java sources."
-    inputs.files(generatedCustomerSource, generatedTopLevelProbeSource, generatedTopLevelVoidProbeSource)
+    description = "Verifies action invocation and derived-property structure in generated Java sources."
+    inputs.files(
+        generatedCustomerSource,
+        generatedTopLevelProbeSource,
+        generatedTopLevelVoidProbeSource,
+        generatedTopLevelDerivedPropertySource,
+    )
 
     doLast {
         fun classBody(source: String, declaration: String): String {
@@ -206,6 +214,7 @@ val verifyGeneratedSourceStructure by tasks.registering {
         val customerSource = generatedCustomerSource.asFile.readText()
         val topLevelProbeSource = generatedTopLevelProbeSource.asFile.readText()
         val topLevelVoidProbeSource = generatedTopLevelVoidProbeSource.asFile.readText()
+        val topLevelDerivedPropertySource = generatedTopLevelDerivedPropertySource.asFile.readText()
         val factoryField = "private FactoryService __factoryService;"
         val wrapperField = "private WrapperFactory __wrapperFactory;"
         val nestedCaller = classBody(customerSource, "public static class invokePlaceOrder {")
@@ -286,6 +295,38 @@ val verifyGeneratedSourceStructure by tasks.registering {
         requireAbsent(unchangedTopLevelVoidAction, factoryField, "Customer_topLevelVoidProbe")
         requireAbsent(unchangedTopLevelVoidAction, wrapperField, "Customer_topLevelVoidProbe")
 
+        val nestedDerivedProperty = classBody(customerSource, "public static class recentCustomer {")
+        requireContains(
+            customerSource,
+            "@Property\n  public static class recentCustomer {",
+            "Customer.recentCustomer",
+        )
+        requireContains(nestedDerivedProperty, "private OrderService orderService;", "Customer.recentCustomer")
+        requireContains(nestedDerivedProperty, "private final Customer mixee;", "Customer.recentCustomer")
+        requireContains(nestedDerivedProperty, "public recentCustomer(Customer mixee)", "Customer.recentCustomer")
+        requireContains(nestedDerivedProperty, "public Customer prop()", "Customer.recentCustomer")
+        requireContains(nestedDerivedProperty, "return mixee;", "Customer.recentCustomer")
+        requireAbsent(nestedDerivedProperty, "@MemberSupport", "Customer.recentCustomer")
+        requireAbsent(customerSource, "private Customer recentCustomer;", "Customer")
+        requireAbsent(customerSource, "getRecentCustomer()", "Customer")
+        requireAbsent(customerSource, "setRecentCustomer(", "Customer")
+
+        val topLevelDerivedProperty = classBody(
+            topLevelDerivedPropertySource,
+            "public class Customer_externalLabel {",
+        )
+        requireContains(topLevelDerivedPropertySource, "@Property", "Customer_externalLabel")
+        requireContains(topLevelDerivedProperty, "private final Customer mixee;", "Customer_externalLabel")
+        requireContains(
+            topLevelDerivedProperty,
+            "public Customer_externalLabel(Customer mixee)",
+            "Customer_externalLabel",
+        )
+        requireContains(topLevelDerivedProperty, "public String prop()", "Customer_externalLabel")
+        requireContains(topLevelDerivedProperty, "return \"external\";", "Customer_externalLabel")
+        requireAbsent(topLevelDerivedProperty, "@MemberSupport", "Customer_externalLabel")
+        requireAbsent(topLevelDerivedProperty, "@Column", "Customer_externalLabel")
+
         val factoryFieldCount = Regex(Regex.escape(factoryField)).findAll(customerSource).count()
         if (factoryFieldCount != 3) {
             throw GradleException(
@@ -327,7 +368,7 @@ val compileMixinVerificationJava = tasks.named<JavaCompile>(mixinVerificationSou
 val verifyGeneratedMixins by tasks.registering(JavaExec::class) {
     dependsOn(compileMixinVerificationJava)
     group = "verification"
-    description = "Verifies generated action classes with the Causeway programming model."
+    description = "Verifies generated action and property classes with the Causeway programming model."
     mainClass.set("causeway.verification.GeneratedMixinRuntimeCheck")
     classpath = mixinVerificationSourceSet.output + mixinVerificationDependencies + stubs + files(
         referenceAppSupport.flatMap { it.archiveFile },

@@ -10,7 +10,7 @@ Derived properties should reuse those proven patterns without prematurely introd
 **Goals:**
 
 - Represent a calculated, non-persisted property as a distinct DSL declaration.
-- Support nested and explicit-target contribution, including cross-model targets.
+- Support nested and explicit-target contribution when the declaration and target entity belong to the same model.
 - Provide a typed BaseLanguage getter body with the mixee and declared injected services in scope.
 - Generate valid Causeway 3.6 property mixins for both placement forms.
 - Diagnose missing targets, invalid placement, duplicate member identities, and incompatible return values.
@@ -35,8 +35,10 @@ A later contributed-member change can extract common structure after the propert
 ### Mirror action placement without sharing an abstraction yet
 
 An entity will gain a `derivedProperties` containment role for nested declarations whose target is implicit.
-`DerivedProperty` will also be rootable with an explicit `target` entity and mixee name, including a target in another model.
+`DerivedProperty` will also be rootable with an explicit `target` entity and mixee name when the declaration and target entity belong to the same model.
 Nested declarations generate public static mixin classes inside the entity class, while explicit-target roots generate top-level `Entity_property` classes.
+Cross-model explicit-target generation is deferred because the current `entityToClass` mapping label is model-local and cannot resolve a generated classifier from another input model without generation-plan ordering and a cross-model reference strategy.
+The discovery and proposed follow-up are captured in `openspec/future-changes/dsl-cross-model-generated-references/proposal.md`.
 This intentionally duplicates a small amount of action placement logic rather than introducing the deferred abstraction early.
 
 ### Reuse existing type, variable, and service concepts
@@ -77,6 +79,7 @@ Negative `@tests` fixtures will cover invalid placement, missing explicit target
 - **Duplicated placement logic can drift from actions** → Centralize generator query helpers where practical and cover both placement forms in source assertions.
 - **The reused `ActionVariableReference` name is conceptually narrow** → Document the temporary reuse and rename or generalize it only in the contributed-member abstraction change.
 - **Duplicate identity checks span two containment and root forms** → Resolve candidates by exact target entity and member kind, then test nested, explicit-target, and persisted collisions.
+- **Generated classifier mapping is model-local** → Restrict this slice to same-model explicit targets and defer cross-model generated references to the documented follow-up change.
 - **BaseLanguage return checking can miss fall-through paths** → Reuse method-like expected-type constraints now and leave complete control-flow return analysis to existing BaseLanguage diagnostics.
 
 ## Migration Plan

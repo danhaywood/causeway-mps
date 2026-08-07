@@ -14,6 +14,7 @@ It has the inherited `name` property and currently has no DSL children.
 A Causeway domain entity root with inherited `name`.
 Its `properties` role contains zero or more `Property` nodes.
 Its `actions` role contains zero or more nested `Action` nodes.
+Its `derivedProperties` role contains zero or more nested `DerivedProperty` nodes.
 
 ### `causeway.structure.Action`
 
@@ -27,6 +28,21 @@ Both forms receive an explicit mixee field/constructor, immutable `Params` carri
 A mixin whose lifecycle subtree contains raw `ActionInvocation` additionally receives the reserved `@Inject private FactoryService __factoryService` field.
 A mixin whose lifecycle subtree contains `WrappedActionInvocation` additionally receives the reserved `@Inject private WrapperFactory __wrapperFactory` field.
 A mixed caller receives both fields.
+
+### `causeway.structure.DerivedProperty`
+
+A rootable or entity-nested calculated scalar property with inherited `name`.
+It contains required `resultType : Type` and BaseLanguage `body : StatementList` children, zero or more `injectedServices : InjectedService` children, and an optional explicit `target : Entity` reference.
+Nested declarations derive their target from the containing entity and must omit `target`.
+Root declarations require a same-model explicit target in the current implementation.
+The scope provider exposes only the exact target mixee and the derived property's injected services through `ActionVariableReference` expressions.
+The concept implements BaseLanguage `IMethodLike`, and its expected return type is the declared non-void result type.
+Its structure declaration is `r:4e8cfae1-fc0f-442b-b22c-99efd9c6acf9(causeway.structure)/4835663559140888301`.
+Its editor is `r:f92574fd-2f37-4189-8af1-9a167710122f(causeway.editor)/4835663559140947210`.
+Nested declarations generate public static `@Property` classes inside the generated entity.
+Root declarations generate top-level `Entity_property` classes in the declaring model package.
+Both forms receive a final mixee field, public mixee constructor, optional injected-service fields, and a public typed no-argument `prop()` method containing the authored body.
+They add no JPA field, entity getter, or setter.
 
 ## Member concepts
 
@@ -103,7 +119,8 @@ The generator currently handles this variant, including primitive `int` and clas
 
 Extends BaseLanguage `Type`, implements the DSL `Type` union, and references an `Entity` through its optional `entity` reference.
 Being a BaseLanguage type allows an entity-backed parameter type to participate in lifecycle contracts such as `Collection<ParamType>`.
-Generator resolution uses the `entityToClass` mapping label so entity-backed parameters, returns, targets, and generated action class references resolve to the generated classifier.
+Generator resolution uses the model-local `entityToClass` mapping label so entity-backed parameters, returns, targets, and generated member class references resolve to the generated classifier.
+Cross-model generated classifier references are not supported yet and are captured by the draft `dsl-cross-model-generated-references` follow-up proposal.
 
 ## Enumeration
 

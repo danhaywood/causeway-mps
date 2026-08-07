@@ -52,6 +52,22 @@ Validate the declaration and its containing entity, regenerate, and inspect eith
 Confirm `@Property`, the final mixee field, public constructor, typed `prop()`, copied body, service fields, and absence of entity persistence state.
 See `docs/derived-properties.md` for the full contract.
 
+## Create a calculated collection
+
+For a nested collection, add `causeway.structure.Collection` under an entity's `collections` role and omit `target`.
+For an explicit-target collection, insert `Collection` as a model root and set `target` to an entity in the same model or an imported model.
+Start from `blueprints/collection-java-type-subtree.json` for a same-model Java `String` element or `blueprints/cross-model-collection-subtree.json` for an external entity element.
+Set mandatory `elementType` to an `EntityType` or a non-primitive BaseLanguage classifier wrapped by `JavaType`.
+Do not use primitive or `void` element types because the generated method contract is always `java.util.List<ElementType>`.
+Give the declaration a BaseLanguage `StatementList` body whose returned expressions satisfy `List<ElementType>`.
+Use `ActionVariableReference` expressions for the exact target mixee and declared injected services, and do not depend on action parameters.
+For cross-model declarations, import the entity-owning model and keep the collection root in the declaring model so its generated mixin remains in the declaring Java package.
+Ensure producer and consumer models import `causeway.devkit`, and do not add another generation plan provider.
+Validate the collection and its containing entity where applicable, regenerate, and inspect either the nested public static class or top-level `Entity_collection` class.
+Confirm `@Collection`, the final mixee field, public constructor, typed `List<ElementType> coll()`, copied body, service fields, and absence of persistence state or mutators.
+The reusable blueprint bodies return `null` as a small type-correct skeleton, so replace them with the intended list-producing body before runtime use.
+See `docs/collections.md` for the complete contract and deferred capabilities.
+
 ## Invoke a DSL action transparently
 
 Use `causeway.structure.ActionInvocation` only inside the body or lifecycle subtree of a DSL `Action`.
@@ -90,8 +106,8 @@ Run `mps_mcp_check_root_node_problems` on each changed root.
 Run `./gradlew checkModels` after DSL model changes.
 Run `./gradlew generateModels` after changes affecting generated output.
 For checkpoint-sensitive changes, delete `languages/causeway.sandbox/source_gen` before generation to prove that all checkpoint registries and persisted checkpoint models are recreated from a clean state.
-Run `./gradlew verifyGeneratedSourceStructure` to check raw and wrapped class-literal forms, same-model and cross-model action/property mixin shapes, external classifier imports, every synchronous and asynchronous wrapper shape, conditional or mixed service injection, absence of unresolved mapping markers, and absence of derived persistence state.
-Run `./gradlew compileGeneratedJava verifyGeneratedMixins` with JDK 21 to compile generated calls, process action and property mixins through the Causeway programming model, and exercise the recording `WrapperFactory` boundary.
+Run `./gradlew verifyGeneratedSourceStructure` to check raw and wrapped class-literal forms, same-model and cross-model action/property/collection mixin shapes, external classifier imports, every synchronous and asynchronous wrapper shape, conditional or mixed service injection, absence of unresolved mapping markers, and absence of contributed-member persistence state.
+Run `./gradlew compileGeneratedJava verifyGeneratedMixins` with JDK 21 to compile generated calls, process action, property, and collection mixins through the Causeway programming model, invoke `prop()` and `coll()`, and exercise the recording `WrapperFactory` boundary.
 Compare generated `customers` Java with `reference-app/src/main/java/customers/` when working on generator milestones.
 Use `docs/action-golden-comparison.md` for the lifecycle mixin normalization rules and the known
 `@Action(semantics=...)` boundary.

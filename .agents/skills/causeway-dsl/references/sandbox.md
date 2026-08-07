@@ -22,6 +22,9 @@
 - Same-model explicit-target `externalLabel` derived property: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559141598502`.
 - Cross-model explicit-target `recommendedCustomer` derived property: `r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)/4835663559141768771`.
 - Cross-model explicit-target `crossModelProbe` action: `r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)/4835663559141773111`.
+- Nested `Customer.recentProducts` collection: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559143007076`.
+- Same-model explicit-target `customerLabels` collection: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559143012244`.
+- Cross-model explicit-target `recommendedProducts` collection: `r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)/4835663559143014130`.
 
 ## Useful subtrees
 
@@ -81,3 +84,13 @@ Neither fixture adds a JPA field, entity getter, or setter.
 Its generated source imports both external classifiers, proving the checkpoint covers mixee, result, and service type references while retaining declaring-model package ownership.
 `recommendations.crossModelProbe` targets and returns `customers.Customer`, proving explicit-target actions use the same checkpointed mapping without template or invocation changes.
 The shared DevKit applies `CausewayGenerationPlan` to every application model, and a clean rebuild recreates `causewaygenerationplan-after_causeway.mps` for both producer and consumer models.
+
+`Customer.recentProducts` demonstrates a nested entity collection whose body uses the `Customer` mixee and an injected `Product` service.
+It generates as public static `Customer.recentProducts` with `@Collection`, an injected service field, a final mixee field, an explicit constructor, and `List<Product> coll()`.
+The root `customerLabels` demonstrates same-model explicit targeting and a non-primitive Java `String` element type.
+It generates as top-level `customers.Customer_customerLabels` with `List<String> coll()`.
+Neither fixture adds a JPA field, entity accessor, mutator, or persistence annotation.
+
+`recommendations.recommendedProducts` targets `customers.Customer`, injects `customers.Product`, returns `List<customers.Product>`, and generates top-level `recommendations.Customer_recommendedProducts`.
+Its generated source remains in package `recommendations` and imports both external classifiers, proving collection mixee, element, and service references use the shared checkpoint.
+The collection runtime verifier confirms exact-target `MixinFacet` discovery, the reserved `coll` main method, the Causeway collection-facet contract, and authored list results.

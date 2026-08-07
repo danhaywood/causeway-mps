@@ -6,6 +6,7 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 
@@ -38,6 +39,18 @@ public final class GeneratedMixinVerifier implements AutoCloseable {
 
     public String memberId(Class<?> mixinType) {
         return programmingModel.mixinNamingStrategy().memberId(mixinType);
+    }
+
+    public CollectionFacet collectionFacet(Class<?> collectionType) {
+        var facetHolder = FacetHolder.simple(
+                metaModelContext,
+                Identifier.classIdentifier(LogicalType.fqcn(collectionType)));
+        var context = ProcessClassContext.forTesting(
+                collectionType,
+                MethodRemover.NOOP,
+                facetHolder);
+        programmingModel.streamFactories().forEach(factory -> factory.process(context));
+        return facetHolder.getFacet(CollectionFacet.class);
     }
 
     @Override

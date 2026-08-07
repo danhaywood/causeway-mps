@@ -10,12 +10,14 @@ import java.util.function.Function;
 
 import app.OrderService;
 import customers.Customer;
+import customers.Customer_customerLabels;
 import customers.Customer_externalLabel;
 import customers.Customer_topLevelProbe;
 import customers.Customer_topLevelVoidProbe;
 import customers.Product;
 import recommendations.Customer_crossModelProbe;
 import recommendations.Customer_recommendedCustomer;
+import recommendations.Customer_recommendedProducts;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -25,7 +27,7 @@ import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener
 import org.apache.causeway.commons.functional.TryFuture;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
-/** Executable runtime contract checks for generated Causeway action and property mixins. */
+/** Executable runtime contract checks for generated Causeway action, property, and collection mixins. */
 public final class GeneratedMixinRuntimeCheck {
     private GeneratedMixinRuntimeCheck() {
     }
@@ -51,7 +53,7 @@ public final class GeneratedMixinRuntimeCheck {
             verifyWrappedInvocationBoundary(factoryService, wrapper, orderService);
             verifyInvalidRejected(verifier);
             System.out.println(
-                    "Generated action and property targets plus raw and wrapped invocation callers satisfy the Causeway runtime contract.");
+                    "Generated action, property, and collection targets plus raw and wrapped invocation callers satisfy the Causeway runtime contract.");
         }
     }
 
@@ -73,6 +75,7 @@ public final class GeneratedMixinRuntimeCheck {
                 Customer_crossModelProbe.class.getMethod("act").invoke(crossModelAction) == null,
                 "cross-model action returned the wrong value");
         verifyGeneratedPropertyMixins(verifier, orderService);
+        verifyGeneratedCollectionMixins(verifier);
         Object nestedCaller = verifyValid(verifier, Customer.invokePlaceOrder.class, Customer.class, "invokePlaceOrder");
         Object topLevelCaller = verifyValid(
                 verifier,
@@ -126,6 +129,41 @@ public final class GeneratedMixinRuntimeCheck {
         inject(crossModel, "recommendedProduct", recommendedProduct);
         Object crossModelResult = Customer_recommendedCustomer.class.getMethod("prop").invoke(crossModel);
         require(crossModelResult == recommendedProduct, "cross-model property mixin returned the wrong value");
+    }
+
+    private static void verifyGeneratedCollectionMixins(GeneratedMixinVerifier verifier) throws Exception {
+        var nested = (Customer.recentProducts) verifyCollectionValid(
+                verifier,
+                Customer.recentProducts.class,
+                Customer.class,
+                "recentProducts");
+        var nestedProduct = new Product();
+        inject(nested, "recommendedProduct", nestedProduct);
+        List<Product> nestedResult = nested.coll();
+        require(nestedResult.isEmpty(), "nested collection mixin returned the wrong value");
+
+        Object topLevel = verifyCollectionValid(
+                verifier,
+                Customer_customerLabels.class,
+                Customer.class,
+                "customerLabels");
+        Object topLevelResult = Customer_customerLabels.class.getMethod("coll").invoke(topLevel);
+        require(List.of("external").equals(topLevelResult), "top-level collection mixin returned the wrong value");
+        require(
+                verifier.collectionFacet(topLevelResult.getClass()) != null,
+                "top-level coll result has no CollectionFacet");
+
+        Object crossModel = verifyCollectionValid(
+                verifier,
+                Customer_recommendedProducts.class,
+                Customer.class,
+                "recommendedProducts");
+        var recommendedProduct = new Product();
+        inject(crossModel, "recommendedProduct", recommendedProduct);
+        Object crossModelResult = Customer_recommendedProducts.class.getMethod("coll").invoke(crossModel);
+        require(
+                List.of().equals(crossModelResult),
+                "cross-model collection mixin returned the wrong value");
     }
 
     private static void verifyWrappedInvocationBoundary(
@@ -239,6 +277,28 @@ public final class GeneratedMixinRuntimeCheck {
         Object mixin = facet.instantiate(mixee);
         require(mixinType.isInstance(mixin), mixinType.getName() + " could not be instantiated for its mixee");
         require(mixinType.getMethod("prop").getParameterCount() == 0, mixinType.getName() + " has the wrong prop method");
+        return mixin;
+    }
+
+    private static Object verifyCollectionValid(
+            GeneratedMixinVerifier verifier,
+            Class<?> mixinType,
+            Class<?> mixeeType,
+            String expectedMemberId) throws Exception {
+        MixinFacet facet = verifier.process(mixinType);
+        require(facet != null, mixinType.getName() + " has no MixinFacet");
+        require(facet.isMixinFor(mixeeType), mixinType.getName() + " does not target " + mixeeType.getName());
+        require("coll".equals(facet.getMainMethodName()), mixinType.getName() + " does not select coll");
+        require(
+                expectedMemberId.equals(verifier.memberId(mixinType)),
+                mixinType.getName() + " has the wrong member id");
+
+        var constructor = mixinType.getConstructor(mixeeType);
+        require(constructor.getParameterCount() == 1, mixinType.getName() + " has the wrong constructor");
+        Object mixee = mixeeType.getConstructor().newInstance();
+        Object mixin = facet.instantiate(mixee);
+        require(mixinType.isInstance(mixin), mixinType.getName() + " could not be instantiated for its mixee");
+        require(mixinType.getMethod("coll").getParameterCount() == 0, mixinType.getName() + " has the wrong coll method");
         return mixin;
     }
 

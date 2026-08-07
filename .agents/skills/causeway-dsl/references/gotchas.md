@@ -17,7 +17,15 @@
 - Clean checkpoint verification deletes the complete sandbox `source_gen` directory and regenerates it; expect `causewaygenerationplan-after_causeway.mps`, reject obsolete `causewaysandboxplan-after_causeway.mps`, and never inspect or edit persisted checkpoint `.mps` files as source models.
 - Derived-property bodies reuse `ActionVariableReference` for the mixee and injected services, but expose no action parameters.
 - A derived property requires a non-void result type, and every returned expression must satisfy its method-like expected type.
-- Low-level `SAbstractConcept.isSubConceptOf` checks are not reliable as equality checks for exact `JavaType` or `VoidType`; the derived-property helper compares their qualified concept names.
+- A calculated collection is contributed read-only behavior, not a persisted relationship; generation must not add JPA state, entity accessors, mutators, cascade, or orphan-removal metadata.
+- A nested collection must omit `target`, while a root collection must specify a same-model or imported-model target.
+- Collection return containers are fixed to `List<ElementType>` in the first slice; do not introduce `Set`, maps, sorting, paging, or a configurable container flag.
+- Collection element types must be `EntityType` or a non-primitive classifier-backed `JavaType`; primitive, `void`, and missing elements are errors.
+- Collection bodies reuse `ActionVariableReference` for the target mixee and injected services but expose no action parameters.
+- Collection identity is exact target plus name and does not collide with persisted properties, derived properties, or actions.
+- Cross-model collection targets and entity elements must resolve through checkpointed `entityToClass` mappings keyed by source entity identity, never authored classifier-name strings.
+- Causeway collection mixins use `@Collection` and public no-argument `coll()` returning `List<ElementType>`; the generated class still needs a final mixee field and public one-argument constructor.
+- Low-level `SAbstractConcept.isSubConceptOf` checks are not reliable as equality checks for exact `JavaType` or `VoidType`; contributed-member helpers compare qualified concept names where exact classification matters.
 - Causeway property mixins use `@Property` and public no-argument `prop()`; the pinned Causeway 3.6 form does not require `@MemberSupport` on `prop()`.
 - Action-body variable references use the smart-reference expression `ActionVariableReference`; ordinary BaseLanguage variable references do not target Causeway declarations.
 - `ActionInvocation` and `WrappedActionInvocation` are valid only inside embedded DSL action code and must be used where their expression result is consumed or returned when the referenced action is non-void.

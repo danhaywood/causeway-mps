@@ -4,6 +4,8 @@ The DSL currently models `Property`, `DerivedProperty`, and `Action`, but has no
 Causeway 3.6 collection mixins use `@Collection`, a one-argument mixee constructor, and a public no-argument `coll()` method returning `List` or `Set`.
 The derived-property implementation already proves nested and explicit-target placement, injected-service scope, method-like body typing, mixin generation, runtime discovery, and cross-model classifier resolution through `causeway.devkit`.
 The collection slice should reuse those mechanisms without prematurely introducing the deferred generic contributed-member abstraction.
+Installed Causeway 3.6.0 APIs confirm `org.apache.causeway.applib.annotation.Collection` with `domainEvent` and `typeOf` attributes, a one-argument mixee constructor, a public no-argument `coll()` method, and `List` or `Set` return support.
+The pinned metamodel exposes `org.apache.causeway.core.metamodel.facets.collections.CollectionFacet` for runtime collection adaptation, while generated mixin validity continues to be identified through `MixinFacet` with main method name `coll`.
 
 ## Goals / Non-Goals
 

@@ -6,14 +6,15 @@ description: Use when creating, editing, validating, generating, or inspecting C
 # Causeway DSL
 
 The `causeway` language models Apache Causeway domain modules, entities, properties, actions, parameters, injected services, and Java or entity types.
-The current generator emits Causeway 3.6 entity-state Java plus nested, same-model, and cross-model explicit-target action and calculated-property mixins.
+The current generator emits Causeway 3.6 entity-state Java plus nested, same-model, and cross-model explicit-target action, calculated-property, and calculated-collection mixins.
 Derived properties generate `@Property` classes with explicit mixee constructors, Jakarta-injected service fields, and typed no-argument `prop()` methods without persistent state.
+Collections generate read-only `@Collection` classes with the same mixee and service shape plus fixed `List<ElementType> coll()` methods without persistence or mutation.
 Cross-model generated classifiers resolve through `CausewayGenerationPlan`, distributed by `causeway.devkit`, and its `after_causeway` checkpoint while root mixins remain in their declaring model's package.
 Actions retain explicit mixee constructors, immutable `Params` carriers, Jakarta-injected service fields, `act`, and all by-name PAT supporting-method families from the `customers` sandbox.
 Embedded action code can use raw `ActionInvocation` as `target.action(args)` or explicit `WrappedActionInvocation` as `wrap(target[, control]).action(args)` and `asyncWrap(target[, control]).action(args)`.
 Raw generation uses `FactoryService.mixin(...).act(...)`, while wrapped generation uses Causeway `WrapperFactory` with placement-correct class literals, asynchronous `applyAsync` or `acceptAsync`, and conditional service plumbing.
 `reference-app` contains the compiling golden for the complete action shape.
-`docs/transparent-action-invocation.md`, `docs/wrapped-action-invocation.md`, `docs/derived-properties.md`, and `docs/shared-generation-plan.md` document the invocation, calculated-property, and generation-plan contracts.
+`docs/transparent-action-invocation.md`, `docs/wrapped-action-invocation.md`, `docs/derived-properties.md`, `docs/collections.md`, and `docs/shared-generation-plan.md` document the invocation, contributed-member, and generation-plan contracts.
 
 ## Critical rules
 
@@ -54,8 +55,12 @@ Raw generation uses `FactoryService.mixin(...).act(...)`, while wrapped generati
 - [Java-typed persisted property subtree](references/blueprints/property-java-type-subtree.json)
 - [Java-typed derived property subtree](references/blueprints/derived-property-java-type-subtree.json)
 - [Cross-model entity-typed derived property subtree](references/blueprints/cross-model-derived-property-subtree.json)
+- [Same-model Java-typed collection subtree](references/blueprints/collection-java-type-subtree.json)
+- [Cross-model entity-typed collection subtree](references/blueprints/cross-model-collection-subtree.json)
 - [Transparent action invocation subtree](references/blueprints/action-invocation-subtree.json)
 - [Wrapped asynchronous controlled invocation subtree](references/blueprints/wrapped-action-invocation-subtree.json)
 - [Transparent action invocation guide](../../../docs/transparent-action-invocation.md)
 - [Wrapped action invocation guide](../../../docs/wrapped-action-invocation.md)
 - [Derived property guide](../../../docs/derived-properties.md)
+- [Calculated collection guide](../../../docs/collections.md)
+- [Shared generation plan guide](../../../docs/shared-generation-plan.md)

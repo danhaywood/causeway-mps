@@ -15,6 +15,7 @@ A Causeway domain entity root with inherited `name`.
 Its `properties` role contains zero or more `Property` nodes.
 Its `actions` role contains zero or more nested `Action` nodes.
 Its `derivedProperties` role contains zero or more nested `DerivedProperty` nodes.
+Its `collections` role contains zero or more nested `Collection` nodes.
 
 ### `causeway.structure.Action`
 
@@ -43,6 +44,23 @@ Nested declarations generate public static `@Property` classes inside the genera
 Root declarations generate top-level `Entity_property` classes in the declaring model package, importing or qualifying external generated entity classifiers when the target or declared types belong to other models.
 Both forms receive a final mixee field, public mixee constructor, optional injected-service fields, and a public typed no-argument `prop()` method containing the authored body.
 They add no JPA field, entity getter, or setter.
+
+### `causeway.structure.Collection`
+
+A rootable or entity-nested calculated read-only collection with inherited `name`.
+It contains required `elementType : Type` and BaseLanguage `body : StatementList` children, zero or more `injectedServices : InjectedService` children, and an optional explicit `target : Entity` reference.
+Nested declarations derive their exact target from the containing entity and must omit `target`.
+Root declarations require an explicit target in the same model or an imported model.
+The scope provider exposes only the exact target mixee and the collection's injected services through `ActionVariableReference` expressions.
+The concept implements BaseLanguage `IMethodLike`, and its expected return type is fixed to `java.util.List<ElementType>`.
+Missing, `void`, and primitive element types are invalid, while Java classifier and entity element types are supported.
+Its structure declaration is `r:4e8cfae1-fc0f-442b-b22c-99efd9c6acf9(causeway.structure)/4835663559142270628`.
+Its editor is `r:f92574fd-2f37-4189-8af1-9a167710122f(causeway.editor)/4835663559142342388`.
+Nested declarations generate public static `@Collection` classes inside the generated entity.
+Root declarations generate top-level `Entity_collection` classes in the declaring model package, importing or qualifying external target and entity-element classifiers.
+Both forms receive a final mixee field, public mixee constructor, optional injected-service fields, and a public typed no-argument `List<ElementType> coll()` method containing the authored body.
+They add no JPA field, entity getter, setter, mutator, or persistence metadata.
+Collection identity is exact target plus name and remains separate from property, derived-property, and action identity.
 
 ## Member concepts
 

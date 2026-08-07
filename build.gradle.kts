@@ -171,6 +171,12 @@ val generatedCrossModelDerivedPropertySource = layout.projectDirectory.file(
 val generatedCrossModelActionSource = layout.projectDirectory.file(
     "languages/causeway.sandbox/source_gen/recommendations/Customer_crossModelProbe.java",
 )
+val generatedTopLevelCollectionSource = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/customers/Customer_customerLabels.java",
+)
+val generatedCrossModelCollectionSource = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/recommendations/Customer_recommendedProducts.java",
+)
 val sharedGenerationPlanModel = layout.projectDirectory.file(
     "languages/causeway.generation/models/causeway.generation@genplan.mps",
 )
@@ -230,7 +236,7 @@ val verifySharedGenerationPlanConfiguration by tasks.registering {
 val verifyGeneratedSourceStructure by tasks.registering {
     dependsOn(verifySharedGenerationPlanConfiguration)
     group = "verification"
-    description = "Verifies action invocation and derived-property structure in generated Java sources."
+    description = "Verifies action, derived-property, and collection structure in generated Java sources."
     inputs.files(
         generatedCustomerSource,
         generatedTopLevelProbeSource,
@@ -238,6 +244,8 @@ val verifyGeneratedSourceStructure by tasks.registering {
         generatedTopLevelDerivedPropertySource,
         generatedCrossModelDerivedPropertySource,
         generatedCrossModelActionSource,
+        generatedTopLevelCollectionSource,
+        generatedCrossModelCollectionSource,
     )
 
     doLast {
@@ -280,6 +288,8 @@ val verifyGeneratedSourceStructure by tasks.registering {
         val topLevelDerivedPropertySource = generatedTopLevelDerivedPropertySource.asFile.readText()
         val crossModelDerivedPropertySource = generatedCrossModelDerivedPropertySource.asFile.readText()
         val crossModelActionSource = generatedCrossModelActionSource.asFile.readText()
+        val topLevelCollectionSource = generatedTopLevelCollectionSource.asFile.readText()
+        val crossModelCollectionSource = generatedCrossModelCollectionSource.asFile.readText()
         val factoryField = "private FactoryService __factoryService;"
         val wrapperField = "private WrapperFactory __wrapperFactory;"
         val nestedCaller = classBody(customerSource, "public static class invokePlaceOrder {")
@@ -461,6 +471,89 @@ val verifyGeneratedSourceStructure by tasks.registering {
         requireAbsent(crossModelActionSource, "map_Entity", "Customer_crossModelProbe")
         requireAbsent(crossModelActionSource, "unresolved", "Customer_crossModelProbe")
 
+        val nestedCollection = classBody(customerSource, "public static class recentProducts {")
+        requireContains(
+            customerSource,
+            "@org.apache.causeway.applib.annotation.Collection\n  public static class recentProducts {",
+            "Customer.recentProducts",
+        )
+        requireContains(nestedCollection, "private Product recommendedProduct;", "Customer.recentProducts")
+        requireContains(nestedCollection, "private final Customer mixee;", "Customer.recentProducts")
+        requireContains(nestedCollection, "public recentProducts(Customer mixee)", "Customer.recentProducts")
+        requireContains(nestedCollection, "public List<Product> coll()", "Customer.recentProducts")
+        requireContains(nestedCollection, "if (mixee != null)", "Customer.recentProducts")
+        requireContains(nestedCollection, "if (recommendedProduct != null)", "Customer.recentProducts")
+        requireAbsent(nestedCollection, "@Column", "Customer.recentProducts")
+        requireAbsent(customerSource, "private List<Product> recentProducts;", "Customer")
+        requireAbsent(customerSource, "getRecentProducts()", "Customer")
+        requireAbsent(customerSource, "setRecentProducts(", "Customer")
+
+        val topLevelCollection = classBody(
+            topLevelCollectionSource,
+            "public class Customer_customerLabels {",
+        )
+        requireContains(topLevelCollectionSource, "package customers;", "Customer_customerLabels")
+        requireContains(topLevelCollectionSource, "@Collection", "Customer_customerLabels")
+        requireContains(topLevelCollection, "private final Customer mixee;", "Customer_customerLabels")
+        requireContains(
+            topLevelCollection,
+            "public Customer_customerLabels(Customer mixee)",
+            "Customer_customerLabels",
+        )
+        requireContains(topLevelCollection, "public List<String> coll()", "Customer_customerLabels")
+        requireContains(topLevelCollection, "result.add(\"external\");", "Customer_customerLabels")
+        requireAbsent(topLevelCollectionSource, "@Column", "Customer_customerLabels")
+        requireAbsent(topLevelCollectionSource, "unresolved", "Customer_customerLabels")
+
+        val crossModelCollection = classBody(
+            crossModelCollectionSource,
+            "public class Customer_recommendedProducts {",
+        )
+        requireContains(
+            crossModelCollectionSource,
+            "package recommendations;",
+            "Customer_recommendedProducts",
+        )
+        requireContains(
+            crossModelCollectionSource,
+            "import customers.Customer;",
+            "Customer_recommendedProducts",
+        )
+        requireContains(
+            crossModelCollectionSource,
+            "import customers.Product;",
+            "Customer_recommendedProducts",
+        )
+        requireContains(crossModelCollectionSource, "@Collection", "Customer_recommendedProducts")
+        requireContains(
+            crossModelCollection,
+            "private Product recommendedProduct;",
+            "Customer_recommendedProducts",
+        )
+        requireContains(
+            crossModelCollection,
+            "private final Customer mixee;",
+            "Customer_recommendedProducts",
+        )
+        requireContains(
+            crossModelCollection,
+            "public Customer_recommendedProducts(Customer mixee)",
+            "Customer_recommendedProducts",
+        )
+        requireContains(
+            crossModelCollection,
+            "public List<Product> coll()",
+            "Customer_recommendedProducts",
+        )
+        requireContains(
+            crossModelCollection,
+            "if (recommendedProduct != null)",
+            "Customer_recommendedProducts",
+        )
+        requireAbsent(crossModelCollectionSource, "@Column", "Customer_recommendedProducts")
+        requireAbsent(crossModelCollectionSource, "map_Entity", "Customer_recommendedProducts")
+        requireAbsent(crossModelCollectionSource, "unresolved", "Customer_recommendedProducts")
+
         val factoryFieldCount = Regex(Regex.escape(factoryField)).findAll(customerSource).count()
         if (factoryFieldCount != 3) {
             throw GradleException(
@@ -502,7 +595,7 @@ val compileMixinVerificationJava = tasks.named<JavaCompile>(mixinVerificationSou
 val verifyGeneratedMixins by tasks.registering(JavaExec::class) {
     dependsOn(compileMixinVerificationJava)
     group = "verification"
-    description = "Verifies generated action and property classes with the Causeway programming model."
+    description = "Verifies generated action, property, and collection classes with the Causeway programming model."
     mainClass.set("causeway.verification.GeneratedMixinRuntimeCheck")
     classpath = mixinVerificationSourceSet.output + mixinVerificationDependencies + stubs + files(
         referenceAppSupport.flatMap { it.archiveFile },

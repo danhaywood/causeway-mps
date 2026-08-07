@@ -6,8 +6,9 @@ description: Use when creating, editing, validating, generating, or inspecting C
 # Causeway DSL
 
 The `causeway` language models Apache Causeway domain modules, entities, properties, actions, parameters, injected services, and Java or entity types.
-The current generator emits Causeway 3.6 entity-state Java, nested and same-model explicit-target action mixins, and calculated property mixins.
+The current generator emits Causeway 3.6 entity-state Java plus nested, same-model, and cross-model explicit-target action and calculated-property mixins.
 Derived properties generate `@Property` classes with explicit mixee constructors, Jakarta-injected service fields, and typed no-argument `prop()` methods without persistent state.
+Cross-model generated classifiers resolve through the sandbox solution's `CausewaySandboxPlan` and its `after_causeway` checkpoint while root mixins remain in their declaring model's package.
 Actions retain explicit mixee constructors, immutable `Params` carriers, Jakarta-injected service fields, `act`, and all by-name PAT supporting-method families from the `customers` sandbox.
 Embedded action code can use raw `ActionInvocation` as `target.action(args)` or explicit `WrappedActionInvocation` as `wrap(target[, control]).action(args)` and `asyncWrap(target[, control]).action(args)`.
 Raw generation uses `FactoryService.mixin(...).act(...)`, while wrapped generation uses Causeway `WrapperFactory` with placement-correct class literals, asynchronous `applyAsync` or `acceptAsync`, and conditional service plumbing.
@@ -26,7 +27,7 @@ Raw generation uses `FactoryService.mixin(...).act(...)`, while wrapped generati
 
 ## Quick start
 
-1. Use model `r:2adc303c-3561-45fa-953b-45530ec39751(customers)` for examples or new sandbox roots.
+1. Use model `r:2adc303c-3561-45fa-953b-45530ec39751(customers)` for same-model examples and `r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)` for cross-model contributions.
 2. Start from `references/blueprints/` for known-valid shapes.
 3. Dry-run roots with `mps_mcp_insert_root_node_from_json`.
 4. Insert roots, then add uncertain or large child-role subtrees with `mps_mcp_update_node`.
@@ -51,6 +52,7 @@ Raw generation uses `FactoryService.mixin(...).act(...)`, while wrapped generati
 - [Entity root skeleton](references/blueprints/entity-skeleton.json)
 - [Java-typed persisted property subtree](references/blueprints/property-java-type-subtree.json)
 - [Java-typed derived property subtree](references/blueprints/derived-property-java-type-subtree.json)
+- [Cross-model entity-typed derived property subtree](references/blueprints/cross-model-derived-property-subtree.json)
 - [Transparent action invocation subtree](references/blueprints/action-invocation-subtree.json)
 - [Wrapped asynchronous controlled invocation subtree](references/blueprints/wrapped-action-invocation-subtree.json)
 - [Transparent action invocation guide](../../../docs/transparent-action-invocation.md)

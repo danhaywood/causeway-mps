@@ -6,12 +6,17 @@
 - One MPS model corresponds to one Causeway module; `Module` is a singleton metadata root, while entities and top-level actions are roots.
 - A root mapping rule emits one output root per input root, which is why class-producing concepts must be rootable.
 - `JavaType` contains a BaseLanguage type node; it is not a textual type-name property.
-- `EntityType` contains an entity reference and generation resolves it through the model-local `entityToClass` mapping label; use the exact entity declaration rather than a Java classifier name.
+- `EntityType` contains an entity reference and generation resolves it through the checkpointed `entityToClass` mapping label; use the exact entity declaration rather than a Java classifier name.
 - A derived property is calculated behavior, not persisted `Property` state; generation must not add a JPA field, entity getter, or setter.
-- A nested derived property must omit `target`, while a root derived property must specify a target in the same model.
-- Cross-model explicit targets currently fail because `entityToClass` output cannot be read across model generation boundaries; defer them to `dsl-cross-model-generated-references` rather than adding unresolved classifier references.
+- A nested derived property must omit `target`, while a root derived property must specify a same-model or imported-model target.
+- Cross-model explicit targets require every producer and consumer model to share `CausewaySandboxPlan`; without its `after_causeway` checkpoint, TextGen reports `Target node is null ... resolve info map_Entity`.
+- The sandbox Custom Generation facet stores `planModel = r:523e9bd0-8ee7-4be3-838c-cf911a3d8260(causeway.sandbox.generation@genplan)` and applies the plan consistently to all sandbox models.
+- The checkpoint plan must transform `jetbrains.mps.lang.smodel` and `jetbrains.mps.baseLanguage.closures` after the checkpoint as well as BaseLanguage; omitting them leaves generator-engagement errors or untransformed closure literals.
+- A genplan `LanguageId` uses the language id rather than the module id; closures is `fd392034-7849-419d-9071-12563d152375`.
+- Clean checkpoint verification deletes the complete sandbox `source_gen` directory and regenerates it; never inspect or edit the persisted checkpoint `.mps` files as source models.
 - Derived-property bodies reuse `ActionVariableReference` for the mixee and injected services, but expose no action parameters.
 - A derived property requires a non-void result type, and every returned expression must satisfy its method-like expected type.
+- Low-level `SAbstractConcept.isSubConceptOf` checks are not reliable as equality checks for exact `JavaType` or `VoidType`; the derived-property helper compares their qualified concept names.
 - Causeway property mixins use `@Property` and public no-argument `prop()`; the pinned Causeway 3.6 form does not require `@MemberSupport` on `prop()`.
 - Action-body variable references use the smart-reference expression `ActionVariableReference`; ordinary BaseLanguage variable references do not target Causeway declarations.
 - `ActionInvocation` and `WrappedActionInvocation` are valid only inside embedded DSL action code and must be used where their expression result is consumed or returned when the referenced action is non-void.

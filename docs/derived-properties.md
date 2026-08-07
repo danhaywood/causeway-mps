@@ -10,8 +10,8 @@ A derived property may be nested under an `Entity` through `Entity.derivedProper
 The containing entity is then the target and supplies the generated mixee type.
 
 A derived property may instead be a model root with an explicit `target` reference.
-The declaration and target entity must belong to the same MPS model in this change.
-Cross-model generated classifier resolution is deferred to the draft follow-up proposal at `openspec/future-changes/dsl-cross-model-generated-references/proposal.md`.
+The target may belong to the declaring model or to an imported MPS model.
+Cross-model and same-model declarations retain identical exact-target typing, scope, placement, and identity semantics.
 
 Nested and root declarations cannot combine the two forms.
 A nested declaration with an explicit target and a root declaration without one are model-checking errors.
@@ -37,6 +37,7 @@ Actions are a separate member kind and may use the same textual name.
 
 A nested declaration generates a public static class inside the generated entity class.
 A root declaration generates a top-level class named `Entity_property` in the declaring model's package.
+When its target belongs to another model, the mixin remains in the declaring package and imports or qualifies the target model's generated entity classifier.
 
 Both forms are annotated with `@Property` and contain:
 
@@ -67,9 +68,19 @@ public static class recentCustomer {
 ```
 
 The same-model root `externalLabel` fixture generates `customers.Customer_externalLabel` with `String prop()`.
+The cross-model root `recommendedCustomer` fixture is declared in `recommendations`, targets `customers.Customer`, injects and returns `customers.Product`, and generates `recommendations.Customer_recommendedCustomer`.
+The companion `crossModelProbe` action verifies that explicit-target action mixins use the same external classifier mapping.
+
+## Cross-model generation contract
+
+The sandbox solution uses `CausewaySandboxPlan` from `causeway.sandbox.generation@genplan` through its Custom Generation facet.
+The plan transforms `causeway`, persists checkpoint `after_causeway`, and then transforms `jetbrains.mps.lang.smodel`, `jetbrains.mps.baseLanguage.closures`, `jetbrains.mps.baseLanguageInternal`, and `jetbrains.mps.baseLanguage`.
+The existing `entityToClass` mapping label uses stable source `Entity` identity and survives the checkpoint, so templates keep using `get output by label and input` without a duplicate classifier-name resolver.
+Every model producing or consuming these mappings must use the same effective plan.
+A clean rebuild may delete `languages/causeway.sandbox/source_gen`; generation recreates the per-model checkpoint files before Java TextGen.
 
 ## Deferred capabilities
 
 This change does not add property-access syntax inside embedded BaseLanguage.
 It does not add supporting methods, collections, caching, setters, persistence, or a generic contributed-member abstraction.
-Cross-model explicit targets require separate generation-plan and generated-reference work.
+The sandbox plan is project-scoped through the Custom Generation facet; shipping the same plan to external consumer modules would require an appropriate DevKit or equivalent shared attachment mechanism.

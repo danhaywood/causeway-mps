@@ -165,6 +165,12 @@ val generatedTopLevelVoidProbeSource = layout.projectDirectory.file(
 val generatedTopLevelDerivedPropertySource = layout.projectDirectory.file(
     "languages/causeway.sandbox/source_gen/customers/Customer_externalLabel.java",
 )
+val generatedCrossModelDerivedPropertySource = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/recommendations/Customer_recommendedCustomer.java",
+)
+val generatedCrossModelActionSource = layout.projectDirectory.file(
+    "languages/causeway.sandbox/source_gen/recommendations/Customer_crossModelProbe.java",
+)
 
 val verifyGeneratedSourceStructure by tasks.registering {
     dependsOn(checkModels)
@@ -175,6 +181,8 @@ val verifyGeneratedSourceStructure by tasks.registering {
         generatedTopLevelProbeSource,
         generatedTopLevelVoidProbeSource,
         generatedTopLevelDerivedPropertySource,
+        generatedCrossModelDerivedPropertySource,
+        generatedCrossModelActionSource,
     )
 
     doLast {
@@ -215,6 +223,8 @@ val verifyGeneratedSourceStructure by tasks.registering {
         val topLevelProbeSource = generatedTopLevelProbeSource.asFile.readText()
         val topLevelVoidProbeSource = generatedTopLevelVoidProbeSource.asFile.readText()
         val topLevelDerivedPropertySource = generatedTopLevelDerivedPropertySource.asFile.readText()
+        val crossModelDerivedPropertySource = generatedCrossModelDerivedPropertySource.asFile.readText()
+        val crossModelActionSource = generatedCrossModelActionSource.asFile.readText()
         val factoryField = "private FactoryService __factoryService;"
         val wrapperField = "private WrapperFactory __wrapperFactory;"
         val nestedCaller = classBody(customerSource, "public static class invokePlaceOrder {")
@@ -326,6 +336,75 @@ val verifyGeneratedSourceStructure by tasks.registering {
         requireContains(topLevelDerivedProperty, "return \"external\";", "Customer_externalLabel")
         requireAbsent(topLevelDerivedProperty, "@MemberSupport", "Customer_externalLabel")
         requireAbsent(topLevelDerivedProperty, "@Column", "Customer_externalLabel")
+
+        val crossModelDerivedProperty = classBody(
+            crossModelDerivedPropertySource,
+            "public class Customer_recommendedCustomer {",
+        )
+        requireContains(
+            crossModelDerivedPropertySource,
+            "package recommendations;",
+            "Customer_recommendedCustomer",
+        )
+        requireContains(
+            crossModelDerivedPropertySource,
+            "import customers.Customer;",
+            "Customer_recommendedCustomer",
+        )
+        requireContains(
+            crossModelDerivedPropertySource,
+            "import customers.Product;",
+            "Customer_recommendedCustomer",
+        )
+        requireContains(crossModelDerivedPropertySource, "@Property", "Customer_recommendedCustomer")
+        requireContains(
+            crossModelDerivedProperty,
+            "private Product recommendedProduct;",
+            "Customer_recommendedCustomer",
+        )
+        requireContains(
+            crossModelDerivedProperty,
+            "private final Customer mixee;",
+            "Customer_recommendedCustomer",
+        )
+        requireContains(
+            crossModelDerivedProperty,
+            "public Customer_recommendedCustomer(Customer mixee)",
+            "Customer_recommendedCustomer",
+        )
+        requireContains(
+            crossModelDerivedProperty,
+            "public Product prop()",
+            "Customer_recommendedCustomer",
+        )
+        requireContains(
+            crossModelDerivedProperty,
+            "return recommendedProduct;",
+            "Customer_recommendedCustomer",
+        )
+        requireAbsent(crossModelDerivedPropertySource, "map_Entity", "Customer_recommendedCustomer")
+        requireAbsent(crossModelDerivedPropertySource, "unresolved", "Customer_recommendedCustomer")
+
+        val crossModelAction = classBody(
+            crossModelActionSource,
+            "public class Customer_crossModelProbe {",
+        )
+        requireContains(crossModelActionSource, "package recommendations;", "Customer_crossModelProbe")
+        requireContains(
+            crossModelActionSource,
+            "import customers.Customer;",
+            "Customer_crossModelProbe",
+        )
+        requireContains(crossModelActionSource, "@Action", "Customer_crossModelProbe")
+        requireContains(crossModelAction, "private final Customer mixee;", "Customer_crossModelProbe")
+        requireContains(
+            crossModelAction,
+            "public Customer_crossModelProbe(Customer mixee)",
+            "Customer_crossModelProbe",
+        )
+        requireContains(crossModelAction, "public Customer act()", "Customer_crossModelProbe")
+        requireAbsent(crossModelActionSource, "map_Entity", "Customer_crossModelProbe")
+        requireAbsent(crossModelActionSource, "unresolved", "Customer_crossModelProbe")
 
         val factoryFieldCount = Regex(Regex.escape(factoryField)).findAll(customerSource).count()
         if (factoryFieldCount != 3) {

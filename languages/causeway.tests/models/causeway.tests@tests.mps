@@ -254,6 +254,28 @@
         </node>
       </node>
     </node>
+    <node concept="1qefOq" id="4crIAbRW_cg" role="1SKRRt">
+      <node concept="2OZRif" id="4crIAbRW_ci" role="1qenE9">
+        <property role="TrG5h" value="name" />
+        <ref role="2OZRij" to="46v8:_$TiGuwUPX" resolve="Customer" />
+        <node concept="3Zuirg" id="4crIAbRW_cl" role="2OZRic">
+          <node concept="3uibUv" id="4crIAbRW_cm" role="3ZuirS">
+            <ref role="3uigEE" to="wyt6:~String" resolve="String" />
+          </node>
+        </node>
+        <node concept="3clFbS" id="4crIAbRW_cn" role="2OZRid">
+          <node concept="3cpWs6" id="4crIAbRW_co" role="3cqZAp">
+            <node concept="10Nm6u" id="4crIAbRW_cp" role="3cqZAk" />
+          </node>
+        </node>
+        <node concept="7CXmI" id="4crIAbRW_cq" role="lGtFl">
+          <node concept="mDk06" id="4crIAbRW_cr" role="7EUXB">
+            <property role="TrG5h" value="crossModelIdentity" />
+            <property role="OYnhT" value="crossModelIdentity" />
+          </node>
+        </node>
+      </node>
+    </node>
   </node>
 </model>
 

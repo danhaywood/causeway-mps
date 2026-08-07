@@ -1,0 +1,95 @@
+{
+  "concept": "causeway.structure.DerivedProperty",
+  "properties": [
+    {
+      "name": "name",
+      "value": "recommendedProduct"
+    }
+  ],
+  "references": [
+    {
+      "role": "target",
+      "target": "r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717565"
+    }
+  ],
+  "children": [
+    {
+      "role": "resultType",
+      "nodes": [
+        {
+          "concept": "causeway.structure.EntityType",
+          "references": [
+            {
+              "role": "entity",
+              "target": "r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717569"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": "injectedServices",
+      "nodes": [
+        {
+          "concept": "causeway.structure.InjectedService",
+          "properties": [
+            {
+              "name": "name",
+              "value": "recommendedProduct"
+            }
+          ],
+          "children": [
+            {
+              "role": "type",
+              "nodes": [
+                {
+                  "concept": "causeway.structure.EntityType",
+                  "references": [
+                    {
+                      "role": "entity",
+                      "target": "r:2adc303c-3561-45fa-953b-45530ec39751(customers)/676917817370717569"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "nodes": [
+        {
+          "concept": "jetbrains.mps.baseLanguage.structure.StatementList",
+          "children": [
+            {
+              "role": "statement",
+              "nodes": [
+                {
+                  "concept": "jetbrains.mps.baseLanguage.structure.ReturnStatement",
+                  "children": [
+                    {
+                      "role": "expression",
+                      "nodes": [
+                        {
+                          "concept": "causeway.structure.ActionVariableReference",
+                          "references": [
+                            {
+                              "role": "variable",
+                              "target": "recommendedProduct"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

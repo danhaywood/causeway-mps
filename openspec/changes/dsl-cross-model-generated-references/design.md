@@ -3,6 +3,7 @@
 The `causeway` generator maps each source `Entity` to a generated BaseLanguage classifier under the `entityToClass` mapping label.
 Same-model templates can resolve that output through `genContext`, but a contribution generated from another model cannot see the target model's transient mapping label.
 The derived-properties experiment reproduced this boundary with null classifier targets and TextGen failures for the mixee field, constructor parameter, and entity-typed return.
+The controlled task 1.1 reproduction generated `recommendations.Customer_recommendedCustomer`, reported two `Target node is null for reference to classifier ... resolve info map_Entity` errors, failed TextGen, and returned to a green baseline after deleting the temporary model.
 
 MPS generation checkpoints are the supported mechanism for persisting transient mappings between phases and making them available to other models that share a generation plan.
 The current generator has no explicit project-level generation plan or checkpoint contract, so introducing one is architectural work rather than a local template adjustment.
@@ -39,19 +40,30 @@ Production mapping reorganization will follow only after this proof identifies t
 This avoids committing the generator to an assumed plan structure that may not match MPS's per-model execution semantics.
 A purely name-based workaround was rejected because it loses rename safety and can conceal missing model dependencies until TextGen.
 
+### Proven checkpoint shape and attachment
+
+Task 1 proved the architecture with one sandbox-owned plan attached through the `causeway.sandbox` Custom Generation facet using its `planModel` setting.
+The plan runs the `causeway` transform, persists in-place checkpoint `after_causeway`, and then transforms `jetbrains.mps.baseLanguage.closures`, `jetbrains.mps.baseLanguageInternal`, and `jetbrains.mps.baseLanguage` with generator priority rules retained.
+The closures entry must use language id `fd392034-7849-419d-9071-12563d152375`, not the closures module id, or closure literals remain untransformed at TextGen.
+The existing `entityToClass` label already maps stable source `Entity` identity to generated `Classifier`, survives the checkpoint, and is resolved by existing `get output by label and input` operations without a second name-based resolver.
+Deleting the complete sandbox `source_gen` directory and rebuilding recreated per-model `causewaysandboxplan-after_causeway.mps` checkpoints and generated a compiling cross-model classifier reference with `import customers.Customer`.
+The project has no pre-existing editable generation plans, and the sandbox Custom Generation facet is deliberately project-scoped so every sandbox model shares one plan without changing language-aspect DevKit plans.
+
 ### Use source identity plus checkpointed mapping output as the authoritative reference
 
 Cross-model templates SHALL continue to reference the source `Entity` node and resolve its generated classifier through a checkpointed mapping label.
 The generated classifier's name SHALL remain an output concern derived by the entity mapping rather than a second authored identity.
 
-The implementation may introduce a dedicated mapping label or query helper if `entityToClass` cannot be exposed safely, but it SHALL not encode the entity's qualified Java name as the primary source-model reference.
+The proof established that the existing `entityToClass` label is exposed safely through the checkpoint, so templates SHALL keep using the existing mapping-label operation rather than introducing a duplicate resolver.
+The implementation SHALL not encode the entity's qualified Java name as the primary source-model reference.
 
 ### Make generation ordering explicit and project-owned
 
 The change SHALL add an explicit generation plan, or an equivalent plan contribution attached through the project's generation configuration, that guarantees classifier mappings are checkpointed before cross-model contribution references are resolved.
 All participating sandbox models SHALL use the same effective plan and checkpoint contract.
 
-The exact attachment mechanism will be selected by the proof: a project DevKit is preferred for reusable production behavior, while a custom generation facet is acceptable only for an initial fixture or if this repository intentionally scopes the plan to selected models.
+The proven attachment mechanism is the sandbox solution's Custom Generation facet because this repository intentionally scopes the plan and generated application models to that solution.
+A DevKit remains the appropriate future mechanism if the plan is later shipped to external consumer modules.
 
 ### Keep output ownership with the declaring contribution model
 
@@ -64,8 +76,9 @@ This preserves the established rule that root contributions are generated with t
 ### Audit actions without broadening the contract speculatively
 
 A cross-model explicit-target action fixture SHALL be used to determine whether action mixee and parameter/return references fail through the same path.
-If they do, the shared checkpointed resolver SHALL cover actions in this change and the generated-source/runtime gates SHALL include them.
-If they do not, action generation will remain unchanged and the audit result will be documented.
+The audit confirmed that a cross-model `Customer_crossModelProbe` action uses the same checkpointed `entityToClass` mapping for its external mixee and entity return type.
+The existing action template required no changes once the plan was active, and the generated action compiled with unchanged placement and invocation semantics.
+Generated-source and runtime gates SHALL retain this action as a second acceptance fixture.
 
 ### Treat generation and runtime verification as separate boundaries
 

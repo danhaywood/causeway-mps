@@ -14,6 +14,8 @@ import customers.Customer_externalLabel;
 import customers.Customer_topLevelProbe;
 import customers.Customer_topLevelVoidProbe;
 import customers.Product;
+import recommendations.Customer_crossModelProbe;
+import recommendations.Customer_recommendedCustomer;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -32,8 +34,10 @@ public final class GeneratedMixinRuntimeCheck {
         var orderService = new RecordingOrderService();
         var wrapper = new RecordingWrapperFactory(orderService);
         FactoryService factoryService = factoryServiceProxy(orderService, wrapper);
+        var injectableProduct = new Product();
         try (var verifier = new GeneratedMixinVerifier(
                 orderService,
+                injectableProduct,
                 factoryService,
                 wrapper.service(),
                 SyncControl.defaults(),
@@ -60,6 +64,14 @@ public final class GeneratedMixinRuntimeCheck {
         verifyValid(verifier, Customer.recordOrder.class, Customer.class, "recordOrder");
         verifyValid(verifier, Customer_topLevelProbe.class, Customer.class, "topLevelProbe");
         verifyValid(verifier, Customer_topLevelVoidProbe.class, Customer.class, "topLevelVoidProbe");
+        Object crossModelAction = verifyValid(
+                verifier,
+                Customer_crossModelProbe.class,
+                Customer.class,
+                "crossModelProbe");
+        require(
+                Customer_crossModelProbe.class.getMethod("act").invoke(crossModelAction) == null,
+                "cross-model action returned the wrong value");
         verifyGeneratedPropertyMixins(verifier, orderService);
         Object nestedCaller = verifyValid(verifier, Customer.invokePlaceOrder.class, Customer.class, "invokePlaceOrder");
         Object topLevelCaller = verifyValid(
@@ -104,6 +116,16 @@ public final class GeneratedMixinRuntimeCheck {
                 "externalLabel");
         Object topLevelResult = Customer_externalLabel.class.getMethod("prop").invoke(topLevel);
         require("external".equals(topLevelResult), "top-level property mixin returned the wrong value");
+
+        Object crossModel = verifyPropertyValid(
+                verifier,
+                Customer_recommendedCustomer.class,
+                Customer.class,
+                "recommendedCustomer");
+        var recommendedProduct = new Product();
+        inject(crossModel, "recommendedProduct", recommendedProduct);
+        Object crossModelResult = Customer_recommendedCustomer.class.getMethod("prop").invoke(crossModel);
+        require(crossModelResult == recommendedProduct, "cross-model property mixin returned the wrong value");
     }
 
     private static void verifyWrappedInvocationBoundary(

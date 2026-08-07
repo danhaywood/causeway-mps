@@ -3,7 +3,10 @@
 ## Solution and model
 
 - Sandbox solution: `c44a8d28-571f-4fff-b536-5883d8cb98df(causeway.sandbox)`.
-- Editable model: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)`.
+- Entity-owning model: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)`.
+- Cross-model contribution model: `r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)`.
+- Generation-plan model: `r:523e9bd0-8ee7-4be3-838c-cf911a3d8260(causeway.sandbox.generation@genplan)`.
+- `CausewaySandboxPlan` root: `r:523e9bd0-8ee7-4be3-838c-cf911a3d8260(causeway.sandbox.generation@genplan)/4835663559141768695`.
 
 ## Representative roots
 
@@ -14,6 +17,8 @@
 - Explicit-target `topLevelVoidProbe` action: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559136407658`.
 - Nested `Customer.recentCustomer` derived property: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559141598468`.
 - Same-model explicit-target `externalLabel` derived property: `r:2adc303c-3561-45fa-953b-45530ec39751(customers)/4835663559141598502`.
+- Cross-model explicit-target `recommendedCustomer` derived property: `r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)/4835663559141768771`.
+- Cross-model explicit-target `crossModelProbe` action: `r:a368ec60-55f1-4094-8a91-a029e7c7bd6b(recommendations)/4835663559141773111`.
 
 ## Useful subtrees
 
@@ -68,3 +73,8 @@ It generates as public static `Customer.recentCustomer` with `@Property`, an inj
 The root `externalLabel` demonstrates same-model explicit targeting and a Java `String` result.
 It generates as top-level `customers.Customer_externalLabel` with `String prop()`.
 Neither fixture adds a JPA field, entity getter, or setter.
+
+`recommendations.recommendedCustomer` targets `customers.Customer`, injects and returns `customers.Product`, and generates top-level `recommendations.Customer_recommendedCustomer`.
+Its generated source imports both external classifiers, proving the checkpoint covers mixee, result, and service type references while retaining declaring-model package ownership.
+`recommendations.crossModelProbe` targets and returns `customers.Customer`, proving explicit-target actions use the same checkpointed mapping without template or invocation changes.
+The sandbox Custom Generation facet applies `CausewaySandboxPlan` to every model, and a clean rebuild recreates `causewaysandboxplan-after_causeway.mps` for both producer and consumer models.
